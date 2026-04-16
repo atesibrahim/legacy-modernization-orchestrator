@@ -34,6 +34,45 @@ Create folder `ai-driven-development/docs/legacy_vs_new_system/` and produce:
 
 ## Procedure
 
+### Step 0.5 — Scale Check for Coverage Analysis
+
+> **Run before Steps 1–6.** For systems with many legacy features, processing the full coverage matrix in one pass risks incomplete mapping. Batch by domain area when the feature count is high.
+
+**Measure:**
+- Count legacy features/modules listed in `legacy_analyse.md` §2 (System Inventory) and §5 (Data Flow Map)
+- Note: stored procedures, scheduled jobs, and external integrations each count as separate features
+
+**Choose a strategy:**
+
+| Scale | Signal | Strategy |
+|---|---|---|
+| **Small** | ≤ 25 legacy features | Complete coverage matrix (Step 1) in a single pass |
+| **Large** | 26+ legacy features | Group features by domain area; each group as a parallel sub-task |
+
+**Domain-batched sub-tasks (large scale):**
+
+Group legacy features by domain area — use the Table Ownership Matrix and module list from `legacy_analyse.md` to define groups. Example for a typical enterprise system:
+
+| Batch | Domain Area | Typical Coverage |
+|---|---|---|
+| Batch 1 | User & Access Management | Login, roles, LDAP/SSO, permissions, audit log |
+| Batch 2 | Core Domain A | Main entity CRUD, business workflows, validations |
+| Batch 3 | Core Domain B | Secondary entity CRUD, downstream business rules |
+| Batch 4 | Reporting & Exports | PDF/XLSX/CSV generation, scheduled reports, dashboards |
+| Batch 5 | Integrations & Batch Jobs | External API calls, cron jobs, file transfers, messaging |
+
+Each batch sub-task:
+1. Receives: the legacy features assigned to its batch + access to all prerequisite artifacts
+2. Produces: its section of the Functional Coverage Matrix (Step 1 format rows only)
+
+This orchestrating agent:
+1. Merges all batch sub-task matrices into a single unified coverage table
+2. Runs Steps 2–6 (architecture comparison, NFR analysis, diagrams, risk, cutover checklist) using the full merged data
+
+Record the batch assignment (feature → batch) in `compare_legacy_to_new_system.md` under `## Coverage Analysis Plan` before starting any batch.
+
+---
+
 ### Step 1 — Functional Coverage Matrix
 Map every legacy feature/function to its new equivalent. No legacy feature left unmapped.
 

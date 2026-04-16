@@ -16,7 +16,7 @@ The SKILL.md procedure references these. Do not deviate — create an ADR if a j
 - **No framework-specific annotations in the `domain/` layer** — domain must be framework-free
 - **Authorization at the method/handler level** — never inline role checks in business logic
 - **No hard-coded secrets** — all configuration via environment variables or a secrets manager
-- **No `DEBUG_MODE` flags** — use environment profiles (`dev`, `test`, `prod`)
+- **No `DEBUG_MODE` flags** — one application.yml or application.properties is enough
 - **No over-engineering** — YAGNI; implement only what is needed
 
 ---

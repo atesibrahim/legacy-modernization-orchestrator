@@ -20,8 +20,8 @@ argument-hint: 'Project name or path to UI/UX design artifacts and system design
 - Backend APIs available or OpenAPI spec for mock generation
 
 ## Output Location
-Create folder `ai-driven-development/development/frontend_development/{project_name}` — all frontend code here.
-
+- Create folder `ai-driven-development/development/frontend_development/{project_name}` all frontend code here.
+- `ai-driven-development/development/fe_development_todo.md` — phase tracker with all frontend phases checked off as they complete.
 ---
 
 ## Tech Stack
@@ -179,6 +179,41 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 5. **Login screen**: Matching wireframe from `ui_ux_pages.html`
 
 6. **LDAP/SSO redirect**: If SSO configured, redirect to provider instead of inline form
+
+---
+
+### Phase 5.5 — Feature Decomposition Check
+
+> **Run after Phase 5 (Auth) completes and before building domain features.** For applications with many features, batching prevents context overload and enables parallel implementation.
+
+**Measure:**
+- List all feature modules from `ui_ux_pages.md` (screen groups / domain areas)
+- Count distinct domain features excluding Auth
+
+**Choose a strategy:**
+
+| Scale | Signal | Strategy |
+|---|---|---|
+| **Small** | ≤ 4 features | Implement all features sequentially in Phase 6 |
+| **Medium** | 5–10 features | Group into 2–3 batches; each batch as a sub-task |
+| **Large** | 10+ features | One sub-task per feature domain; run in parallel |
+
+**Feature sub-task breakdown (medium/large):**
+
+Each feature sub-task implements the full vertical slice for its domain:
+- `types/` — TypeScript interfaces matching OpenAPI response schemas
+- `api/` — TanStack Query `useQuery` / `useMutation` hooks
+- `components/` — feature-specific UI components
+- `hooks/` — extracted business logic
+- Page component composed from the above
+
+**Prerequisites that must complete before any feature sub-task starts:**
+- Phase 3 (Design System + shared components) ✅
+- Phase 5 (Auth + protected routes + Axios instance configured) ✅
+
+After all feature sub-tasks complete, continue with Phase 8 (API hardening), Phase 10 (performance), Phase 11 (testing).
+
+Record the feature-to-sub-task assignment in the phase tracker before starting.
 
 ---
 

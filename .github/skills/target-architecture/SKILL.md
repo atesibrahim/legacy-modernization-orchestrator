@@ -69,6 +69,43 @@ Create in folder `ai-driven-development/docs/target_architecture/` and produce:
 
 ## Procedure
 
+### Step 0.5 — Scope & Complexity Check
+
+> **Run before Steps 1–9.** The number of bounded contexts and in-scope tiers determines whether to proceed linearly or decompose design into parallel sub-tasks.
+
+**Review from prerequisites:**
+- Count bounded contexts hinted at in `legacy_analyse.md` (module count, God-tables, integration clusters)
+- Count in-scope tiers from `tech_stack_selections.md` (Backend / Frontend / iOS / Android)
+
+**Choose a strategy:**
+
+| Scale | Signal | Strategy |
+|---|---|---|
+| **Simple** | 1–3 bounded contexts, 1 tier | Proceed through Steps 1–9 sequentially |
+| **Moderate** | 4–6 bounded contexts OR 2 tiers | Design contexts one at a time; backend and frontend architecture as separate sub-tasks |
+| **Complex** | 7+ bounded contexts OR 3+ tiers | One sub-task per bounded context group for Steps 2+3; one sub-task per tier for diagrams |
+
+**Per-context sub-task breakdown (moderate/complex):**
+
+For each bounded context (or group of 2–3 small related ones), create a sub-task that covers:
+- Step 2: domain model, ubiquitous language, context relationships
+- Step 3: module responsibilities, API surface, owned data, events
+
+Each sub-task writes findings to: `ai-driven-development/docs/target_architecture/_partial_bc_{name}.md`
+
+This agent then:
+1. Synthesizes all partial BC files into `target_architecture.md`
+2. Runs Steps 4–9 (API design, data architecture, security, diagrams, NFR, ADRs) using all partial inputs
+
+**Multi-tier decomposition:**
+- Sub-task A: Backend architecture (Steps 2, 3, 4, 5, 6, ADRs 001–004 + 006)
+- Sub-task B: Frontend/Mobile architecture (Step 2 frontend-specific, ADR-005 if mobile in scope)
+- This agent: Diagrams (Step 7) and NFR (Step 8) — synthesized after A and B complete
+
+> Record the decomposition plan (bounded context list + assigned sub-tasks) in `target_architecture.md` before starting any sub-task.
+
+---
+
 ### Step 1 — Architecture Style Decision
 Justify the choice between:
 

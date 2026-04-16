@@ -21,6 +21,7 @@ argument-hint: 'Project name or path to UI/UX design artifacts and system design
 
 ## Output Location
 Create folder `ai-driven-development/development/mobile_development/ios/{project_name}` — all iOS code here.
+- `ai-driven-development/development/ios_development_todo.md` — phase tracker with all iOS phases checked off as they complete.
 
 ---
 
@@ -215,6 +216,40 @@ Before writing any code, add the iOS phase checklist from [STANDARDS.md](./STAND
 - [ ] Logout clears all tokens from Keychain
 - [ ] API errors surface user-readable messages
 - [ ] No token values logged to console
+
+---
+
+### Phase 6.5 — Feature Decomposition Check
+
+> **Run after Phase 6 (Networking/Auth) completes.** For apps with many screens, implementing one feature domain per sub-task avoids overloading a single agent context.
+
+**Measure:**
+- List all feature modules from `ui_ux_pages.md`
+- Count distinct domain features excluding Auth
+
+**Choose a strategy:**
+
+| Scale | Signal | Strategy |
+|---|---|---|
+| **Small** | ≤ 4 features | Implement all features sequentially in Phase 7 |
+| **Medium** | 5–10 features | Group into 2–3 batches; each batch = one sub-task |
+| **Large** | 10+ features | One sub-task per feature domain; run in parallel |
+
+**Feature sub-task breakdown (medium/large):**
+
+Each feature sub-task implements for its domain:
+- Models: `Codable` structs matching OpenAPI schemas
+- Service protocol + implementation (`async throws`)
+- ViewModel (`@Observable` / `ObservableObject`) with loading/error/empty states
+- SwiftUI Views matching wireframes from `ui_ux_pages.html`
+
+**Prerequisites that must complete before any feature sub-task starts:**
+- Phase 3 (Design System + Shared Components) ✅
+- Phase 5 (APIClient + Auth flow + Keychain + NavigationStack root) ✅
+
+After all feature sub-tasks complete, continue with Phase 9 (persistence), Phase 10 (push/deep link), Phase 11 (testing), Phase 12 (release).
+
+Record the feature-to-sub-task assignment in the phase tracker before starting.
 
 ---
 

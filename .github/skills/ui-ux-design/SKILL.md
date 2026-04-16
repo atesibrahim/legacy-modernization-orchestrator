@@ -96,7 +96,44 @@ Define the reusable component library:
 - List items with actions
 - Status indicators
 - Data visualizations (charts, KPIs)
+---
 
+### Step 4.5 — Screen Decomposition for Large Applications
+
+> **Run after Step 2 (IA) produces the full screen inventory.** For applications with many screens, batching prevents context overload and enables parallel wireframe production.
+
+**Measure:**
+- Count total screens/pages from the site map produced in Step 2
+
+**Choose a strategy:**
+
+| Scale | Threshold | Strategy |
+|---|---|---|
+| **Small** | ≤ 8 screens | Produce all wireframes in Step 5 sequentially |
+| **Medium** | 9–20 screens | Group into 2–3 feature batches; each batch as a sub-task |
+| **Large** | 20+ screens | Group by user role or domain area; each group = one parallel sub-task |
+
+**Grouping approach (medium/large):**
+
+Assign every screen from the inventory to a named batch. Example grouping for a typical enterprise app:
+
+| Batch | Area | Example Screens |
+|---|---|---|
+| Batch 1 | Auth & Onboarding | Login, Register, Forgot Password, Profile Setup |
+| Batch 2 | Core Domain A | List View, Detail View, Create/Edit Form |
+| Batch 3 | Core Domain B | Reports, Dashboard, KPI Board |
+| Batch 4 | Admin / Settings | User Management, Configuration, Audit Log |
+
+Each batch sub-task:
+1. Receives: the batch screen list + design tokens + component inventory from Steps 3+4
+2. Produces: HTML wireframe sections for its screens (matching `ui_ux_pages.html` structure)
+3. This agent merges all batch outputs into a single `ui_ux_pages.html` file
+
+> **Design system (Steps 3+4) is not parallelizable** — it must complete fully before any wireframe batch starts, as every batch relies on shared tokens and components.
+
+Record the batch plan (screen → batch assignment) in `ui_ux_pages.md` under `## Screen Decomposition Plan` before starting any batch.
+
+---
 ### Step 5 — Wireframes for Critical Screens
 For each critical screen, produce an HTML wireframe in `ui_ux_pages.html`.
 

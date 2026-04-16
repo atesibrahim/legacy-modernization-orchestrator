@@ -53,6 +53,60 @@ Record the profile in `legacy_analyse.md` **Section 10 — Technology Profile** 
 
 ---
 
+### Step 0.5 — Scale Assessment & Work Decomposition
+
+> **Run this before Steps 1–8.** Codebase size determines whether to work sequentially or decompose into parallel sub-tasks that can run simultaneously and be merged at the end.
+
+**Measure codebase scale:**
+- Count total source files by primary language extension
+- Count top-level modules/packages/projects
+- Count distinct tiers detected in Step 0 (Backend / Frontend / iOS / Android)
+
+**Choose a strategy:**
+
+| Scale | Signal | Strategy |
+|---|---|---|
+| **Small** | < 200 source files, 1–2 modules, 1 tier | Proceed through Steps 1–8 sequentially |
+| **Medium** | 200–2 000 source files OR 3–5 modules | 2 parallel tracks (see below) |
+| **Large** | 2 000+ files OR 6+ modules OR 2+ tiers | Per-tier sub-tasks + specialist DB track |
+
+**Medium — 2 parallel tracks:**
+- **Track A — DB Analyst**: Execute Step 2 (full database deep dive) independently
+- **Track B — Codebase Analyst**: Execute Steps 1, 3, 4, 5 (inventory, code quality, runtime, data flow)
+
+After both tracks complete, this agent runs Steps 6, 7, 8 (dependency mapping, security, risk) and merges all findings into `legacy_analyse.md`.
+
+**Large — per-tier sub-tasks + specialist tracks:**
+
+Spawn one sub-task per detected tier, each covering Steps 1 + 3 + 4 + 5 scoped to that tier's source tree:
+
+| Sub-task | Input Scope | Steps |
+|---|---|---|
+| Backend analyst | Server-side source tree | 1, 3, 4, 5 |
+| Frontend analyst | Web client source tree | 1, 3, 4, 5 |
+| iOS analyst | iOS project folder | 1, 3, 4, 5 |
+| Android analyst | Android project folder | 1, 3, 4, 5 |
+| DB analyst | All DB schemas, migration scripts, stored procs | 2 (full) |
+| Cross-cutting analyst | Full repo (deps, security, risk) | 6, 7, 8 — starts after tier tasks done |
+
+**Sub-task handoff protocol:**
+1. Each sub-task reads its scoped source path and produces a partial findings file: `ai-driven-development/docs/analysing/_partial_{tier}.md`
+2. This orchestrating agent reads all partial files and merges them into the final `legacy_analyse.md`, filling every section of the Output Format
+
+**Record decomposition plan before starting:**
+Add to `legacy_analyse.md` header:
+```
+## Analysis Plan
+- Scale: [Small / Medium / Large]
+- Strategy: [Sequential / 2-track / Per-tier]
+- Sub-tasks defined: [list]
+- Estimated scope: [file count, tier count]
+```
+
+> If sub-agent tooling is unavailable, process tiers sequentially — but record the order and note it in the report header so reviewers know it was done in passes.
+
+---
+
 ### Step 1 — System Inventory
 Catalog everything that exists:
 

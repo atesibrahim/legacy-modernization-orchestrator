@@ -80,6 +80,43 @@ Update this file at the start and end of every phase.
 
 ---
 
+### Step 0.1 — Bounded Context Decomposition Check
+
+> **Run after reading `target_architecture.md` and before Phase 1.** The number of bounded contexts determines whether to implement the domain in one pass or decompose feature development into sequential or parallel sub-tasks per context.
+
+**Measure:**
+- Count bounded contexts defined in `target_architecture.md`
+- List the feature modules they map to and their entity counts
+
+**Choose a strategy:**
+
+| Scale | Signal | Strategy |
+|---|---|---|
+| **Simple** | 1–2 bounded contexts, ≤ 5 entities per context | Implement all contexts in a single pass through Phases 3–9 |
+| **Moderate** | 3–5 bounded contexts | Implement one bounded context at a time through Phases 3, 5, 7 |
+| **Complex** | 6+ bounded contexts | One sub-task per context for Phases 3+5+7; run in parallel; merge into shared codebase |
+
+**Per-context sub-task scope (moderate/complex):**
+
+Each sub-task implements the full vertical slice for one bounded context:
+- **Phase 3** scope: entities + value objects + repository interfaces for this context only
+- **Phase 5** scope: application services + infrastructure repos + DTOs + mappers for this context
+- **Phase 7** scope: REST controllers + OpenAPI annotations for this context's API surface
+
+**Always single-threaded (never per-context):**
+- Phase 1–2: project setup and core foundation — done once for the whole project
+- Phase 9: integrations and async — done once; references all contexts
+- Phase 11: observability and DevOps — done once
+- Phase 12: testing and quality gate — runs across full codebase
+- Phase 13: final review — runs across full codebase
+
+**Integration contracts between contexts:**
+Define and document inter-context DTOs and events in a shared `api-contracts/` folder **before** starting parallel context sub-tasks. Both sides of a context boundary must agree on the contract first.
+
+Record the decomposition plan (bounded context list → sub-task assignment) in `be_development_todo.md` before coding any context.
+
+---
+
 ### Phase 1 — Project Setup & Core Foundation
 **Goal**: Bootstrap a working, runnable project with all tooling in place.
 
