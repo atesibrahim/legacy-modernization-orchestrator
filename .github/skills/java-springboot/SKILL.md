@@ -23,7 +23,7 @@ Your goal is to help me write high-quality Spring Boot applications by following
 
 - **Externalized Configuration:** Use `application.yml` (or `application.properties`) for configuration. YAML is often preferred for its readability and hierarchical structure.
 - **Type-Safe Properties:** Use `@ConfigurationProperties` to bind configuration to strongly-typed Java objects.
-- **Profiles:** Use Spring Profiles (`application-dev.yml`, `application-prod.yml`) to manage environment-specific configurations.
+- **Profiles:** Use Spring Profile (`application.yml`)
 - **Secrets Management:** Do not hardcode secrets. Use environment variables, or a dedicated secret management tool like Openshift Secrets.
 
 ## Web Layer (Controllers)
@@ -63,3 +63,112 @@ Your goal is to help me write high-quality Spring Boot applications by following
 - **Spring Security:** Use Spring Security for authentication and authorization.
 - **Password Encoding:** Always encode passwords using a strong hashing algorithm like BCrypt.
 - **Input Sanitization:** Prevent SQL injection by using Spring Data JPA or parameterized queries. Prevent Cross-Site Scripting (XSS) by properly encoding output.
+
+---
+
+## Backend Development — Java 21 + Spring Boot 3.5 Implementation
+
+> These are the Java-specific implementation steps that complement [`backend-development/SKILL.md`](../backend-development/SKILL.md). Apply these when `tech_stack_selections.md` confirms Java + Spring Boot as the backend stack.
+
+See also: [`STANDARDS.md`](./STANDARDS.md) for Java-specific architecture rules, Maven folder structure, and Docker image template.
+
+---
+
+### Phase 1 — Project Setup (Java / Spring Boot)
+
+**`pom.xml`** — required dependencies:
+- `spring-boot-starter-parent` 3.5+ as parent
+- `spring-boot-starter-web`
+- `spring-boot-starter-security`
+- `spring-boot-starter-data-jpa`
+- `spring-boot-starter-validation`
+- `spring-boot-starter-actuator`
+- `springdoc-openapi-starter-webmvc-ui`
+- `lombok` + `mapstruct`
+- Java 21 compiler settings (`maven-compiler-plugin` with `release=21`)
+- Profiles: `dev`, `test`, `prod`
+
+**Configuration files**:
+- `application.yml` — common config
+- `application-dev.yml` — local dev overrides (H2 or Docker DB, debug logging)
+- `application-prod.yml` — production (all secrets via env vars, JSON logging)
+
+---
+
+### Phase 5 — Application & Infrastructure Layers (Java)
+
+**Application Layer**:
+- Use case / Service implementation classes annotated with `@Service`
+- DTOs with Jakarta Validation (`@NotNull`, `@Size`, etc.) on request objects
+- MapStruct mappers (`@Mapper(componentModel = "spring")`)
+- Transaction boundaries at service layer with `@Transactional`
+
+**Infrastructure Layer**:
+- JPA repository implementations extending `JpaRepository`
+- External service clients using `RestClient` or `WebClient`
+- Messaging producers/consumers (Kafka `@KafkaListener` / RabbitMQ `@RabbitListener`)
+- Caching with `@EnableCaching` + `@Cacheable`
+
+---
+
+### Phase 7 — Spring Security Configuration
+
+```java
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class SecurityConfig {
+    // SecurityFilterChain bean
+    // JWT filter (OncePerRequestFilter)
+    // CORS configuration (CorsConfigurationSource)
+    // CSRF: disabled for stateless APIs
+}
+```
+
+**Auth Options**:
+- **JWT + LDAP**: `LdapAuthenticationProvider` + JWT issuance on success
+- **Keycloak/OAuth2**: Spring Security OAuth2 Resource Server + JWT decoder
+- **Both**: LDAP for legacy clients, OAuth2 for new clients (migration period)
+
+**Authorization**:
+```java
+@PreAuthorize("hasRole('ADMIN') or hasPermission(#id, 'READ')")
+public ItemDto getItem(Long id) { ... }
+```
+
+---
+
+### Phase 9 — Integrations (Java)
+
+- **Scheduling**: `@Scheduled` or Spring Batch — use `ShedLock` for distributed job locking
+- **SSH**: JSch library wrapped in a service layer
+- **FTP**: Apache Commons Net wrapped in a service layer
+- **Email**: `JavaMailSender` with Thymeleaf or Freemarker templates
+
+---
+
+### Phase 11 — Observability (Java)
+
+**Logging** (`logback-spring.xml`):
+- JSON structured output in `prod` profile (`logstash-logback-encoder`)
+- Include `traceId`, `spanId`, `userId` MDC fields for correlation
+
+**Metrics**: Micrometer → exposed at `/actuator/prometheus`
+
+**Tracing**: OpenTelemetry Java Agent attached as `-javaagent:opentelemetry-javaagent.jar`
+
+**Health probes** (Actuator):
+- `/actuator/health` — liveness
+- `/actuator/health/readiness` — readiness
+- Custom `HealthIndicator` beans for DB and messaging
+
+**Docker**: use the template in [`STANDARDS.md`](./STANDARDS.md) § Docker Image Template.
+
+---
+
+### Phase 12 — Quality Gate (Java)
+
+- **Coverage**: JaCoCo Maven plugin — target ≥ 70% line coverage (`mvn verify`)
+- **Dependency security**: `mvn dependency-check:check` (OWASP Dependency Check plugin) — fail on CVSS ≥ 7
+- **N+1 queries**: Enable `spring.jpa.show-sql=true` in test profile; analyse Hibernate SQL output
+- **Integration tests**: `@SpringBootTest` + `MockMvc` for API layer; `@DataJpaTest` for repositories; Testcontainers for real DB

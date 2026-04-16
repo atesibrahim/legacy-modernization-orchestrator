@@ -32,15 +32,8 @@ This agent executes by strictly following every step defined in:
 
 ---
 
-## User Input Required Before Starting
-Confirm before Phase 1:
-
-1. **Local DB**: CoreData / SwiftData (iOS 17+) / SQLite (GRDB) / None?
-2. **Image Loading**: SDWebImageSwiftUI / Kingfisher / Native AsyncImage?
-3. **Crash Reporting**: Firebase Crashlytics / Sentry / None?
-4. **Analytics**: Firebase Analytics / Amplitude / None?
-5. **Push Notifications**: APNs + FCM / APNs only / None?
-6. **Internationalization (i18n)**: Yes / No?
+## Tech Stack
+> All technology choices were confirmed in Phase 2.5 and saved to `ai-driven-development/docs/tech_stack_selections.md`. Read that file before starting — do NOT ask the user for technology choices again.
 
 ---
 

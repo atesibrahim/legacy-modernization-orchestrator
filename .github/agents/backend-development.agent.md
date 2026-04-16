@@ -31,14 +31,8 @@ This agent executes by strictly following every step defined in:
 
 ---
 
-## User Input Required Before Starting
-Confirm before Phase 1:
-
-1. **Database**: Oracle / PostgreSQL / MySQL?
-2. **Auth Provider**: Spring Security + LDAP / Keycloak / Auth0?
-3. **Messaging**: Kafka / RabbitMQ / AWS SQS / None?
-4. **Caching**: Redis / Caffeine / None?
-5. **Container Orchestration**: Docker + K8s / Docker Compose / Cloud PaaS?
+## Tech Stack
+> All technology choices were confirmed in Phase 2.5 and saved to `ai-driven-development/docs/tech_stack_selections.md`. Read that file before starting — do NOT ask the user for technology choices again.
 
 ---
 

@@ -63,9 +63,11 @@ Create folders:
 
 ## Architecture Rules (Non-Negotiable)
 
-> See [STANDARDS.md](./STANDARDS.md) for the full list of architecture rules, project folder structure, Docker image template, error response format, and all other project standards.
+> See [STANDARDS.md](./STANDARDS.md) for language-agnostic architecture rules, the error response format, and the phase tracker template.
 
-> **Language adaptation**: The procedure below uses **Java 21 + Spring Boot** as the reference implementation. If the confirmed language/framework in `tech_stack_selections.md` is .NET, Python, or Go, apply the equivalent toolchain from the Per-Language Toolchain table above — same architectural patterns (Clean Architecture, layered structure, REST + OpenAPI, JWT auth, observability), different tools.
+> **Java 21 + Spring Boot**: For Java-specific standards (Maven folder structure, Lombok, Spring annotations, Docker template), see [`../java-springboot/STANDARDS.md`](../java-springboot/STANDARDS.md). For Java-specific implementation steps (pom.xml setup, Spring Security config, Logback, Testcontainers), see [`../java-springboot/SKILL.md`](../java-springboot/SKILL.md).
+
+> **Language adaptation**: The procedure below applies to all stacks. When the confirmed stack is Java + Spring Boot, follow the Java-specific steps in [`../java-springboot/SKILL.md`](../java-springboot/SKILL.md) alongside this procedure. For .NET, Python, or Go, apply the equivalent toolchain from the Per-Language Toolchain table above — same architectural patterns (Clean Architecture, layered structure, REST + OpenAPI, JWT auth, observability), different tools.
 
 ---
 
@@ -81,13 +83,13 @@ Update this file at the start and end of every phase.
 ### Phase 1 — Project Setup & Core Foundation
 **Goal**: Bootstrap a working, runnable project with all tooling in place.
 
-1. **Maven project structure**: Use the folder structure from [STANDARDS.md](./STANDARDS.md).
+1. **Project structure**: Use the folder structure from the stack-specific standards file (see [`../java-springboot/STANDARDS.md`](../java-springboot/STANDARDS.md) for Java/Maven).
 
-2. **`pom.xml`** with:
-   - Spring Boot 3.5+ parent
-   - Java 21 compiler settings
-   - Required dependencies (Spring Web, Security, Data JPA, Validation, Actuator, Lombok, SpringDoc)
-   - Profiles: `dev`, `test`, `prod`
+2. **Build file** (`pom.xml` / `*.csproj` / `pyproject.toml` / `go.mod`) with:
+   - Framework parent / version pinning
+   - Required dependencies (web, security, ORM, validation, health checks, API docs)
+   - Profiles / environments: `dev`, `test`, `prod`
+   - For Java specifics, see [`../java-springboot/SKILL.md`](../java-springboot/SKILL.md) § Phase 1.
 
 3. **Application configuration files**:
    - `application.yml` — common config
@@ -128,7 +130,7 @@ For each bounded context identified in system design:
 6. **Enumerations**: Business-meaningful constants as enums
 
 **Rules**:
-- Entities have no Spring annotations in `domain/` package
+- Entities have no framework-specific annotations in the `domain/` package
 - Validation logic belongs in domain constructors / factory methods
 - No `Optional` wrapping everywhere — use it only as return type from repositories
 
@@ -144,15 +146,15 @@ For each bounded context identified in system design:
 **Goal**: Implement use cases and wire them to infrastructure.
 
 **Application Layer**:
-- Use case / Service implementation classes (annotated with `@Service`)
-- DTOs with Jakarta Validation (`@NotNull`, `@Size`, etc.)
-- Mappers (MapStruct recommended)
-- Transaction boundaries at service layer (`@Transactional`)
+- Use case / service implementation classes
+- DTOs with validation (Jakarta Validation / FluentValidation / Pydantic / struct tags per stack)
+- Mappers (MapStruct / AutoMapper / dataclasses / struct mapping per stack)
+- Transaction boundaries at service layer
+- For Java specifics, see [`../java-springboot/SKILL.md`](../java-springboot/SKILL.md) § Phase 5.
 
 **Infrastructure Layer**:
-- JPA repository implementations (Spring Data interfaces)
-- External service clients (REST templates / WebClient)
-- Messaging producers/consumers (if applicable)
+- ORM repository implementations
+- External service clients (HTTP clients, messaging producers/consumers)
 - Caching configuration (if applicable)
 
 ### Phase 6 — Review Phase 5
@@ -173,29 +175,20 @@ For each bounded context identified in system design:
 - HTTP verbs: GET (read), POST (create), PUT (update), PATCH (partial), DELETE
 - OpenAPI annotations for all endpoints
 
-**Spring Security Setup**:
-```java
-@Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
-public class SecurityConfig {
-    // SecurityFilterChain bean
-    // JWT filter
-    // CORS config
-    // CSRF: disable for stateless APIs
-}
-```
+**Security Framework Setup** (implement based on the confirmed stack):
+- Register a security filter chain / middleware pipeline
+- Configure JWT validation (or OAuth2 resource server)
+- Configure CORS for frontend origins only
+- Disable CSRF for stateless APIs
 
 **Auth Options** (implement based on user selection):
-- **JWT + LDAP**: `LdapAuthenticationProvider` + JWT issuance on success
-- **Keycloak/OAuth2**: Spring Security OAuth2 Resource Server + JWT decoder
+- **JWT + LDAP**: LDAP authentication provider + JWT issuance on success
+- **Keycloak/OAuth2**: OAuth2 Resource Server + JWT decoder
 - **Both**: LDAP for legacy clients, OAuth2 for new clients (migration period)
 
-**Authorization**:
-```java
-@PreAuthorize("hasRole('ADMIN') or hasPermission(#id, 'READ')")
-public ItemDto getItem(Long id) { ... }
-```
+**Authorization**: enforce at method/handler level — never inline role checks in business logic.
+
+> For Java + Spring Boot specifics (`SecurityConfig`, `@PreAuthorize`, JWT filter), see [`../java-springboot/SKILL.md`](../java-springboot/SKILL.md) § Phase 7.
 
 ### Phase 8 — Review Phase 7
 - [ ] All endpoints documented in Swagger UI
@@ -220,17 +213,17 @@ public ItemDto getItem(Long id) { ... }
 - Message schemas documented
 
 **Scheduling**:
-- `@Scheduled` or Spring Batch jobs replacing legacy cron scripts
-- Job locking for distributed deployments (ShedLock)
+- Replace legacy cron scripts with framework scheduler or batch jobs
+- Use distributed job locking for multi-instance deployments
 
 **File/SSH/FTP** (if applicable):
-- JSch for SSH commands
-- Apache Commons Net for FTP operations
+- Use stack-appropriate SSH / FTP client library
 - All operations wrapped in service layer with error handling
 
 **Email Notifications**:
-- `JavaMailSender` or Spring Mail
-- Templates (Thymeleaf or Freemarker)
+- Use stack-appropriate mail client with templated email bodies
+
+> For Java + Spring Boot specifics (`@Scheduled`, ShedLock, JSch, `JavaMailSender`, Thymeleaf), see [`../java-springboot/SKILL.md`](../java-springboot/SKILL.md) § Phase 9.
 
 ### Phase 10 — Review Phase 9
 - [ ] All integrations have circuit breakers or retry logic
@@ -244,13 +237,10 @@ public ItemDto getItem(Long id) { ... }
 **Goal**: Make the system monitorable in production.
 
 **Logging**:
-```xml
-<!-- logback-spring.xml -->
-<!-- JSON structured logging for prod -->
-<!-- Pattern with traceId, spanId, userId for correlation -->
-```
+- Structured JSON output in `prod` profile
+- Include trace ID, span ID, and user ID in every log line for correlation
 
-**Metrics** (Micrometer):
+**Metrics**:
 - Business metrics: counters per use case
 - SLA metrics: response time histograms
 - DB metrics: connection pool, query times
@@ -260,42 +250,41 @@ public ItemDto getItem(Long id) { ... }
 - Span annotations on service methods
 
 **Docker**:
-```dockerfile
-FROM eclipse-temurin:21-jre-alpine
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
-COPY target/app.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
-```
+- Non-root user — mandatory for security
+- Minimal base image (Alpine or distroless); pin exact version
+- See stack-specific Docker template: [`../java-springboot/STANDARDS.md`](../java-springboot/STANDARDS.md) § Docker Image Template
 
-**Health Checks** (Actuator):
-- `/actuator/health` — liveness
-- `/actuator/health/readiness` — readiness
-- Custom health indicators for DB, messaging
+**Health Checks**:
+- Liveness and readiness endpoints (e.g. `/actuator/health`, `/actuator/health/readiness` for Java)
+- Custom health indicators for DB and messaging
+
+> For Java + Spring Boot specifics (Logback JSON config, Micrometer, OpenTelemetry Java Agent, eclipse-temurin Docker image), see [`../java-springboot/SKILL.md`](../java-springboot/SKILL.md) § Phase 11.
 
 ---
 
 ### Phase 12 — Testing & Quality Gate
 **Goal**: Achieve quality targets before release.
 
-**Unit Tests** (JUnit 5 + Mockito):
+**Unit Tests**:
 - All service methods have unit tests
 - Target: ≥ 70% line coverage
 - Test all edge cases, null inputs, boundary values
 
-**Integration Tests** (Testcontainers):
-- DB integration tests using real DB container
-- API layer tests with `@SpringBootTest` + `MockMvc`
+**Integration Tests**:
+- DB integration tests using real DB container (Testcontainers or equivalent)
+- API layer tests covering happy path and error cases
 - Security tests: authenticated vs unauthenticated requests
 
 **Performance**:
 - Load test key endpoints (k6 / Gatling / JMeter)
 - Verify P95 < 200ms under expected load
-- Check for N+1 queries (Hibernate query log analysis)
+- Check for N+1 queries via ORM query logging
 
 **Security Scan**:
-- OWASP Dependency Check on `pom.xml`
+- Run a dependency vulnerability scan (OWASP Dependency Check / `dotnet list package --vulnerable` / `pip-audit` / `govulncheck`)
 - No CVEs in critical/high severity from runtime dependencies
+
+> For Java + Spring Boot specifics (JUnit 5, Mockito, JaCoCo, `mvn dependency-check:check`, Hibernate query log), see [`../java-springboot/SKILL.md`](../java-springboot/SKILL.md) § Phase 12.
 
 ### Phase 13 — Final Review & Cleanup
 - [ ] All TODO comments resolved

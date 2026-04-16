@@ -1,7 +1,9 @@
 # Backend Development Standards
 
-These are the **non-negotiable, project-independent** standards for all backend implementations.
+These are the **non-negotiable, language-agnostic** standards for all backend implementations.
 The SKILL.md procedure references these. Do not deviate — create an ADR if a justified exception is needed.
+
+> **Java 21 + Spring Boot**: For Java-specific standards (Maven folder structure, Lombok, Spring annotations, Docker image template), see [`../java-springboot/STANDARDS.md`](../java-springboot/STANDARDS.md).
 
 ---
 
@@ -10,28 +12,12 @@ The SKILL.md procedure references these. Do not deviate — create an ADR if a j
 - **Clean Architecture layers**: `Controller → Service → Repository → Entity` — strict, no skipping
 - **Dependency Inversion**: Use interfaces, inject via constructor, never field injection
 - **No business logic** in controllers, entities, or repositories
-- **No raw SQL** — Spring Data JPA repositories or named queries only
-- **No `@Autowired` on fields** — constructor injection only
-- **`@PreAuthorize`** for authorization — never inline role checks in business logic
-- **No hard-coded secrets** — all configuration via environment variables or Vault
-- **No `DEBUG_MODE` flags** — use Spring profiles (`dev`, `test`, `prod`)
-- **Lombok**: Use minimally — `@Getter`, `@Builder`, `@Slf4j` preferred over `@Data`
+- **No raw SQL** — use the ORM or named/parameterized queries only
+- **No framework-specific annotations in the `domain/` layer** — domain must be framework-free
+- **Authorization at the method/handler level** — never inline role checks in business logic
+- **No hard-coded secrets** — all configuration via environment variables or a secrets manager
+- **No `DEBUG_MODE` flags** — use environment profiles (`dev`, `test`, `prod`)
 - **No over-engineering** — YAGNI; implement only what is needed
-
----
-
-## Project Folder Structure (Maven)
-
-```
-src/main/java/com/{company}/{project}/
-├── {module}/
-│   ├── domain/         ← Entities, Value Objects, Repository interfaces
-│   ├── application/    ← Service interfaces, Use cases, DTOs
-│   ├── infrastructure/ ← JPA Repositories, external clients, config
-│   └── api/            ← REST Controllers, request/response mappers
-├── shared/             ← Cross-cutting: exceptions, utils, audit
-└── Application.java
-```
 
 ---
 
@@ -82,63 +68,21 @@ Map HTTP status codes consistently:
 [Expand each phase with specific tasks as you start it]
 ```
 
----
-
-## Docker Image Template
-
-```dockerfile
-FROM eclipse-temurin:21-jre-alpine
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
-COPY target/app.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
-```
-
-Rules:
-- Non-root user (`appuser`) — mandatory for security
-- Alpine base — minimal attack surface
-- No `latest` tags — always pin base image version
-- `ENV JAVA_OPTS=""` — allow JVM tuning without image rebuild
+> For Docker image templates, see the stack-specific standards file (e.g. [`../java-springboot/STANDARDS.md`](../java-springboot/STANDARDS.md) § Docker Image Template).
 
 ---
 
 ## Application Configuration Structure
 
-```
-src/main/resources/
-├── application.yml         ← Common config (no secrets, no env-specific values)
-├── application-dev.yml     ← Local dev overrides (H2 / local DB, debug logging)
-├── application-prod.yml    ← Production (all sensitive values via env vars)
-└── logback-spring.xml      ← Structured JSON logging for prod, console for dev
-```
+Organize configuration files by environment profile. All sensitive values must come from environment variables — no secrets in config files:
+
+- **Common config** — default values shared across all environments
+- **Dev profile** — local overrides (local DB, debug logging, relaxed security)
+- **Prod profile** — production (all secrets via env vars, structured JSON logging)
 
 Environment variable naming convention: `APP_DATASOURCE_URL`, `APP_SECURITY_JWT_SECRET`
 
----
-
-## Security Configuration Template
-
-```java
-@Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
-public class SecurityConfig {
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-            .csrf(AbstractHttpConfigurer::disable)        // stateless API
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .sessionManagement(s -> s.sessionCreationPolicy(STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**", "/actuator/health").permitAll()
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-            .build();
-    }
-}
-```
+> For the Spring Boot-specific file layout (`application.yml`, `application-dev.yml`, `logback-spring.xml`), see [`../java-springboot/STANDARDS.md`](../java-springboot/STANDARDS.md).
 
 ---
 
@@ -157,14 +101,10 @@ public class SecurityConfig {
 
 ## Logging Standards
 
-```xml
-<!-- logback-spring.xml — production profile -->
-<!-- JSON structured output with correlation fields -->
-<!-- Required MDC fields: traceId, spanId, userId, requestId -->
-```
-
 Every log entry in production must include:
 - `traceId` — OpenTelemetry W3C trace context
 - `level`, `timestamp`, `logger`, `message`
 - `userId` (where available, from security context)
 - Never log: passwords, tokens, PII, full request bodies
+
+> For Java + Spring Boot logging configuration (Logback JSON, MDC fields), see [`../java-springboot/STANDARDS.md`](../java-springboot/STANDARDS.md).

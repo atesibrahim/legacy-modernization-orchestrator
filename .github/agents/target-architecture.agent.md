@@ -31,16 +31,8 @@ This agent executes by strictly following every step defined in:
 
 ---
 
-## User Input Required Before Starting
-Confirm these technology choices with the user before proceeding:
-
-1. **Architecture Style**: Modular Monolith / Microservices / Hybrid?
-2. **Database**: Oracle / PostgreSQL / MySQL / other?
-3. **Auth Provider**: Spring Security + LDAP / Keycloak / Auth0?
-4. **Message Broker**: Kafka / RabbitMQ / None?
-5. **Caching**: Redis / Caffeine / None?
-6. **Frontend UI Library**: MUI / shadcn+Tailwind / Chakra?
-7. **Container Strategy**: K8s / Openshift / Docker Compose / Cloud PaaS?
+## Tech Stack
+> All technology choices were confirmed in Phase 2.5 and saved to `ai-driven-development/docs/tech_stack_selections.md`. Read that file before starting — do NOT ask the user for technology choices again.
 
 ---
 

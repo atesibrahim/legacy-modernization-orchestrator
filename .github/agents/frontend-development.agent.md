@@ -32,14 +32,8 @@ This agent executes by strictly following every step defined in:
 
 ---
 
-## User Input Required Before Starting
-Confirm before Phase 1:
-
-1. **UI Component Library**: MUI / shadcn+Tailwind / Chakra?
-2. **State Management**: Redux Toolkit / Zustand / Jotai / Context only?
-3. **Tables**: TanStack Table / AG Grid?
-4. **Charts**: Recharts / Chart.js / Victory / None?
-5. **i18n**: Yes (react-i18next) / No?
+## Tech Stack
+> All technology choices were confirmed in Phase 2.5 and saved to `ai-driven-development/docs/tech_stack_selections.md`. Read that file before starting — do NOT ask the user for technology choices again.
 
 ---
 
