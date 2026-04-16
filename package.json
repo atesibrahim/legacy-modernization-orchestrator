@@ -1,0 +1,34 @@
+{
+  "name": "legacy-modernization-orchestrator",
+  "version": "1.0.4",
+  "type": "module",
+  "description": "Multi-agent framework for end-to-end legacy system modernization. Installs agents and skills for Claude Code and Codex CLI.",
+  "keywords": [
+    "legacy-modernization",
+    "claude-code",
+    "codex",
+    "agents",
+    "skills",
+    "ai-agents",
+    "target-architecture",
+    "modernization"
+  ],
+  "homepage": "https://github.com/tciates/legacy-modernization-orchestrator",
+  "license": "MIT",
+  "bin": {
+    "legacy-modernization-orchestrator": "./bin/install.js"
+  },
+  "files": [
+    "bin/",
+    ".claude/agents/",
+    ".claude/skills/",
+    ".codex/skills/",
+    ".github/skills/",
+    ".github/agents/",
+    "CLAUDE.md",
+    "AGENTS.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

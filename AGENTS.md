@@ -1,0 +1,112 @@
+# Legacy Modernization Orchestrator — Agent Instructions
+
+This repository contains a structured multi-agent framework for end-to-end legacy system modernization. All detailed skill instructions live in `.github/skills/`. All agent definitions live in `.github/agents/`.
+
+---
+
+## How to Use This Framework
+
+When a user asks you to modernize, analyse, or redesign a legacy system, you MUST act as the appropriate agent defined below. Read the referenced `SKILL.md` file in full before proceeding — it contains the authoritative, step-by-step instructions, output formats, and Definition of Done checklists. **Do NOT skip, reorder, or summarize steps.**
+
+---
+
+## Agent Roster
+
+### `legacy-modernization-orchestrator` _(Master Orchestrator)_
+**Use when:** Starting or continuing a full legacy modernization project.  
+**Role:** Execute all phases in strict order, validate DoD gates, coordinate all other agents.  
+**Skill:** `.github/agents/legacy-modernization-orchestrator.agent.md`
+
+**Phase Order:**
+```
+Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional parallel) → Phase 5 → Phase 6 → Phase 7
+```
+
+| Phase | Agent | Required? |
+|-------|-------|-----------|
+| 1 | `analysing-legacy` | Always |
+| 2 | `legacy-architecture` | Always |
+| 3 | `target-architecture` | Always |
+| 4a | `ui-ux-design` | If any client UI needed |
+| 4b | `backend-development` | Optional |
+| 4c | `frontend-development` | Optional |
+| 4d | `ios-development` | Optional |
+| 4e | `android-development` | Optional |
+| 5 | `compare-legacy-to-new` | After any dev phase |
+| 6 | Final Validation | After Phase 5 |
+
+---
+
+### `analysing-legacy`
+**Use when:** Analysing legacy codebase, reverse engineering legacy architecture, identifying technical debt, mapping business flows, detecting hidden dependencies, assessing security posture, database schema reverse engineering, stored procedures and triggers inventory, table ownership matrix, data quality assessment, creating legacy architecture reports, risk matrix, data and integration maps before any redesign or migration project.  
+**Argument hint:** Path or description of the legacy project to analyze  
+**Skill file:** `.github/skills/analysing-legacy/SKILL.md`
+
+---
+
+### `legacy-architecture`
+**Use when:** Visualizing legacy architecture, creating system diagrams for legacy systems, understanding legacy component relationships, mapping legacy data flows, identifying architectural weaknesses, producing mermaid diagrams in HTML format, documenting legacy architectural constraints before redesign.  
+**Argument hint:** Legacy system name or path to analysis report to base diagrams from  
+**Skill file:** `.github/skills/legacy-architecture/SKILL.md`
+
+---
+
+### `target-architecture`
+**Use when:** Designing new modern system architecture, creating target state architecture, applying clean architecture hexagonal DDD microservices patterns, defining service boundaries bounded contexts API-first design, producing mermaid architecture diagrams in HTML, tech stack Java 21 Spring Boot 3.5 React 18 Kotlin mobile.  
+**Argument hint:** Project name or path to legacy analysis and legacy design artifacts  
+**Skill file:** `.github/skills/target-architecture/SKILL.md`
+
+---
+
+### `ui-ux-design`
+**Use when:** Designing user interfaces for modernized application, creating wireframes mockups design systems, defining user journeys for web React and mobile iOS Android, applying WCAG accessibility standards, building responsive mobile-first design, producing HTML design previews, creating component design system tokens typography colors.  
+**Argument hint:** Application name and list of primary user roles or workflows to design for  
+**Skill file:** `.github/skills/ui-ux-design/SKILL.md`
+
+---
+
+### `backend-development`
+**Use when:** Building Java 21 Spring Boot 3.5 backend, implementing clean architecture hexagonal architecture, setting up domain-driven design modules, implementing REST APIs OpenAPI security JWT LDAP OAuth2, database JPA repositories, testing JUnit Mockito Testcontainers, observability metrics tracing logging, phased development plan backend implementation.  
+**Argument hint:** Project name or path to system design artifacts to base backend implementation on  
+**Skill file:** `.github/skills/backend-development/SKILL.md`
+
+---
+
+### `frontend-development`
+**Use when:** Building React 18 TypeScript frontend, implementing design system components, state management Redux Toolkit Zustand TanStack Query, API integration Axios, code splitting lazy loading performance optimization, Jest Cypress Playwright testing, phased frontend development plan. For mobile clients use `ios-development` or `android-development` instead.  
+**Argument hint:** Project name or path to UI/UX design artifacts and system design to implement  
+**Skill file:** `.github/skills/frontend-development/SKILL.md`
+
+---
+
+### `ios-development`
+**Use when:** Building Swift SwiftUI iOS mobile app, implementing MVVM architecture, Combine async-await, Keychain token storage, URLSession networking, CoreData local persistence, push notifications, deep linking, unit testing XCTest, UI testing, App Store deployment, phased iOS development plan.  
+**Argument hint:** Project name or path to UI/UX design artifacts and system design to implement  
+**Skill file:** `.github/skills/ios-development/SKILL.md`
+
+---
+
+### `android-development`
+**Use when:** Building Kotlin Jetpack Compose Android mobile app, implementing MVVM Clean Architecture, Kotlin Coroutines Flow, EncryptedSharedPreferences Keystore token storage, Retrofit OkHttp networking, Room local persistence, push notifications FCM, deep linking, unit testing JUnit Mockk Turbine, UI testing Espresso Compose, Play Store deployment, phased Android development plan.  
+**Argument hint:** Project name or path to UI/UX design artifacts and system design to implement  
+**Skill file:** `.github/skills/android-development/SKILL.md`
+
+---
+
+### `compare-legacy-to-new`
+**Use when:** Comparing legacy system with redesigned system, gap analysis between legacy and new, mapping legacy components to new equivalents, creating migration strategy, producing before-after diagrams in HTML mermaid, validating that all legacy functionality is covered in new design, identifying improvements and regressions.  
+**Argument hint:** Path to legacy analysis and new system design artifacts to compare  
+**Skill file:** `.github/skills/compare-legacy-to-new/SKILL.md`
+
+---
+
+## Execution Rules
+
+1. **Always read the full `SKILL.md` file** for the active agent before starting work.
+2. **Never skip or reorder steps** — the skill files are authoritative.
+3. **Validate DoD checklists** at the end of each agent's work before proceeding.
+4. **Phases 1–3 are always required** — never jump straight to development.
+5. **Auto-detect scope from Phase 1** — after `analysing-legacy` completes, read **Section 10 — Technology Profile** in `legacy_analyse.md` to pre-fill the scope (Backend / Web Frontend / iOS / Android). Present the detected scope to the user for confirmation before Phase 4. Do NOT ask all 4 questions blindly if the profile is already known.
+6. **Only execute phases relevant to the confirmed scope** — skip and mark N/A any Phase 4 sub-phase whose tier is not present in the repository. Do not design, diagram, or generate code for layers that don't exist.
+7. **Phases 4a–4e can run in parallel** once scope is confirmed and UI/UX contracts are available (4a required before 4c/4d/4e; 4a skipped if backend-only).
+8. All outputs go into `ai-driven-development/` subdirectories as specified by each skill.
