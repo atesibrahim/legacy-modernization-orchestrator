@@ -32,7 +32,7 @@ This agent executes by strictly following every step defined in:
 ---
 
 ## Outputs
-Produce in `ai-driven-development/docs/analysing/`:
+Produce in `ai-driven-development/docs/analysing/` (create if not exists):
 - `legacy_analyse.md` — Full legacy architecture analysis report
 
 ---

@@ -1,6 +1,6 @@
 ---
 name: target-architecture
-description: "Use when designing new modern system architecture, creating target state architecture, applying clean architecture hexagonal DDD microservices patterns, defining service boundaries bounded contexts API-first design, producing mermaid architecture diagrams in HTML, tech stack Java 21 Spring Boot 3.5 React 18 Kotlin mobile. Requires legacy analysis and legacy design artifacts."
+description: "Use when designing new modern system architecture, creating target state architecture, applying clean architecture hexagonal DDD microservices patterns, defining service boundaries bounded contexts API-first design, producing mermaid architecture diagrams in HTML, tech stack user-selected: Java/.NET/Python/Go backend, React/Vue/Angular/Svelte frontend, Kotlin mobile. Requires legacy analysis and legacy design artifacts."
 tools:
   - Read
   - Write

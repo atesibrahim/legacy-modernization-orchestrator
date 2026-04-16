@@ -19,13 +19,14 @@ When a user asks you to modernize, analyse, or redesign a legacy system, you MUS
 
 **Phase Order:**
 ```
-Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional parallel) → Phase 5 → Phase 6 → Phase 7
+Phase 1 → Phase 2 → Phase 2.5 (Tech Stack Selection Gate) → Phase 3 → [Scope Selection] → Phase 4 (optional parallel) → Phase 5 → Phase 6 → Phase 7
 ```
 
 | Phase | Agent | Required? |
-|-------|-------|-----------|
+|-------|-------|----------|
 | 1 | `analysing-legacy` | Always |
 | 2 | `legacy-architecture` | Always |
+| 2.5 | Tech Stack Selection Gate | Always |
 | 3 | `target-architecture` | Always |
 | 4a | `ui-ux-design` | If any client UI needed |
 | 4b | `backend-development` | Optional |
@@ -52,7 +53,7 @@ Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional para
 ---
 
 ### `target-architecture`
-**Use when:** Designing new modern system architecture, creating target state architecture, applying clean architecture hexagonal DDD microservices patterns, defining service boundaries bounded contexts API-first design, producing mermaid architecture diagrams in HTML, tech stack Java 21 Spring Boot 3.5 React 18 Kotlin mobile.  
+**Use when:** Designing new modern system architecture, creating target state architecture, applying clean architecture hexagonal DDD microservices patterns, defining service boundaries bounded contexts API-first design, producing mermaid architecture diagrams in HTML, tech stack user-selected: Java/.NET/Python/Go backend, React/Vue/Angular/Svelte frontend, Kotlin mobile.  
 **Argument hint:** Project name or path to legacy analysis and legacy design artifacts  
 **Skill file:** `.github/skills/target-architecture/SKILL.md`
 
@@ -66,14 +67,14 @@ Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional para
 ---
 
 ### `backend-development`
-**Use when:** Building Java 21 Spring Boot 3.5 backend, implementing clean architecture hexagonal architecture, setting up domain-driven design modules, implementing REST APIs OpenAPI security JWT LDAP OAuth2, database JPA repositories, testing JUnit Mockito Testcontainers, observability metrics tracing logging, phased development plan backend implementation.  
+**Use when:** Building Java Spring Boot / .NET ASP.NET Core / Python FastAPI / Go Gin-Fiber backend, implementing clean architecture hexagonal architecture, setting up domain-driven design modules, implementing REST APIs OpenAPI security JWT OAuth2, database ORM repositories, testing unit integration Testcontainers, observability metrics tracing logging, phased development plan backend implementation.  
 **Argument hint:** Project name or path to system design artifacts to base backend implementation on  
 **Skill file:** `.github/skills/backend-development/SKILL.md`
 
 ---
 
 ### `frontend-development`
-**Use when:** Building React 18 TypeScript frontend, implementing design system components, state management Redux Toolkit Zustand TanStack Query, API integration Axios, code splitting lazy loading performance optimization, Jest Cypress Playwright testing, phased frontend development plan. For mobile clients use `ios-development` or `android-development` instead.  
+**Use when:** Building React / Vue / Angular / Svelte TypeScript frontend, implementing design system components, state management TanStack Query Zustand Pinia NgRx, API integration Axios, code splitting lazy loading performance optimization, Vitest Playwright testing, phased frontend development plan. For mobile clients use `ios-development` or `android-development` instead.  
 **Argument hint:** Project name or path to UI/UX design artifacts and system design to implement  
 **Skill file:** `.github/skills/frontend-development/SKILL.md`
 
@@ -107,6 +108,7 @@ Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional para
 3. **Validate DoD checklists** at the end of each agent's work before proceeding.
 4. **Phases 1–3 are always required** — never jump straight to development.
 5. **Auto-detect scope from Phase 1** — after `analysing-legacy` completes, read **Section 10 — Technology Profile** in `legacy_analyse.md` to pre-fill the scope (Backend / Web Frontend / iOS / Android). Present the detected scope to the user for confirmation before Phase 4. Do NOT ask all 4 questions blindly if the profile is already known.
-6. **Only execute phases relevant to the confirmed scope** — skip and mark N/A any Phase 4 sub-phase whose tier is not present in the repository. Do not design, diagram, or generate code for layers that don't exist.
-7. **Phases 4a–4e can run in parallel** once scope is confirmed and UI/UX contracts are available (4a required before 4c/4d/4e; 4a skipped if backend-only).
-8. All outputs go into `ai-driven-development/` subdirectories as specified by each skill.
+6. **Phase 2.5 (Tech Stack Selection Gate) is mandatory** — collect ALL flexible technology choices from the user after Phase 2 and save them to `ai-driven-development/docs/tech_stack_selections.md`. All downstream agents read from this file. Do NOT ask for tech choices again in Phases 3–4.
+7. **Only execute phases relevant to the confirmed scope** — skip and mark N/A any Phase 4 sub-phase whose tier is not present in the repository. Do not design, diagram, or generate code for layers that don't exist.
+8. **Phases 4a–4e can run in parallel** once scope is confirmed and UI/UX contracts are available (4a required before 4c/4d/4e; 4a skipped if backend-only).
+9. All outputs go into `ai-driven-development/` subdirectories as specified by each skill.

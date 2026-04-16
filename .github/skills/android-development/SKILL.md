@@ -45,17 +45,18 @@ Create folder `ai-driven-development/development/mobile_development/android/{pro
 | Code Quality | Detekt + Ktlint |
 | Build | Gradle (Kotlin DSL) |
 
-### Flexible / User-Selectable (confirm before Phase 1)
+### Confirmed Tech Choices (read from `tech_stack_selections.md`)
 
-| Concern | Options |
+> **Do NOT ask the user for these** — all choices were confirmed in Phase 2.5 and saved to `ai-driven-development/docs/tech_stack_selections.md`. Read that file before Phase 1 and apply the confirmed selections throughout.
+
+| Concern | `tech_stack_selections.md` key |
 |---|---|
-| JSON Serialization | Moshi (preferred) / Gson / kotlinx.serialization |
-| Logging | Timber (preferred) / Android Log |
-| Crash Reporting | Firebase Crashlytics / Sentry / None |
-| Analytics | Firebase Analytics / Amplitude / None |
-| Push Notifications | FCM (Firebase Cloud Messaging) / None |
-| Paging | Paging 3 (Jetpack) / manual pagination / None |
-| WorkManager | Yes (background sync) / No |
+| JSON Serialization | § Android → JSON Serialization |
+| Crash Reporting | § Android → Crash Reporting |
+| Analytics | § Android → Analytics |
+| Push Notifications | § Android → Push Notifications |
+| Paging | § Android → Paging Strategy |
+| WorkManager | § Android → Background Sync (WorkManager) |
 
 ---
 

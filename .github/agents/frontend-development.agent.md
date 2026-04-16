@@ -1,6 +1,6 @@
 ---
 name: frontend-development
-description: 'Frontend development agent for legacy modernization. Act as a senior expert frontend developer. Use when: building React 18 TypeScript frontend, implementing design system components, state management Redux Toolkit Zustand TanStack Query, API integration Axios, code splitting lazy loading performance optimization, Jest Cypress Playwright testing, phased frontend development plan. For mobile: use ios-development or android-development agents instead.'
+description: 'Frontend development agent for legacy modernization. Act as a senior expert frontend developer. Use when: building React / Vue / Angular / Svelte TypeScript frontend, implementing design system components, state management TanStack Query Zustand Pinia NgRx, API integration Axios, code splitting lazy loading performance optimization, Vitest Playwright testing, phased frontend development plan. For mobile: use ios-development or android-development agents instead.'
 argument-hint: 'Project name or path to UI/UX design artifacts and system design to implement'
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: target-architecture
-description: 'Target system architecture design skill for legacy modernization. Act as a senior master architect. Use when: designing new modern system architecture, creating target state architecture, applying clean architecture hexagonal DDD microservices patterns, defining service boundaries bounded contexts API-first design, producing mermaid architecture diagrams in HTML, tech stack Java 21 Spring Boot 3.5 React 18 Kotlin mobile.'
+description: 'Target system architecture design skill for legacy modernization. Act as a senior master architect. Use when: designing new modern system architecture, creating target state architecture, applying clean architecture hexagonal DDD microservices patterns, defining service boundaries bounded contexts API-first design, producing mermaid architecture diagrams in HTML, tech stack user-selected: Java/.NET/Python/Go backend, React/Vue/Angular/Svelte frontend, Kotlin mobile.'
 argument-hint: 'Project name or path to legacy analysis and legacy design artifacts'
 ---
 
@@ -17,8 +17,9 @@ argument-hint: 'Project name or path to legacy analysis and legacy design artifa
 ## Prerequisites
 - `ai-driven-development/docs/analysing/legacy_analyse.md`
 - `ai-driven-development/docs/legacy_architecture/legacy_architecture.md`
+- `ai-driven-development/docs/tech_stack_selections.md` ← **all flexible tech choices confirmed by user in Phase 2.5**
 
-> **Before starting any design work**, read `legacy_analyse.md` **Section 10 — Technology Profile** and record the confirmed scope (Backend / Web Frontend / iOS / Android). Skip all design steps, tech choices, diagrams, and ADRs that are not applicable to the confirmed scope. Do NOT design layers that do not exist in the target system.
+> **Before starting any design work**, read both `legacy_analyse.md` **Section 10 — Technology Profile** (to confirm scope) and `tech_stack_selections.md` (to load all confirmed technology choices). Apply every confirmed choice directly — do NOT ask the user again. Skip all design steps, tech choices, diagrams, and ADRs that are not applicable to the confirmed scope. Do NOT design layers that do not exist in the target system.
 
 ## Output Location
 Create in folder `ai-driven-development/docs/target_architecture/` and produce:
@@ -29,34 +30,40 @@ Create in folder `ai-driven-development/docs/target_architecture/` and produce:
 
 ---
 
-## Tech Stack (Fixed — apply only layers in scope)
+## Tech Stack (apply only layers in scope — language/framework from `tech_stack_selections.md`)
 
-| Layer | Technology | Required When |
+> The backend language/framework and frontend framework are **user-selected** in Phase 2.5. Read `tech_stack_selections.md` to determine the active choices. iOS/Android stacks are fixed.
+
+| Layer | User-Selected Options | Required When |
 |---|---|---|
-| Backend Language | Java 21 (LTS) | Backend in scope |
-| Backend Framework | Spring Boot 3.5+ | Backend in scope |
-| Frontend | React 18+ with TypeScript | Web Frontend in scope |
+| Backend Language | Java 21 / .NET 9 / Python 3.12 / Go 1.23 | Backend in scope |
+| Backend Framework | Spring Boot 3.5+ / ASP.NET Core / FastAPI / Gin or Fiber | Backend in scope |
+| Frontend Framework | React 18+ / Vue 3 / Angular 18 / Svelte 5 | Web Frontend in scope |
+| Frontend Language | TypeScript (strict — all frameworks) | Web Frontend in scope |
 | Mobile iOS | Swift / SwiftUI | iOS in scope |
-| Mobile Android | Kotlin | Android in scope |
+| Mobile Android | Kotlin / Jetpack Compose | Android in scope |
 | API Style | REST + OpenAPI 3.1 | Backend in scope |
 
 > Do NOT include rows or sections for tiers that are out of scope.
 
-### Flexible / User-Selectable Components
-Present options **only for components relevant to the confirmed scope**:
+### Confirmed Tech Choices (read from `tech_stack_selections.md`)
 
-| Concern | Options | Applicable When |
+> **Do NOT ask the user for technology preferences** — all flexible choices were collected in Phase 2.5 and saved to `ai-driven-development/docs/tech_stack_selections.md`. Read that file and apply the confirmed selections directly.
+
+| Concern | Confirmed In | Applicable When |
 |---|---|---|
-| Architecture Style | Modular Monolith / Microservices / Hybrid | Backend in scope |
-| State Management (Frontend) | Redux Toolkit / Zustand / Jotai | Web Frontend in scope |
-| UI Component Library | MUI / Tailwind CSS + shadcn/ui / Chakra UI | Web Frontend in scope |
-| Message Broker | Kafka / RabbitMQ / AWS SQS / None | Backend in scope |
-| Caching | Redis / Caffeine / None | Backend in scope |
-| Auth Provider | Keycloak (OAuth2/OIDC) / Spring Security + LDAP / Auth0 | Backend in scope |
-| Database | PostgreSQL / Oracle / MySQL / MongoDB | Backend in scope |
-| Container Orchestration | Kubernetes / Docker Compose / Cloud PaaS | Any backend/full-stack |
-| CI/CD | GitHub Actions / GitLab CI / Jenkins | Always |
-| Observability | Prometheus + Grafana / Datadog / ELK Stack | Always |
+| **Backend Language / Framework** | `tech_stack_selections.md` § Backend → Language / Framework | Backend in scope |
+| Architecture Style | `tech_stack_selections.md` § Backend → Architecture Style | Backend in scope |
+| **Frontend Framework** | `tech_stack_selections.md` § Web Frontend → Framework | Web Frontend in scope |
+| State Management (Frontend) | `tech_stack_selections.md` § Web Frontend → Global State Management | Web Frontend in scope |
+| UI Component Library | `tech_stack_selections.md` § Web Frontend → UI Component Library | Web Frontend in scope |
+| Message Broker | `tech_stack_selections.md` § Backend → Message Broker | Backend in scope |
+| Caching | `tech_stack_selections.md` § Backend → Caching | Backend in scope |
+| Auth Provider | `tech_stack_selections.md` § Backend → Auth Provider | Backend in scope |
+| Database | `tech_stack_selections.md` § Backend → Database | Backend in scope |
+| Container Orchestration | `tech_stack_selections.md` § Common → Container/Deployment | Any backend/full-stack |
+| CI/CD | `tech_stack_selections.md` § Common → CI/CD | Always |
+| Observability | `tech_stack_selections.md` § Common → Observability | Always |
 
 ---
 

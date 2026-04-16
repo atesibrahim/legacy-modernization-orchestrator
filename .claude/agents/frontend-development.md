@@ -1,6 +1,6 @@
 ---
 name: frontend-development
-description: "Use when building React 18 TypeScript frontend, implementing design system components, state management Redux Toolkit Zustand TanStack Query, API integration Axios, code splitting lazy loading performance optimization, Jest Cypress Playwright testing, phased frontend development plan. For mobile clients use ios-development or android-development agents instead."
+description: "Use when building React / Vue / Angular / Svelte TypeScript frontend, implementing design system components, state management TanStack Query Zustand Pinia NgRx, API integration Axios, code splitting lazy loading performance optimization, Vitest Playwright testing, phased frontend development plan. For mobile clients use ios-development or android-development agents instead."
 tools:
   - Read
   - Write

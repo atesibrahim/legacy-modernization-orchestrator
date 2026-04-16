@@ -1,6 +1,6 @@
 ---
 name: target-architecture
-description: Target architecture design — Clean/Hexagonal/DDD patterns, service boundaries, API-first design, Java 21 Spring Boot 3.5 React 18 Kotlin mobile stack.
+description: Target architecture design — Clean/Hexagonal/DDD patterns, service boundaries, API-first design, user-selected: Java/.NET/Python/Go backend, React/Vue/Angular/Svelte frontend, Kotlin mobile stack.
 argument-hint: Project name or path to legacy analysis and legacy design artifacts
 ---
 

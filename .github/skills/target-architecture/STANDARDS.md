@@ -83,7 +83,7 @@ graph TB
     end
     subgraph "API Gateway Layer"
         GW[API Gateway]
-        AUTH_SRV[Auth Service - OAuth2/JWT]
+        AUTH_SRV["Auth Service - OAuth2/JWT"]
     end
     subgraph "Domain Services"
         SVC1[Domain Service A]
@@ -112,8 +112,8 @@ graph TB
     SVC2 --> DB2
     SVC1 --> MQ
     SVC2 --> CACHE
-    SVC1 -.->|metrics/logs| LOG
-    SVC2 -.->|metrics/logs| METRICS
+    SVC1 -.->|"metrics/logs"| LOG
+    SVC2 -.->|"metrics/logs"| METRICS
       </pre>
     </div>
   </div>
@@ -150,11 +150,11 @@ graph LR
       <pre class="mermaid">
 sequenceDiagram
     participant U as User
-    participant FE as React Frontend
-    participant GW as API Gateway
-    participant AUTH as Auth Service
+    participant FE as "React Frontend"
+    participant GW as "API Gateway"
+    participant AUTH as "Auth Service"
     participant IDP as "Identity Provider (LDAP/Keycloak)"
-    participant SVC as Domain Service
+    participant SVC as "Domain Service"
 
     U->>FE: Login (username/password)
     FE->>AUTH: POST /auth/token
@@ -248,19 +248,24 @@ With `htmlLabels: true`, use `<br/>` not `\n` for line breaks inside quoted node
 ✅ `A["Line One<br/>Line Two"]`  
 ❌ `A["Line One\nLine Two"]` — renders as the literal characters `\n`
 
-### Rule 3 — Node ID Rules
+### Rule 3 — Node ID and Edge Label Rules
 
 | Rule | Correct | Incorrect |
 |---|---|---|
 | No spaces in IDs | `AUTH_SRV[Auth Service]` | `AUTH SRV[Auth Service]` |
 | Reserved words as IDs | `END_NODE[End]` | `end[End]` (reserved keyword) |
-| Special chars in labels | `A["My (Node)"]` | `A[My (Node)]` |
+| Special chars in node labels | `A["OAuth2/JWT"]` | `A[OAuth2/JWT]` |
+| Slash in edge labels | `A -.->|"metrics/logs"| B` | `A -.->|metrics/logs| B` |
+| Question mark in diamond | `A{"Done?"}` | `A{Done?}` |
 
 ### Rule 4 — Participant Names with Special Characters (sequenceDiagram)
 
-Quote participant display names that contain parentheses, commas, slashes, or spaces that could be ambiguous:
+Quote all participant display names that contain parentheses, commas, slashes, or multiple words:
 
+✅ `participant FE as "React Frontend"`  
+✅ `participant GW as "API Gateway"`  
 ✅ `participant IDP as "Identity Provider (LDAP/Keycloak)"`  
+❌ `participant FE as React Frontend`  
 ❌ `participant IDP as Identity Provider (LDAP/Keycloak)`
 
 ### Rule 5 — Always Close `subgraph` and `alt`/`loop` Blocks
@@ -285,7 +290,7 @@ After generating the HTML file with `create_file`, verify all items before marki
 4. **Tag balance** — every `<pre class="mermaid">` has a matching `</pre>` on its own line
 5. **Diagram count** — number of `<pre class="mermaid">` blocks matches the planned number of diagrams
 6. **No `\n` in labels** — no `\n` appears inside quoted Mermaid node labels; replace with `<br/>`
-7. **Quoted special chars** — participant names and labels containing `()`, `/`, or `,` are double-quoted
+7. **Quoted special chars** — all node labels, edge labels, and participant display names containing `()`, `/`, `?`, `,`, or multiple words are double-quoted
 8. **All blocks closed** — every `subgraph`, `alt`, `loop`, `opt` has a matching `end`
 9. **No empty diagram blocks** — each `<pre class="mermaid">` contains actual diagram content
 
@@ -330,7 +335,7 @@ Use for each major architectural decision. Required ADRs: architecture style, au
 | Horizontal Scalability | N instances via HPA | Kubernetes HPA configuration |
 | Recovery Time Objective (RTO) | < 30 min | DR drill |
 | Recovery Point Objective (RPO) | < 5 min | Backup frequency validation |
-| Test Coverage (Unit) | ≥ 80% | JaCoCo / Vitest coverage report |
+| Test Coverage (Unit) | >= 80% | JaCoCo / Vitest coverage report |
 
 ---
 

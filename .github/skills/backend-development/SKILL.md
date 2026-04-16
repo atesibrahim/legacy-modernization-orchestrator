@@ -1,6 +1,6 @@
 ---
 name: backend-development
-description: 'Backend development skill for legacy modernization. Act as a senior master backend developer. Use when: building Java 21 Spring Boot 3.5 backend, implementing clean architecture hexagonal architecture, setting up domain-driven design modules, implementing REST APIs OpenAPI security JWT LDAP OAuth2, database JPA repositories, testing JUnit Mockito Testcontainers, observability metrics tracing logging, phased development plan backend implementation.'
+description: 'Backend development skill for legacy modernization. Act as a senior master backend developer. Use when: building Java Spring Boot / .NET ASP.NET Core / Python FastAPI / Go Gin-Fiber backend, implementing clean architecture hexagonal architecture, setting up domain-driven design modules, implementing REST APIs OpenAPI security JWT OAuth2, database ORM repositories, testing unit integration Testcontainers, observability metrics tracing logging, phased development plan backend implementation.'
 argument-hint: 'Project name or path to system design artifacts to base backend implementation on'
 ---
 
@@ -16,7 +16,7 @@ argument-hint: 'Project name or path to system design artifacts to base backend 
 
 ## Prerequisites
 - `ai-driven-development/docs/target_architecture/target_architecture.md`
-- Architecture style and tech decisions confirmed
+- `ai-driven-development/docs/tech_stack_selections.md` ← all flexible tech choices confirmed by user in Phase 2.5
 
 ## Output Location
 Create folders:
@@ -26,39 +26,46 @@ Create folders:
 
 ---
 
-## Tech Stack (Fixed)
+## Tech Stack
 
-| Concern | Technology |
+> **Read `tech_stack_selections.md` § Backend → Language / Framework** before Phase 1 to determine the active language and framework. Apply the corresponding toolchain column from the table below throughout the entire implementation.
+
+### Per-Language Toolchain
+
+| Concern | Java 21 + Spring Boot 3.5 | .NET 9 + ASP.NET Core | Python 3.12 + FastAPI | Go 1.23 + Gin / Fiber |
+|---|---|---|---|---|
+| Build | Maven (`pom.xml`) | .NET CLI / MSBuild (`*.csproj`) | pip + `pyproject.toml` | Go modules (`go.mod`) |
+| API Docs | SpringDoc OpenAPI 3 (Swagger UI) | Swashbuckle / NSwag | FastAPI auto-docs (built-in) | swaggo/swag |
+| ORM / DB Access | Spring Data JPA + Hibernate 6 | EF Core 9 | SQLAlchemy 2 + Alembic | GORM / sqlc |
+| Connection Pool | HikariCP | Built-in (EF Core) | asyncpg / psycopg3 | pgxpool |
+| Security / JWT | Spring Security 6 + JWT | ASP.NET Identity + JWT Bearer | python-jose / authlib | golang-jwt |
+| Boilerplate | Lombok | (built-in records/nullability) | Pydantic v2 | (native structs) |
+| Testing | JUnit 5 + Mockito + Testcontainers | xUnit + Moq + Testcontainers.NET | pytest + pytest-asyncio + Testcontainers | Go testing + testcontainers-go |
+| Logging | SLF4J + Logback (structured JSON) | Serilog or NLog (JSON sink) | structlog / loguru | zerolog / zap |
+| Metrics | Micrometer + Prometheus | prometheus-net | prometheus\_client | prometheus/client\_golang |
+| Tracing | OpenTelemetry Java Agent | OpenTelemetry .NET | opentelemetry-python | opentelemetry-go |
+
+### Confirmed Tech Choices (read from `tech_stack_selections.md`)
+
+> **Do NOT ask the user for these** — all choices were confirmed in Phase 2.5 and saved to `ai-driven-development/docs/tech_stack_selections.md`. Read that file before Phase 1 and apply the confirmed selections throughout.
+
+| Concern | `tech_stack_selections.md` key |
 |---|---|
-| Language | Java 21 (LTS, virtual threads capable) |
-| Framework | Spring Boot 3.5+ |
-| Build | Maven (`pom.xml`) |
-| API Docs | SpringDoc OpenAPI 3 (Swagger UI) |
-| ORM / DB | Spring Data JPA + Hibernate 6 |
-| Connection Pool | HikariCP |
-| Security | Spring Security 6 + JWT |
-| Boilerplate | Lombok |
-| Testing | JUnit 5 + Mockito + Testcontainers |
-| Logging | SLF4J + Logback (structured JSON) |
-| Metrics | Micrometer + Prometheus |
-| Tracing | OpenTelemetry |
-
-### Flexible / User-Selectable (confirm before Phase 1)
-
-| Concern | Options |
-|---|---|
-| Database | Oracle / PostgreSQL / MySQL |
-| Auth Provider | Spring Security + LDAP / Keycloak / Auth0 |
-| Messaging | Kafka / RabbitMQ / AWS SQS / None |
-| Caching | Redis / Caffeine / None |
-| Scheduling | Spring Batch / `@Scheduled` / Quartz |
-| Container Orchestration | Docker + K8s / Docker Compose / Cloud PaaS |
+| Language / Framework | § Backend → Language / Framework |
+| Database | § Backend → Database |
+| Auth Provider | § Backend → Auth Provider |
+| Messaging | § Backend → Message Broker |
+| Caching | § Backend → Caching |
+| Scheduling | § Backend → Job Scheduling |
+| Container Orchestration | § Common → Container/Deployment |
 
 ---
 
 ## Architecture Rules (Non-Negotiable)
 
 > See [STANDARDS.md](./STANDARDS.md) for the full list of architecture rules, project folder structure, Docker image template, error response format, and all other project standards.
+
+> **Language adaptation**: The procedure below uses **Java 21 + Spring Boot** as the reference implementation. If the confirmed language/framework in `tech_stack_selections.md` is .NET, Python, or Go, apply the equivalent toolchain from the Per-Language Toolchain table above — same architectural patterns (Clean Architecture, layered structure, REST + OpenAPI, JWT auth, observability), different tools.
 
 ---
 

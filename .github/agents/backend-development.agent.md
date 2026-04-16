@@ -1,6 +1,6 @@
 ---
 name: backend-development
-description: 'Backend development agent for legacy modernization. Act as a senior expert backend developer. Use when: building Java 21 Spring Boot 3.5 backend, implementing clean architecture hexagonal architecture, setting up domain-driven design modules, implementing REST APIs OpenAPI security JWT LDAP OAuth2, database JPA repositories, testing JUnit Mockito Testcontainers, observability metrics tracing logging, phased development plan backend implementation.'
+description: 'Backend development agent for legacy modernization. Act as a senior expert backend developer. Use when: building Java Spring Boot / .NET ASP.NET Core / Python FastAPI / Go Gin-Fiber backend, implementing clean architecture hexagonal architecture, setting up domain-driven design modules, implementing REST APIs OpenAPI security JWT OAuth2, database ORM repositories, testing unit integration Testcontainers, observability metrics tracing logging, phased development plan backend implementation.'
 argument-hint: 'Project name or path to system design artifacts to base backend implementation on'
 ---
 

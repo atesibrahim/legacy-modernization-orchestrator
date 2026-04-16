@@ -44,17 +44,18 @@ Create folder `ai-driven-development/development/mobile_development/ios/{project
 | Testing (UI) | XCUITest |
 | Code Quality | SwiftLint |
 
-### Flexible / User-Selectable (confirm before Phase 1)
+### Confirmed Tech Choices (read from `tech_stack_selections.md`)
 
-| Concern | Options |
+> **Do NOT ask the user for these** — all choices were confirmed in Phase 2.5 and saved to `ai-driven-development/docs/tech_stack_selections.md`. Read that file before Phase 1 and apply the confirmed selections throughout.
+
+| Concern | `tech_stack_selections.md` key |
 |---|---|
-| Local DB | CoreData / SwiftData / SQLite (GRDB) / None |
-| Image Loading | SDWebImageSwiftUI / Kingfisher / Native AsyncImage |
-| Logging | OSLog (preferred) / CocoaLumberjack |
-| Crash Reporting | Firebase Crashlytics / Sentry / None |
-| Analytics | Firebase Analytics / Amplitude / None |
-| Push Notifications | APNs + Firebase Cloud Messaging (FCM) / APNs only / None |
-| Package Manager | Swift Package Manager (SPM) — preferred / CocoaPods |
+| Local DB | § iOS → Local Persistence |
+| Image Loading | § iOS → Image Loading |
+| Crash Reporting | § iOS → Crash Reporting |
+| Analytics | § iOS → Analytics |
+| Push Notifications | § iOS → Push Notifications |
+| Package Manager | § iOS → Package Manager |
 
 ---
 

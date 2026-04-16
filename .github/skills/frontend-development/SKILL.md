@@ -1,6 +1,6 @@
 ---
 name: frontend-development
-description: 'Frontend development skill for legacy modernization. Act as a senior expert frontend developer. Use when: building React 18 TypeScript frontend, implementing design system components, state management Redux Toolkit Zustand TanStack Query, API integration Axios, code splitting lazy loading performance optimization, Jest Cypress Playwright testing, phased frontend development plan. For mobile clients use ios-development or android-development skills instead.'
+description: 'Frontend development skill for legacy modernization. Act as a senior expert frontend developer. Use when: building React / Vue / Angular / Svelte TypeScript frontend, implementing design system components, state management TanStack Query Zustand Pinia NgRx, API integration Axios, code splitting lazy loading performance optimization, Vitest Playwright testing, phased frontend development plan. For mobile clients use ios-development or android-development skills instead.'
 argument-hint: 'Project name or path to UI/UX design artifacts and system design to implement'
 ---
 
@@ -26,36 +26,43 @@ Create folder `ai-driven-development/development/frontend_development/{project_n
 
 ## Tech Stack
 
-| Concern | Technology |
-|---|---|
-| Framework | React 18+ |
-| Language | TypeScript (strict mode) |
-| Build Tool | Vite |
-| Package Manager | pnpm (preferred) / npm |
-| API Layer | TanStack Query v5 + Axios |
-| Routing | React Router v6 |
-| Form Handling | React Hook Form + Zod |
-| Testing (Unit) | Vitest + React Testing Library |
-| Testing (E2E) | Playwright (preferred) / Cypress |
-| Code Quality | ESLint + Prettier + TypeScript strict |
+> **Read `tech_stack_selections.md` § Web Frontend → Framework** before Phase 1 to determine the active framework. Apply the corresponding toolchain column from the table below throughout the entire implementation.
 
-### Flexible / User-Selectable (confirm before Phase 1)
+### Per-Framework Toolchain
 
-| Concern | Options |
+| Concern | React 18 + TypeScript | Vue 3 + TypeScript | Angular 18 | Svelte 5 + TypeScript |
+|---|---|---|---|---|
+| Build Tool | Vite | Vite | Angular CLI | Vite |
+| Package Manager | pnpm / npm | pnpm / npm | pnpm / npm | pnpm / npm |
+| Routing | React Router v6 | Vue Router 4 | Angular Router (built-in) | SvelteKit |
+| API Layer | TanStack Query v5 + Axios | TanStack Query v5 + Axios | Angular HttpClient | TanStack Query + Axios |
+| Form Handling | React Hook Form + Zod | VeeValidate + Zod | Angular Reactive Forms + Zod | Superforms + Zod |
+| Testing (Unit) | Vitest + React Testing Library | Vitest + Vue Test Utils | Jest + Angular Testing Library | Vitest |
+| Testing (E2E) | Playwright | Playwright | Playwright / Cypress | Playwright |
+| Code Quality | ESLint + Prettier + TS strict | ESLint + Prettier + TS strict | ESLint + Prettier + TS strict | ESLint + Prettier + TS strict |
+
+### Confirmed Tech Choices (read from `tech_stack_selections.md`)
+
+> **Do NOT ask the user for these** — all choices were confirmed in Phase 2.5 and saved to `ai-driven-development/docs/tech_stack_selections.md`. Read that file before Phase 1 and apply the confirmed selections throughout.
+
+| Concern | `tech_stack_selections.md` key |
 |---|---|
-| UI Component Library | MUI v5 / shadcn/ui + Tailwind CSS / Chakra UI v3 |
-| Global State | Redux Toolkit / Zustand / Jotai / Context API only |
-| Animation | Framer Motion / CSS transitions only |
-| Charts / Data viz | Recharts / Chart.js / Victory / Nivo |
-| Table | TanStack Table v8 / AG Grid Community |
-| Rich Text Editor | TipTap / Quill / None |
-| Internationalization | react-i18next / None |
+| Framework | § Web Frontend → Framework |
+| UI Component Library | § Web Frontend → UI Component Library |
+| Global State | § Web Frontend → Global State Management |
+| Animation | § Web Frontend → Animation |
+| Charts / Data viz | § Web Frontend → Charts / Data Visualization |
+| Table | § Web Frontend → Data Table |
+| Rich Text Editor | § Web Frontend → Rich Text Editor |
+| Internationalization | § Web Frontend → Internationalization |
 
 ---
 
 ## Folder Structure & Architecture Rules
 
 > See [STANDARDS.md](./STANDARDS.md) for the project folder structure, TypeScript configuration, ESLint rules, API integration patterns, token storage rules, and phase tracker template.
+
+> **Framework adaptation**: The procedure below uses **React 18 + TypeScript** as the reference implementation. If the confirmed framework in `tech_stack_selections.md` is Vue 3, Angular 18, or Svelte 5, apply the equivalent toolchain from the Per-Framework Toolchain table above — same architectural patterns (component-based, typed, tested, accessible), different framework APIs.
 
 ---
 

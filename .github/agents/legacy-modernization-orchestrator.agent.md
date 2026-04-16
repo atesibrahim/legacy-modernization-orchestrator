@@ -29,6 +29,7 @@ Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional para
 |---|---|---|---|
 | 1 | [`analysing-legacy`](./analysing-legacy.agent.md) | Legacy Analysis | Always |
 | 2 | [`legacy-architecture`](./legacy-architecture.agent.md) | Legacy Architecture Visualization | Always |
+| 2.5 | Tech Stack Selection Gate | User confirms all target tech choices | Always |
 | 3 | [`target-architecture`](./target-architecture.agent.md) | Target Architecture Design | Always |
 | 4a | [`ui-ux-design`](./ui-ux-design.agent.md) | UX & Interface Design | If any client UI needed |
 | 4b | [`backend-development`](./backend-development.agent.md) | Backend Implementation | **Optional** |
@@ -48,10 +49,11 @@ Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional para
 
 1. **Never skip Phases 1–3** — analysis, legacy design, and target design are always required
 2. **Scope Selection is mandatory before Phase 4** — ask the user which development targets apply (see Scope Selection below)
-3. **Skip optional phases that are out of scope** — do not execute them; mark as N/A in tracker
-4. **Validate DoD before proceeding** — if DoD not met, refine current phase before moving on
-5. **Document phase status** — update the tracker file after each phase
-6. **Parallelize where safe** — Phases 4a–4e can all run simultaneously once scope is confirmed
+3. **Tech Stack Selection Gate (Phase 2.5) is mandatory** — collect ALL technology choices from the user after Phase 2, save to `tech_stack_selections.md`, then proceed to Phase 3
+4. **Skip optional phases that are out of scope** — do not execute them; mark as N/A in tracker
+5. **Validate DoD before proceeding** — if DoD not met, refine current phase before moving on
+6. **Document phase status** — update the tracker file after each phase
+7. **Parallelize where safe** — Phases 4a–4e can all run simultaneously once scope is confirmed
 
 ---
 
@@ -114,6 +116,7 @@ Create `ai-driven-development/redesign_progress.md` to track all phases:
 |---|---|---|---|---|---|
 | 1 | analysing-legacy | ⬜ Not Started | — | — | |
 | 2 | legacy-architecture | ⬜ Not Started | — | — | |
+| 2.5 | tech-stack-selection | ⬜ Not Started | — | — | |
 | 3 | target-architecture | ⬜ Not Started | — | — | |
 | 4a | ui-ux-design | ⬜ Not Started | — | — | |
 | 4b | backend-development | ⬜ N/A | — | — | ← if not in scope |
@@ -162,7 +165,7 @@ Create `ai-driven-development/redesign_progress.md` to track all phases:
 - `ai-driven-development/docs/legacy_architecture/legacy_architecture.md`
 - `ai-driven-development/docs/legacy_architecture/legacy_architecture.html`
 
-**DoD Gate** — do NOT proceed to Phase 3 until ALL are checked:
+**DoD Gate** — do NOT proceed to Phase 2.5 until ALL are checked:
 - [ ] High-level architecture diagram rendered correctly in browser
 - [ ] Component dependency diagram complete
 - [ ] Data flow diagram for main flows
@@ -173,26 +176,171 @@ Create `ai-driven-development/redesign_progress.md` to track all phases:
 
 ---
 
+## Phase 2.5: Tech Stack Selection Gate
+**Role**: Orchestrator — gather all technology choices from the user before any design or code work begins
+**Required**: Always — this gate must complete before Phase 3 starts
+
+**Requires**: Phase 2 complete (legacy architecture understood), Scope confirmed (from Phase 1 analysis)
+
+> **Purpose**: Collect and persist every flexible technology decision for all in-scope tiers in one place. All downstream agents (target-architecture, ui-ux-design, backend-development, frontend-development, ios-development, android-development) will read `tech_stack_selections.md` instead of asking the user again.
+
+**Execute**:
+Present the following questionnaire to the user, showing **only the sections relevant to the confirmed scope**. Record the user's answers and save them to `ai-driven-development/docs/tech_stack_selections.md`.
+
+> "Before I begin designing the target architecture, I need to confirm your technology preferences.
+>
+> **Option A — Skip selection (use defaults)**: Type `skip` or `default` and I will apply the full default stack immediately:
+> - Backend: Java 21 + Spring Boot 3.5, PostgreSQL, Keycloak, no broker, Redis, `@Scheduled`
+> - Frontend: React 18 + TypeScript, MUI v5, Zustand, no charts/table/RTE/i18n, CSS transitions
+> - iOS: CoreData, AsyncImage, APNs only, no crash/analytics, SPM
+> - Android: Moshi, FCM, no crash/analytics, manual pagination, no WorkManager
+> - Common: Docker Compose, GitHub Actions, Prometheus + Grafana
+>
+> **Option B — Answer each question**: Pick from the listed options **or type any custom value** — you are not limited to the suggestions shown. For each question you can also type `default` to accept the recommended option for that item.
+>
+> Which would you prefer?"
+
+### Skip / Default Behaviour
+If the user types `skip`, `default`, or `use defaults`:
+- Populate `tech_stack_selections.md` with the full default stack listed in Option A above.
+- Skip all remaining questions.
+- Proceed directly to the DoD gate.
+
+If the user chooses to answer individually, for **any question** where the user types `default`, apply the *(default)* or *(recommended)* option shown for that question.
+
+> **Custom values are always accepted**: if the user types a technology not listed in the options (e.g. "Oracle DB", "Bun", "SolidJS", "Drizzle ORM"), record it exactly as entered. Do not reject or ask again.
+
+### Questions — Common (always ask)
+> For each question: pick an option, type `default` for the recommended choice, or type any custom value.
+
+| # | Decision | Options *(custom values accepted)* |
+|---|---|---|
+| C1 | **Container/Deployment Strategy** | **Docker Compose** *(default)* / OpenShift / Docker + Kubernetes / Cloud PaaS / *custom* |
+| C2 | **CI/CD Platform** | **GitHub Actions** *(default)* / GitLab CI / Jenkins / *custom* |
+| C3 | **Observability Stack** | **Prometheus + Grafana** *(default)* / Datadog / ELK Stack / *custom* |
+
+### Questions — Backend *(ask only if Backend is in scope)*
+> For each question: pick an option, type `default` for the recommended choice, or type any custom value.
+
+| # | Decision | Options *(custom values accepted)* |
+|---|---|---|
+| B0 | **Backend Language & Framework** | **Java 21 + Spring Boot 3.5** *(default)* / .NET 9 + ASP.NET Core / Python 3.12 + FastAPI / Go 1.23 + Gin or Fiber / *custom* |
+| B1 | **Architecture Style** | **Modular Monolith** *(default)* / Microservices / Hybrid / *custom* |
+| B2 | **Database** | **PostgreSQL** *(default)* / Oracle / MySQL / MongoDB / *custom* |
+| B3 | **Auth Provider** | **Keycloak (OAuth2/OIDC)** *(default — works with all languages)* / Spring Security + LDAP *(Java only)* / ASP.NET Identity *(.NET only)* / Auth0 / *custom* |
+| B4 | **Message Broker** | **None** *(default)* / Kafka / RabbitMQ / AWS SQS / *custom* |
+| B5 | **Caching** | **Redis** *(default)* / In-process cache / None / *custom* |
+| B6 | **Job Scheduling** | **Framework default scheduler** *(default)* / Quartz / Hangfire *(.NET)* / APScheduler *(Python)* / *custom* |
+
+### Questions — Web Frontend *(ask only if Web Frontend is in scope)*
+> For each question: pick an option, type `default` for the recommended choice, or type any custom value.
+
+| # | Decision | Options *(custom values accepted)* |
+|---|---|---|
+| F0 | **Frontend Framework** | **React 18 + TypeScript** *(default)* / Vue 3 + TypeScript / Angular 18 / Svelte 5 + TypeScript / *custom* |
+| F1 | **UI Component Library** | **MUI v5** *(default)* / shadcn/ui + Tailwind CSS / Chakra UI v3 *(React)* · PrimeVue / Vuetify / Quasar *(Vue)* · Angular Material / PrimeNG *(Angular)* · shadcn-svelte + Tailwind *(Svelte)* / *custom* |
+| F2 | **Global State Management** | **Zustand** *(default, React)* / Redux Toolkit / Jotai / Context API only *(React)* · **Pinia** *(default, Vue)* · **NgRx** *(default, Angular)* / Signals · **Svelte stores** *(default, Svelte)* / *custom* |
+| F3 | **Charts / Data Visualization** | **None** *(default)* / Recharts / Chart.js / Nivo / *custom* |
+| F4 | **Data Table** | **None** *(default)* / TanStack Table v8 / AG Grid Community / *custom* |
+| F5 | **Rich Text Editor** | **None** *(default)* / TipTap / Quill / *custom* |
+| F6 | **Internationalization (i18n)** | **None** *(default)* / react-i18next *(React)* · vue-i18n *(Vue)* · Angular i18n built-in *(Angular)* · svelte-i18n *(Svelte)* / *custom* |
+| F7 | **Animation** | **CSS transitions only** *(default)* / Framer Motion *(React/Svelte)* / GSAP / *custom* |
+
+### Questions — iOS App *(ask only if iOS is in scope)*
+> For each question: pick an option, type `default` for the recommended choice, or type any custom value.
+
+| # | Decision | Options *(custom values accepted)* |
+|---|---|---|
+| I1 | **Local Persistence** | **CoreData** *(default)* / SwiftData (iOS 17+) / SQLite (GRDB) / None / *custom* |
+| I2 | **Image Loading** | **Native AsyncImage** *(default)* / Kingfisher / SDWebImageSwiftUI / *custom* |
+| I3 | **Push Notifications** | **APNs only** *(default)* / APNs + Firebase Cloud Messaging (FCM) / None / *custom* |
+| I4 | **Crash Reporting** | **None** *(default)* / Firebase Crashlytics / Sentry / *custom* |
+| I5 | **Analytics** | **None** *(default)* / Firebase Analytics / Amplitude / *custom* |
+| I6 | **Package Manager** | **Swift Package Manager (SPM)** *(default)* / CocoaPods / *custom* |
+
+### Questions — Android App *(ask only if Android is in scope)*
+> For each question: pick an option, type `default` for the recommended choice, or type any custom value.
+
+| # | Decision | Options *(custom values accepted)* |
+|---|---|---|
+| A1 | **JSON Serialization** | **Moshi** *(default)* / Gson / kotlinx.serialization / *custom* |
+| A2 | **Push Notifications** | **Firebase Cloud Messaging (FCM)** *(default)* / None / *custom* |
+| A3 | **Crash Reporting** | **None** *(default)* / Firebase Crashlytics / Sentry / *custom* |
+| A4 | **Analytics** | **None** *(default)* / Firebase Analytics / Amplitude / *custom* |
+| A5 | **Paging Strategy** | **Manual pagination** *(default)* / Paging 3 (Jetpack) / None / *custom* |
+| A6 | **Background Sync (WorkManager)** | **No** *(default)* / Yes / *custom* |
+
+**Save confirmed choices to**:
+```
+ai-driven-development/docs/tech_stack_selections.md
+```
+
+Using this template:
+```markdown
+# Tech Stack Selections
+## Project: [Project Name]
+## Confirmed: [Date]
+## Scope: [Backend / Web Frontend / iOS / Android — only confirmed tiers]
+
+## Common
+- Container/Deployment: [choice]
+- CI/CD: [choice]
+- Observability: [choice]
+
+## Backend *(if in scope)*
+- Language / Framework: [choice]
+- Architecture Style: [choice]
+- Database: [choice]
+- Auth Provider: [choice]
+- Message Broker: [choice]
+- Caching: [choice]
+- Job Scheduling: [choice]
+
+## Web Frontend *(if in scope)*
+- Framework: [choice]
+- UI Component Library: [choice]
+- Global State Management: [choice]
+- Charts / Data Visualization: [choice]
+- Data Table: [choice]
+- Rich Text Editor: [choice]
+- Internationalization: [choice]
+- Animation: [choice]
+
+## iOS *(if in scope)*
+- Local Persistence: [choice]
+- Image Loading: [choice]
+- Push Notifications: [choice]
+- Crash Reporting: [choice]
+- Analytics: [choice]
+- Package Manager: [choice]
+
+## Android *(if in scope)*
+- JSON Serialization: [choice]
+- Push Notifications: [choice]
+- Crash Reporting: [choice]
+- Analytics: [choice]
+- Paging Strategy: [choice]
+- Background Sync (WorkManager): [choice]
+```
+
+**DoD Gate** — do NOT proceed to Phase 3 until ALL are checked:
+- [ ] User either typed `skip`/`default` (full defaults applied) or answered all questions for all in-scope tiers
+- [ ] `ai-driven-development/docs/tech_stack_selections.md` created with all confirmed choices
+- [ ] No section left with placeholder `[choice]` values for in-scope tiers
+- [ ] Custom values entered by the user are preserved exactly as typed
+
+---
+
 ## Phase 3: Target Architecture Design
 **Agent**: [`target-architecture`](./target-architecture.agent.md)
 **Role**: Senior Master Architect
 
-**Requires**: Phase 2 complete
+**Requires**: Phase 2.5 complete (`tech_stack_selections.md` confirmed)
 
 **Execute**:
-> Invoke the `target-architecture` agent — it will confirm user tech choices and follow all steps in its skill.
+> Invoke the `target-architecture` agent — it will read `tech_stack_selections.md` for all flexible tech choices and follow all steps in its skill.
 >
 > **Pass the Technology Profile from `legacy_analyse.md` Section 10** so the target-architecture agent can skip layers, diagrams, tech choices, and ADRs that are not applicable to this repository's scope.
-
-**User Input Required Before Starting**:
-> Before proceeding, confirm these technology choices with the user (only ask about components relevant to the confirmed scope):
-> 1. **Architecture Style**: Modular Monolith / Microservices / Hybrid? *(backend scope only)*
-> 2. **Database**: Oracle / PostgreSQL / MySQL / other? *(backend scope only)*
-> 3. **Auth Provider**: Spring Security + LDAP / Keycloak / Auth0? *(backend scope only)*
-> 4. **Message Broker**: Kafka / RabbitMQ / None? *(backend scope only)*
-> 5. **Caching**: Redis / Caffeine / None? *(backend scope only)*
-> 6. **Frontend UI Library**: MUI / shadcn+Tailwind / Chakra? *(web frontend scope only)*
-> 7. **Container Strategy**: K8s / Docker Compose / Cloud PaaS?
 
 **Produce**:
 - `ai-driven-development/docs/target_architecture/target_architecture.md`

@@ -90,7 +90,7 @@ graph TB
         MQ[Message Queue]
     end
     subgraph "External Systems"
-        LDAP[LDAP / SSO]
+        LDAP["LDAP / SSO"]
         EXT[External APIs]
         EMAIL[Email Server]
     end
@@ -120,7 +120,7 @@ graph LR
         REPORT[Reporting Module]
     end
     subgraph "Supporting"
-        UTIL[Utility / Helpers]
+        UTIL["Utility / Helpers"]
         CONFIG[Config Module]
         LOG[Logging Module]
     end
@@ -143,8 +143,8 @@ graph LR
       <pre class="mermaid">
 flowchart TD
     INPUT[User Request] --> VALIDATION[Input Validation]
-    VALIDATION --> AUTH_CHK{Authorized?}
-    AUTH_CHK -- No --> ERROR[Return 401/403]
+    VALIDATION --> AUTH_CHK{"Authorized?"}
+    AUTH_CHK -- No --> ERROR["Return 401/403"]
     AUTH_CHK -- Yes --> BUSINESS[Business Processing]
     BUSINESS --> DB_READ[(DB Read)]
     BUSINESS --> DB_WRITE[(DB Write)]
@@ -163,7 +163,7 @@ flowchart TD
 sequenceDiagram
     participant U as User
     participant APP as Application
-    participant LDAP as LDAP Server
+    participant LDAP as "LDAP Server"
     participant DB as Database
     U->>APP: Login Request (username/password)
     APP->>LDAP: Bind + Authenticate
@@ -226,12 +226,17 @@ With `htmlLabels: true`, use `<br/>` not `\n` for line breaks inside quoted node
 | No spaces in IDs | `AUTH_SRV[Auth Service]` | `AUTH SRV[Auth Service]` |
 | Reserved words as IDs | `END_NODE[End]` | `end[End]` (reserved keyword) |
 | Special chars in labels | `A["My (Node)"]` | `A[My (Node)]` |
+| Slash in labels | `A["LDAP / SSO"]` | `A[LDAP / SSO]` |
+| Question mark in diamond | `A{"Done?"}` | `A{Done?}` |
+| Slash in diamond | `A{"401/403"}` | `A{401/403}` |
 
 ### Rule 4 — Participant Names with Special Characters (sequenceDiagram)
 
-Quote participant display names that contain parentheses, commas, slashes, or spaces that could be ambiguous:
+Quote participant display names that contain parentheses, commas, slashes, spaces, or any other characters that could be ambiguous:
 
+✅ `participant LDAP as "LDAP Server"`  
 ✅ `participant IDP as "Identity Provider (LDAP/Keycloak)"`  
+❌ `participant LDAP as LDAP Server`  
 ❌ `participant IDP as Identity Provider (LDAP/Keycloak)`
 
 ### Rule 5 — Always Close `subgraph` and `alt`/`loop` Blocks
@@ -256,7 +261,7 @@ After generating the HTML file with `create_file`, verify all items before marki
 4. **Tag balance** — every `<pre class="mermaid">` has a matching `</pre>` on its own line
 5. **Diagram count** — number of `<pre class="mermaid">` blocks matches the planned number of diagrams
 6. **No `\n` in labels** — no `\n` appears inside quoted Mermaid node labels; replace with `<br/>`
-7. **Quoted special chars** — participant names and labels containing `()`, `/`, or `,` are double-quoted
+7. **Quoted special chars** — all node labels and participant display names containing `()`, `/`, `?`, `,`, or spaces are double-quoted
 8. **All blocks closed** — every `subgraph`, `alt`, `loop`, `opt` has a matching `end`
 9. **No empty diagram blocks** — each `<pre class="mermaid">` contains actual diagram content
 

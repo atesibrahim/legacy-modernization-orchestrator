@@ -36,8 +36,7 @@ When invoked for any legacy modernization task, you MUST:
 | Phase | Agent | Required? |
 |-------|-------|-----------|
 | 1 | `analysing-legacy` | Always |
-| 2 | `legacy-architecture` | Always |
-| 3 | `target-architecture` | Always |
+| 2 | `legacy-architecture` | Always || 2.5 | Tech Stack Selection Gate | Always || 3 | `target-architecture` | Always |
 | 4a | `ui-ux-design` | If any client UI needed |
 | 4b | `backend-development` | Optional |
 | 4c | `frontend-development` | Optional |
@@ -65,7 +64,7 @@ Legacy architecture visualization — component diagrams, data flow maps, mermai
 ---
 
 ### `target-architecture`
-Target architecture design — Clean/Hexagonal/DDD patterns, service boundaries, API-first design, Java 21 Spring Boot 3.5 React 18 Kotlin mobile stack.  
+Target architecture design — Clean/Hexagonal/DDD patterns, service boundaries, API-first design, user-selected: Java/.NET/Python/Go backend, React/Vue/Angular/Svelte frontend, Kotlin mobile stack.  
 **Skill:** `.github/skills/target-architecture/SKILL.md`  
 **Output dir:** `ai-driven-development/docs/target_architecture/`
 
@@ -79,14 +78,14 @@ UI/UX design — wireframes, design system, user journeys for web and mobile, WC
 ---
 
 ### `backend-development`
-Java 21 Spring Boot 3.5 backend — clean/hexagonal architecture, DDD modules, REST APIs, JWT/LDAP/OAuth2, JPA, JUnit/Mockito/Testcontainers, observability.  
+Java Spring Boot / .NET ASP.NET Core / Python FastAPI / Go Gin-Fiber backend — clean/hexagonal architecture, DDD modules, REST APIs, JWT/OAuth2, ORM repositories, unit/integration/Testcontainers testing, observability.  
 **Skill:** `.github/skills/backend-development/SKILL.md`  
 **Prerequisites:** `target_architecture/target_architecture.md` must exist.
 
 ---
 
 ### `frontend-development`
-React 18 TypeScript frontend — design system components, Redux Toolkit / Zustand / TanStack Query, Axios, Jest/Cypress/Playwright. Use `ios-development` or `android-development` for mobile.  
+React / Vue / Angular / Svelte TypeScript frontend — design system components, TanStack Query / Zustand / Pinia / NgRx state management, Axios, Vitest/Playwright testing. Use `ios-development` or `android-development` for mobile.  
 **Skill:** `.github/skills/frontend-development/SKILL.md`  
 **Prerequisites:** UI/UX design artifacts and system design must exist.
 
@@ -120,5 +119,6 @@ Gap analysis — legacy vs new system comparison, migration strategy, before-aft
 3. **No partial DoD** — all checklist items must be ✅ before the phase is considered done.
 4. **Output location matters** — write all artifacts to the directories specified in the skill.
 5. **Auto-detect scope from Phase 1** — after `analysing-legacy` completes, read **Section 10 — Technology Profile** in `legacy_analyse.md` to pre-fill scope (Backend / Web Frontend / iOS / Android). Present the detected scope to the user for confirmation. Do NOT ask all 4 questions blindly when the profile is already available.
-6. **Only execute phases relevant to the confirmed scope** — skip and mark N/A any Phase 4 sub-phase whose tier is absent from the repository. Do not design, diagram, or produce code for layers that don't exist.
-7. **Evidence-based only** — no assumptions; findings must be backed by code, config, or schema evidence.
+6. **Phase 2.5 (Tech Stack Selection Gate) is mandatory** — collect ALL flexible technology choices from the user after Phase 2, save to `ai-driven-development/docs/tech_stack_selections.md`. All downstream agents read from this file. Do NOT ask for tech choices again in Phases 3–4.
+7. **Only execute phases relevant to the confirmed scope** — skip and mark N/A any Phase 4 sub-phase whose tier is absent from the repository. Do not design, diagram, or produce code for layers that don't exist.
+8. **Evidence-based only** — no assumptions; findings must be backed by code, config, or schema evidence.

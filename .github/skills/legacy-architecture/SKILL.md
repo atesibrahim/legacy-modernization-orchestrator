@@ -6,6 +6,17 @@ argument-hint: 'Legacy system name or path to analysis report to base diagrams f
 
 # Legacy System Design & Visualization
 
+# Instructions
+
+1. Read the - `legacy_architecture.html` and `legacy_architecture.md` files after created to ensure they are correctly generated and contain the required diagrams and documentation. If the HTML file is not rendering diagrams correctly, check for common Mermaid syntax issues (unclosed blocks, reserved keywords in node IDs, etc.) and regenerate the file if needed.
+2. **Run validation** on the generated HTML file using the File Creation Validation Checklist from [STANDARDS.md](./STANDARDS.md) before proceeding. This ensures the diagrams will render correctly and are not broken due to syntax errors or file generation issues.
+3. **Report validation results**:
+   - If valid: Confirm the diagram is valid and exit
+   - If invalid: Show the errors found and explain what's wrong
+4. **Fix the issues** automatically (invalid diagrams have no value)
+5. **Re-validate** to confirm the fix worked
+6. Repeat steps 4-5 until there are no validation issues
+
 ## Role
 **Senior Master Architect** — Reconstruct and visually document the legacy architecture with precision. Produce diagrams that make even the most chaotic legacy systems understandable.
 
