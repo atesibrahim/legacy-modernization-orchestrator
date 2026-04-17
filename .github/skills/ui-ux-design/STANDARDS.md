@@ -114,7 +114,18 @@ Complete starting template for `ui_ux_pages.html`. Add screen sections as needed
   <meta charset="UTF-8">
   <title>UI/UX Design Wireframes</title>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <script>mermaid.initialize({ startOnLoad: true, theme: 'default' });</script>
+  <script src="https://cdn.jsdelivr.net/npm/panzoom@9/dist/panzoom.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      securityLevel: 'loose',
+      fontFamily: 'system-ui, Segoe UI, sans-serif',
+      fontSize: 15,
+      flowchart: { curve: 'basis', htmlLabels: true },
+      sequence: { actorMargin: 80, boxMargin: 10 }
+    });
+  </script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: system-ui, 'Segoe UI', sans-serif; background: #fdfaf5; color: #1a1a1a; }
@@ -163,7 +174,8 @@ Complete starting template for `ui_ux_pages.html`. Add screen sections as needed
     .form-input { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #e8d9c4;
                   border-radius: 6px; font-size: 0.875rem; background: #fff; }
     .diagram { background: white; padding: 1.5rem; border-radius: 8px;
-               box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 2rem; }
+               box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 2rem;
+               overflow: hidden; position: relative; min-height: 140px; }
   </style>
 </head>
 <body>
@@ -286,6 +298,32 @@ journey
     </div>
 
   </div>
+<script>
+  (async function() {
+    await mermaid.run({ querySelector: '.mermaid' });
+    document.querySelectorAll('.diagram').forEach(function(wrap) {
+      var svg = wrap.querySelector('svg');
+      if (!svg) return;
+      var tb = document.createElement('div');
+      tb.style.cssText = 'display:flex;gap:6px;margin-bottom:10px;';
+      [['＋','zoomIn'],['－','zoomOut'],['⊙ Reset','reset']].forEach(function(pair) {
+        var btn = document.createElement('button');
+        btn.textContent = pair[0];
+        btn.style.cssText = 'background:#f5e4c8;color:#5a3010;border:1px solid #e07840;border-radius:4px;padding:3px 10px;cursor:pointer;font-size:0.82rem;font-family:inherit;';
+        btn.onmouseover = function(){ this.style.background='#e07840'; this.style.color='#fff'; };
+        btn.onmouseout  = function(){ this.style.background='#f5e4c8'; this.style.color='#5a3010'; };
+        btn._act = pair[1];
+        tb.appendChild(btn);
+      });
+      wrap.insertBefore(tb, wrap.firstChild);
+      svg.style.cursor = 'grab';
+      var pz = panzoom(svg, { maxZoom: 5, minZoom: 0.15, zoomDoubleClickSpeed: 1 });
+      tb.querySelectorAll('button').forEach(function(btn) {
+        btn.addEventListener('click', function() { pz[btn._act](); });
+      });
+    });
+  })();
+</script>
 </body>
 </html>
 ```

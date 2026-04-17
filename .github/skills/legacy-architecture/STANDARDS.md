@@ -24,12 +24,14 @@ Use the **warm light design system** — warm cream/amber palette: `#7c4a1e` pri
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Legacy Architecture</title>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/panzoom@9/dist/panzoom.min.js"></script>
   <script>
     mermaid.initialize({
-      startOnLoad: true,
+      startOnLoad: false,
       theme: 'default',
       securityLevel: 'loose',
-      fontFamily: 'Segoe UI, Arial, sans-serif',
+      fontFamily: 'system-ui, Segoe UI, sans-serif',
+      fontSize: 15,
       flowchart: { curve: 'basis', htmlLabels: true },
       sequence: { actorMargin: 80, boxMargin: 10 }
     });
@@ -49,7 +51,7 @@ Use the **warm light design system** — warm cream/amber palette: `#7c4a1e` pri
     .section { margin-bottom: 48px; }
     .section h2 { font-size: 1.5rem; color: var(--primary); border-left: 5px solid var(--accent); padding-left: 16px; margin-bottom: 16px; }
     .section h3 { font-size: 1.1rem; color: var(--secondary); margin: 24px 0 8px; }
-    .diagram-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 24px 32px; box-shadow: 0 2px 8px rgba(124,74,30,0.08); margin-bottom: 24px; overflow-x: auto; }
+    .diagram-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 24px 32px; box-shadow: 0 2px 8px rgba(124,74,30,0.08); margin-bottom: 24px; overflow: hidden; position: relative; min-height: 140px; }
     .diagram-title { font-size: 1.0rem; font-weight: 600; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
     .diagram-title::before { content: "▶"; color: var(--accent); }
     .mermaid { min-width: 400px; }
@@ -187,6 +189,32 @@ sequenceDiagram
   <p>Legacy System Architecture — produced by legacy-architecture skill</p>
 </footer>
 
+<script>
+  (async function() {
+    await mermaid.run({ querySelector: '.mermaid' });
+    document.querySelectorAll('.diagram-wrap').forEach(function(wrap) {
+      var svg = wrap.querySelector('svg');
+      if (!svg) return;
+      var tb = document.createElement('div');
+      tb.style.cssText = 'display:flex;gap:6px;margin-bottom:10px;';
+      [['＋','zoomIn'],['－','zoomOut'],['⊙ Reset','reset']].forEach(function(pair) {
+        var btn = document.createElement('button');
+        btn.textContent = pair[0];
+        btn.style.cssText = 'background:#f5e4c8;color:#5a3010;border:1px solid #d4872a;border-radius:4px;padding:3px 10px;cursor:pointer;font-size:0.82rem;font-family:inherit;';
+        btn.onmouseover = function(){ this.style.background='#d4872a'; this.style.color='#fff'; };
+        btn.onmouseout  = function(){ this.style.background='#f5e4c8'; this.style.color='#5a3010'; };
+        btn._act = pair[1];
+        tb.appendChild(btn);
+      });
+      wrap.insertBefore(tb, wrap.firstChild);
+      svg.style.cursor = 'grab';
+      var pz = panzoom(svg, { maxZoom: 5, minZoom: 0.15, zoomDoubleClickSpeed: 1 });
+      tb.querySelectorAll('button').forEach(function(btn) {
+        btn.addEventListener('click', function() { pz[btn._act](); });
+      });
+    });
+  })();
+</script>
 </body>
 </html>
 ```
