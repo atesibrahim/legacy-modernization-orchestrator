@@ -1,6 +1,6 @@
 {
   "name": "legacy-modernization-orchestrator",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "description": "Multi-agent framework for end-to-end legacy system modernization. Installs agents and skills for Claude Code and Codex CLI.",
   "keywords": [
