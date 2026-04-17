@@ -1,6 +1,7 @@
 ---
 name: java-springboot
-description: 'Get best practices for developing applications with Spring Boot.'
+description: 'Java 21 + Spring Boot 3 backend — clean/hexagonal architecture, Spring Data JPA, Micrometer, Logback/SLF4J, JUnit 5, Testcontainers, Maven/Gradle, Dockerfile. Apply when tech_stack_selections.md confirms Java + Spring Boot as the backend stack.'
+argument-hint: 'Project name or path to system design artifacts to base backend implementation on'
 ---
 
 # Spring Boot Best Practices

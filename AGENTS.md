@@ -19,7 +19,7 @@ When a user asks you to modernize, analyse, or redesign a legacy system, you MUS
 
 **Phase Order:**
 ```
-Phase 1 → Phase 2 → Phase 2.5 (Tech Stack Selection Gate) → Phase 3 → [Scope Selection] → Phase 4 (optional parallel) → Phase 5 → Phase 6 → Phase 7
+Phase 1 → Phase 2 → Phase 2.5 (Tech Stack Selection Gate) → Phase 3 → [Scope Selection] → Phase 4 (optional parallel) → Phase 5 → Phase 6
 ```
 
 | Phase | Agent | Required? |
@@ -33,6 +33,9 @@ Phase 1 → Phase 2 → Phase 2.5 (Tech Stack Selection Gate) → Phase 3 → [S
 | 4c | `frontend-development` | Optional |
 | 4d | `ios-development` | Optional |
 | 4e | `android-development` | Optional |
+| 4f | `data-migration` | Optional |
+| 4g | `security-review` | Optional |
+| 4h | `devops-infra` | Optional |
 | 5 | `compare-legacy-to-new` | After any dev phase |
 | 6 | Final Validation | After Phase 5 |
 
@@ -94,6 +97,25 @@ Phase 1 → Phase 2 → Phase 2.5 (Tech Stack Selection Gate) → Phase 3 → [S
 
 ---
 
+### `devops-infra`
+**Use when:** Producing Kubernetes manifests, Helm charts, Terraform/Pulumi cloud infrastructure modules, GitHub Actions / GitLab CI pipelines, Prometheus alerting rules, Grafana dashboards, secret management with HashiCorp Vault or External Secrets Operator, Docker image security.  
+**Argument hint:** Project name or path to target architecture and backend development artifacts  
+**Skill file:** `.github/skills/devops-infra/SKILL.md`
+
+---
+
+### Cross-Platform Mobile — Not Supported
+
+> **Flutter, React Native, and KMM (Kotlin Multiplatform Mobile) are not supported by this framework.**
+>
+> When a project requires cross-platform mobile, you have two options:
+> 1. **Choose one native target** — use `ios-development` (Swift/SwiftUI) and/or `android-development` (Kotlin/Jetpack Compose). This is the recommended path for new projects where code quality and platform-native behaviour matter.
+> 2. **Document the limitation** — note in the target architecture and tech_stack_selections.md that cross-platform is out of scope for this framework. A future `cross-platform-mobile` skill may be added to support Flutter or React Native.
+>
+> Do NOT attempt to use `ios-development` or `android-development` agents to generate Flutter/React Native/KMM code — the output will be incorrect.
+
+---
+
 ### `compare-legacy-to-new`
 **Use when:** Comparing legacy system with redesigned system, gap analysis between legacy and new, mapping legacy components to new equivalents, creating migration strategy, producing before-after diagrams in HTML mermaid, validating that all legacy functionality is covered in new design, identifying improvements and regressions.  
 **Argument hint:** Path to legacy analysis and new system design artifacts to compare  
@@ -107,7 +129,7 @@ Phase 1 → Phase 2 → Phase 2.5 (Tech Stack Selection Gate) → Phase 3 → [S
 2. **Never skip or reorder steps** — the skill files are authoritative.
 3. **Validate DoD checklists** at the end of each agent's work before proceeding.
 4. **Phases 1–3 are always required** — never jump straight to development.
-5. **Auto-detect scope from Phase 1** — after `legacy-analysis` completes, read **Section 10 — Technology Profile** in `legacy_analyse.md` to pre-fill the scope (Backend / Web Frontend / iOS / Android). Present the detected scope to the user for confirmation before Phase 4. Do NOT ask all 4 questions blindly if the profile is already known.
+5. **Auto-detect scope from Phase 1** — after `legacy-analysis` completes, read **Section 10 — Technology Profile** in `legacy_analysis.md` to pre-fill the scope (Backend / Web Frontend / iOS / Android). Present the detected scope to the user for confirmation before Phase 4. Do NOT ask all 4 questions blindly if the profile is already known.
 6. **Phase 2.5 (Tech Stack Selection Gate) is mandatory** — collect ALL flexible technology choices from the user after Phase 2 and save them to `ai-driven-development/docs/tech_stack_selections.md`. All downstream agents read from this file. Do NOT ask for tech choices again in Phases 3–4.
 7. **Only execute phases relevant to the confirmed scope** — skip and mark N/A any Phase 4 sub-phase whose tier is not present in the repository. Do not design, diagram, or generate code for layers that don't exist.
 8. **Phases 4a–4e can run in parallel** once scope is confirmed and UI/UX contracts are available (4a required before 4c/4d/4e; 4a skipped if backend-only).

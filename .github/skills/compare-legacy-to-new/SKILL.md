@@ -15,15 +15,22 @@ argument-hint: 'Path to legacy analysis and new system design artifacts to compa
 - Presenting migration strategy to stakeholders
 - Risk assessment before production cutover
 
-## Prerequisites
-- `ai-driven-development/docs/analysing/legacy_analyse.md`
-- `ai-driven-development/docs/legacy_architecture/legacy_architecture.md`
-- `ai-driven-development/docs/target_architecture/target_architecture.md`
-- At least one of the following (based on project scope):
-  - `ai-driven-development/development/backend_development/` (or OpenAPI spec)
-  - `ai-driven-development/development/frontend_development/` (or screen inventory)
-  - `ai-driven-development/development/mobile_development/ios/` (or screen inventory)
-  - `ai-driven-development/development/mobile_development/android/` (or screen inventory)
+## Prerequisites (Preflight)
+Before starting, verify the following artifacts exist:
+
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| Legacy analysis report | `ai-driven-development/docs/legacy_analysis/legacy_analysis.md` | Always |
+| Legacy architecture report | `ai-driven-development/docs/legacy_architecture/legacy_architecture.md` | Always |
+| Target architecture | `ai-driven-development/docs/target_architecture/target_architecture.md` | Always |
+| Backend development outputs | `ai-driven-development/development/backend_development/` | If backend in scope |
+| Frontend development outputs | `ai-driven-development/development/frontend_development/` | If web frontend in scope |
+| iOS development outputs | `ai-driven-development/development/mobile_development/ios/` | If iOS in scope |
+| Android development outputs | `ai-driven-development/development/mobile_development/android/` | If Android in scope |
+
+**At least one Phase 4 development artifact must exist.** If none are present, stop and report which Phase 4 agents must run first.
+
+**If any always-required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 1: `legacy-analysis`, Phase 2: `legacy-architecture`, Phase 3: `target-architecture`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
 ## Output Location
 Create folder `ai-driven-development/docs/legacy_vs_new_system/` and produce:
@@ -39,7 +46,7 @@ Create folder `ai-driven-development/docs/legacy_vs_new_system/` and produce:
 > **Run before Steps 1–6.** For systems with many legacy features, processing the full coverage matrix in one pass risks incomplete mapping. Batch by domain area when the feature count is high.
 
 **Measure:**
-- Count legacy features/modules listed in `legacy_analyse.md` §2 (System Inventory) and §5 (Data Flow Map)
+- Count legacy features/modules listed in `legacy_analysis.md` §2 (System Inventory) and §5 (Data Flow Map)
 - Note: stored procedures, scheduled jobs, and external integrations each count as separate features
 
 **Choose a strategy:**
@@ -51,7 +58,7 @@ Create folder `ai-driven-development/docs/legacy_vs_new_system/` and produce:
 
 **Domain-batched sub-tasks (large scale):**
 
-Group legacy features by domain area — use the Table Ownership Matrix and module list from `legacy_analyse.md` to define groups. Example for a typical enterprise system:
+Group legacy features by domain area — use the Table Ownership Matrix and module list from `legacy_analysis.md` to define groups. Example for a typical enterprise system:
 
 | Batch | Domain Area | Typical Coverage |
 |---|---|---|
@@ -121,6 +128,77 @@ Quantify improvements where possible:
 | Test Coverage | 0% | ≥70% | SonarQube |
 | Security Score | OWASP D | OWASP B | ZAP scan |
 | Bundle Size (Frontend) | N/A | <500KB | Bundle analyzer |
+
+### Step 3.5 — Performance Baseline & Regression Analysis
+Document the legacy system's performance benchmarks and verify the new system does not regress.
+
+#### 3.5.1 — Capture Legacy Performance Baseline
+Collect or estimate from logs/monitoring:
+
+| Metric | Legacy Measured Value | Source |
+|---|---|---|
+| API P50 latency (ms) | e.g. 120 ms | APM / access log |
+| API P95 latency (ms) | e.g. 480 ms | APM / access log |
+| API P99 latency (ms) | e.g. 1200 ms | APM / access log |
+| Max throughput (req/s) | e.g. 250 rps | Load test / log analysis |
+| DB query P95 (ms) | e.g. 340 ms | DB slow query log |
+| Frontend LCP (ms) | e.g. 3800 ms | Lighthouse / RUM |
+| Frontend TTI (ms) | e.g. 5200 ms | Lighthouse / RUM |
+| Batch job duration | e.g. 4h 20min | Scheduler logs |
+
+> If measured values are unavailable, label estimates as `(estimated)` and note the estimation method.
+
+#### 3.5.2 — Define Regression Thresholds
+Set pass/fail thresholds for the new system based on the baseline:
+
+**Rule**: New system P95 latency ≤ Legacy P95 × 1.2 (20% regression tolerance)
+
+| Metric | Legacy Baseline | Regression Threshold (≤) | New System Result | Pass/Fail |
+|---|---|---|---|---|
+| API P95 latency | 480 ms | 576 ms | TBD | — |
+| API P99 latency | 1200 ms | 1440 ms | TBD | — |
+| Max throughput | 250 rps | 250 rps (must match or exceed) | TBD | — |
+| DB query P95 | 340 ms | 408 ms | TBD | — |
+| Frontend LCP | 3800 ms | 3000 ms (target improvement) | TBD | — |
+| Batch job | 4h 20min | 5h 00min | TBD | — |
+
+#### 3.5.3 — Load Test Scenario Definition
+Define test scenarios to run against the new system using k6, Gatling, or JMeter:
+
+```
+Scenario: Peak Load
+  Virtual Users: <same peak as legacy production>
+  Ramp-up: 2 min
+  Steady state: 10 min
+  Ramp-down: 1 min
+  Key transactions:
+    - Login (10% of traffic)
+    - Primary business flow (40% of traffic)
+    - Read-heavy pages (40% of traffic)
+    - Batch trigger / report (10% of traffic)
+
+Scenario: Spike Test
+  Baseline: 50% of peak
+  Spike to: 150% of peak over 30s
+  Hold: 2 min
+  Expected: no error rate increase >0.1%
+```
+
+#### 3.5.4 — Performance Comparison Table
+Complete after running load tests on the new system:
+
+| Metric | Legacy | New System | Δ% | Regression? |
+|---|---|---|---|---|
+| API P95 latency | 480 ms | TBD | TBD | TBD |
+| API P99 latency | 1200 ms | TBD | TBD | TBD |
+| Max throughput | 250 rps | TBD | TBD | TBD |
+| DB query P95 | 340 ms | TBD | TBD | TBD |
+| Frontend LCP | 3800 ms | TBD | TBD | TBD |
+| Error rate (at peak) | ~0.5% | TBD | TBD | TBD |
+
+> **Blocking rule**: Any metric marked `Regression? = YES` is a **cutover blocker**. Do not proceed to Phase 6 until all regressions are resolved or explicitly accepted with stakeholder sign-off.
+
+---
 
 ### Step 4 — Risk & Migration Strategy
 Identify transition risks and mitigation:
@@ -195,6 +273,13 @@ Before production migration, all items must be checked:
 ---
 
 ## Definition of Done (DoD)
+
+### Performance
+- [ ] Legacy performance baseline documented (P50/P95/P99 latency, throughput, batch duration)
+- [ ] Regression thresholds defined per metric
+- [ ] Load test scenarios defined and executed against new system
+- [ ] Performance comparison table complete with Pass/Fail per metric
+- [ ] Zero blocking performance regressions (or written stakeholder acceptance on record)
 
 ### Coverage
 - [ ] Every legacy module/feature mapped to new equivalent (no gaps)

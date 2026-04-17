@@ -1,5 +1,7 @@
 # Java 21 + Spring Boot 3.5 — Standards
 
+> **Tier 2 (language-specific) — Skill-local standards.** Extends [Core Standards (Tier 1)](../../standards/core.md) and [Backend Development Standards (Tier 2)](../backend-development/STANDARDS.md). Core and backend-agnostic standards always take precedence; this file adds Java/Spring Boot–specific rules only.
+
 Java and Spring Boot specific standards for backend development.
 These accompany the language-agnostic [backend-development/STANDARDS.md](../backend-development/STANDARDS.md) and [SKILL.md](../backend-development/SKILL.md).
 

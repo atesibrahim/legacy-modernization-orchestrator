@@ -1,7 +1,7 @@
 ---
 name: target-architecture
-description: Target architecture design — Clean/Hexagonal/DDD patterns, service boundaries, API-first design, user-selected: Java/.NET/Python/Go backend, React/Vue/Angular/Svelte frontend, Kotlin mobile stack.
-argument-hint: Project name or path to legacy analysis and legacy design artifacts
+description: 'Modern target system architecture design using Clean / Hexagonal / DDD patterns. Trigger phrases: "design modern replacement system", "create target architecture", "define bounded contexts", "design microservices", "API-first architecture design", "produce architecture diagrams for new system", "define service boundaries". Tech stack: Java Spring Boot / .NET ASP.NET Core / Python FastAPI / Go Gin-Fiber backend; React / Vue / Angular / Svelte frontend; Kotlin mobile. Outputs: target_architecture.md + target_architecture.html with architecture diagrams and ADRs. NOT for legacy system documentation — use legacy-analysis and legacy-architecture for that. Requires legacy-analysis + legacy-architecture + tech_stack_selections.md to exist.'
+argument-hint: 'Project name or path to legacy analysis and legacy design artifacts'
 ---
 
 # target-architecture

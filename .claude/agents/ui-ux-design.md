@@ -1,6 +1,6 @@
 ---
 name: ui-ux-design
-description: "Use when designing user interfaces for modernized application, creating wireframes mockups design systems, defining user journeys for web React and mobile iOS Android, applying WCAG accessibility standards, building responsive mobile-first design, producing HTML design previews, creating component design system tokens typography colors."
+description: "Use when: designing user interfaces for modernized application, creating wireframes and mockups, defining design systems and component tokens, mapping user journeys for web and mobile, applying WCAG accessibility, producing design-to-code handoff artifacts (tokens.json, component API, Storybook stubs). NOT needed for backend-only projects. Requires target-architecture."
 tools:
   - Read
   - Write

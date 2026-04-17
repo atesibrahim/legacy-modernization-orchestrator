@@ -1,5 +1,7 @@
 # Target System Design Standards
 
+> **Tier 2 — Skill-local standards.** Extends [Core Standards (Tier 1)](../../standards/core.md). Core standards apply universally; this file adds target-architecture–specific HTML templates and diagram conventions.
+
 Reference templates for producing `target_architecture.html` and `target_architecture.md`.
 Use these as starting points — **replace all placeholder names, services, and labels** with the actual system components.
 

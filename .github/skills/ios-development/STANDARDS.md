@@ -1,5 +1,7 @@
 # iOS Development Standards
 
+> **Tier 2 — Skill-local standards.** Extends [Core Standards (Tier 1)](../../standards/core.md). Core standards apply universally; this file adds Swift/SwiftUI–specific architecture rules, MVVM conventions, and App Store compliance standards.
+
 These are the **non-negotiable, project-independent** standards for all Swift/SwiftUI iOS implementations.
 The SKILL.md procedure references these. Do not deviate — justify any exception with a code comment.
 

@@ -1,5 +1,7 @@
 # Comparison Standards
 
+> **Tier 2 — Skill-local standards.** Extends [Core Standards (Tier 1)](../../standards/core.md). Core standards apply universally; this file adds comparison-report–specific HTML templates and coverage-status conventions.
+
 Reference templates for producing `compare_legacy_to_new_system.html` and the comparison report.
 Customize all technology labels, service names, and feature rows with actual system data.
 

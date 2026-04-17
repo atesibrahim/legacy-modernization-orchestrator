@@ -1,5 +1,7 @@
 # Frontend Development Standards
 
+> **Tier 2 — Skill-local standards.** Extends [Core Standards (Tier 1)](../../standards/core.md). Core standards apply universally; this file adds frontend-specific architecture rules, component conventions, and testing standards.
+
 These are the **non-negotiable, project-independent** standards for all React TypeScript frontend implementations.
 The SKILL.md procedure references these. Do not deviate — justify any exception in a code comment or ADR.
 

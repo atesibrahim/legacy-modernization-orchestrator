@@ -14,10 +14,16 @@ argument-hint: 'Project name or path to UI/UX design artifacts and system design
 - After `target-architecture` confirms API contracts (OpenAPI spec available)
 - Starting or continuing phased iOS mobile implementation
 
-## Prerequisites
-- `ai-driven-development/docs/ui_design/ui_ux_pages.md`
-- `ai-driven-development/docs/target_architecture/target_architecture.md` (API contracts / OpenAPI spec)
-- Backend APIs available or OpenAPI spec for mock generation
+## Prerequisites (Preflight)
+Before starting, verify the following artifacts exist:
+
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| UI/UX design | `ai-driven-development/docs/ui_design/ui_ux_pages.md` | Always |
+| Target architecture (API contracts) | `ai-driven-development/docs/target_architecture/target_architecture.md` | Always |
+| Backend OpenAPI spec or running API | `ai-driven-development/development/backend_development/` or OpenAPI spec URL | Recommended |
+
+**If any required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 4a: `ui-ux-design`, Phase 3: `target-architecture`, Phase 4b: `backend-development`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
 ## Output Location
 Create folder `ai-driven-development/development/mobile_development/ios/{project_name}` — all iOS code here.
@@ -410,6 +416,48 @@ Coverage targets:
 - [ ] Privacy manifest (`PrivacyInfo.xcprivacy`) complete with all API usage reasons
 - [ ] App Store metadata: screenshots, description, keywords prepared
 - [ ] TestFlight build uploaded and tested by at least 2 people
+
+---
+
+### Phase 12.5 — Platform Extensions *(only if required by product scope)*
+
+Implement iOS platform extension features for the project. Skip any item not required.
+
+#### WidgetKit (Home Screen & Lock Screen Widgets)
+- **Decision**: Use WidgetKit (iOS 14+) for all widget surfaces (home screen, lock screen, standby mode)
+- Create a Widget Extension target: `File > New > Target > Widget Extension`
+- Implement `TimelineProvider` for data updates: `getSnapshot()` (preview), `getTimeline()` (live updates), `relevances()` (Smart Stack ranking)
+- Use `@AppStorage` or App Group `UserDefaults` (suite: `group.{bundle-id}`) to share data between app and widget
+- Widget sizes: `.systemSmall`, `.systemMedium`, `.systemLarge`, `.accessoryCircular`, `.accessoryRectangular` (lock screen iOS 16+)
+- For interactive widgets (iOS 17+): use `AppIntent` + `Button` / `Toggle` with `widgetURL` or `Link`
+- **Live Activities** (iOS 16.1+): implement `ActivityAttributes` struct + `ActivityContent`; start via `Activity.request()`; update via `Activity.update()`; end via `Activity.end()`; add `NSSupportsLiveActivities = YES` to Info.plist
+- Test widgets with Xcode Widget Simulator and Timeline preview
+
+#### BackgroundTasks Framework (iOS 13+)
+- Register task identifiers in Info.plist `BGTaskSchedulerPermittedIdentifiers` array
+- Use `BGAppRefreshTask` for lightweight data refresh (≤30s, opportunistic scheduling)
+- Use `BGProcessingTask` for long-running work (data sync, ML model updates) — requires `requiresNetworkConnectivity` / `requiresExternalPower` flags
+- Schedule in `applicationDidEnterBackground` via `BGTaskScheduler.shared.submit()`
+- Implement expiry handler: call `task.setTaskCompleted(success:)` before expiry to avoid kill
+- Test via `e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.example.refresh"]` in LLDB
+
+#### App Shortcuts & Siri Integration (App Intents — iOS 16+)
+- Replace SiriKit Intents with **App Intents framework** (preferred for iOS 16+)
+- Define `AppIntent` structs with `@Parameter` properties and `perform()` async method
+- Register shortcuts via `AppShortcutsProvider` returning `AppShortcut` array
+- Add `AppIntents` to the App Intents extension target (or app target for simple intents)
+- Spotlight donation: implement `IndexedEntity` on domain models for `CSSearchableItem` donations
+
+#### CoreData vs SwiftData Decision
+| Criteria | CoreData | SwiftData (iOS 17+) |
+|---|---|---|
+| iOS deployment target | iOS 13+ | iOS 17+ only |
+| Existing schema | Use CoreData (migration path) | SwiftData if greenfield |
+| CloudKit sync | `NSPersistentCloudKitContainer` | `modelContainer(for:cloudKitDatabase:)` |
+| Preference | Use for projects targeting < iOS 17 | Use for projects targeting iOS 17+ |
+
+**If using CoreData**: `NSPersistentContainer`, `NSFetchedResultsController`, `NSManagedObject` subclasses generated from `.xcdatamodeld`  
+**If using SwiftData**: `@Model` macro, `ModelContainer`, `@Query` property wrapper, migrations via `VersionedSchema`
 
 ---
 

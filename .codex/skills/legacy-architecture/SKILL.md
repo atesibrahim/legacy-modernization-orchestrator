@@ -1,7 +1,7 @@
 ---
 name: legacy-architecture
-description: Legacy architecture visualization — component diagrams, data flow maps, mermaid HTML diagrams, architectural constraint documentation.
-argument-hint: Legacy system name or path to analysis report to base diagrams from
+description: 'Legacy system architecture visualization via Mermaid.js HTML diagrams. Trigger phrases: "diagram legacy system", "visualize legacy architecture", "map legacy component dependencies", "document legacy data flows", "create legacy architecture diagrams", "identify architectural weaknesses in legacy system", "produce legacy system HTML diagrams". Outputs: legacy_architecture.md + legacy_architecture.html with 6 diagrams: high-level architecture, component dependency, data flow, auth flow, DB architecture, deployment topology. NOT for designing the new target system — use target-architecture for that. Requires legacy-analysis output to exist.'
+argument-hint: 'Legacy system name or path to analysis report to base diagrams from'
 ---
 
 # legacy-architecture

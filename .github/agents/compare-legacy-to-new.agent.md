@@ -27,7 +27,7 @@ This agent executes by strictly following every step defined in:
 ---
 
 ## Prerequisites
-- `ai-driven-development/docs/analysing/legacy_analyse.md`
+- `ai-driven-development/docs/legacy_analysis/legacy_analysis.md`
 - `ai-driven-development/docs/legacy_architecture/legacy_architecture.md`
 - `ai-driven-development/docs/target_architecture/target_architecture.md`
 - At least one of the following (based on project scope):

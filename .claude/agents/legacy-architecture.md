@@ -1,6 +1,6 @@
 ---
 name: legacy-architecture
-description: "Use when visualizing legacy architecture, creating system diagrams for legacy systems, understanding legacy component relationships, mapping legacy data flows, identifying architectural weaknesses, producing mermaid diagrams in HTML format, documenting legacy architectural constraints before redesign. Requires legacy analysis artifacts to exist."
+description: "Use when: visualizing legacy architecture, diagramming legacy system components and dependencies, mapping legacy data flows, documenting legacy architectural weaknesses, producing Mermaid.js HTML diagrams (high-level, component, data flow, auth, DB, deployment). NOT for new system design — use target-architecture for that. Requires legacy-analysis output."
 tools:
   - Read
   - Write
@@ -21,4 +21,4 @@ Read the full skill file at `.github/skills/legacy-architecture/SKILL.md` before
 Produce all artifacts in `ai-driven-development/docs/legacy_architecture/`
 
 ## Prerequisites
-- `ai-driven-development/docs/analysing/legacy_analyse.md` must exist (Phase 1 complete)
+- `ai-driven-development/docs/legacy_analysis/legacy_analysis.md` must exist (Phase 1 complete)

@@ -1,5 +1,7 @@
 # UI/UX Design Standards
 
+> **Tier 2 — Skill-local standards.** Extends [Core Standards (Tier 1)](../../standards/core.md). Core standards apply universally; this file adds UI/UX–specific HTML wireframe templates, responsive breakpoints, and accessibility conventions.
+
 Reference templates for producing `ui_ux_pages.html` and the design system.
 Customize all colors, typography, and component labels to the project's brand requirements.
 

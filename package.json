@@ -30,5 +30,9 @@
   ],
   "engines": {
     "node": ">=18"
+  },
+  "scripts": {
+    "sync:wrappers": "node scripts/sync-wrappers.js",
+    "check:wrappers": "node scripts/sync-wrappers.js --check"
   }
 }

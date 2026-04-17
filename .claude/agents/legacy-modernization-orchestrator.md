@@ -1,6 +1,6 @@
 ---
 name: legacy-modernization-orchestrator
-description: "Use when starting or continuing a full legacy modernization project end-to-end, orchestrating all redesign phases in order, running the complete legacy modernization workflow, validating phase completion before proceeding, coordinating analysis design development comparison phases. Invokes other agents in sequence: legacy-analysis → legacy-architecture → target-architecture → ui-ux-design → backend/frontend/ios/android-development → compare-legacy-to-new."
+description: "Use when starting or continuing a full end-to-end legacy modernization project. Orchestrates all phases in order with DoD gates: legacy-analysis → legacy-architecture → tech stack selection → target-architecture → ui-ux-design → backend/frontend/ios/android-development (optional parallel) → compare-legacy-to-new → final-validation. Use individual sub-agents when only a single phase is needed."
 tools:
   - Read
   - Write

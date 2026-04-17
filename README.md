@@ -117,18 +117,19 @@ Agents are defined in `.github/agents/`. Use the agent picker in VS Code Copilot
 ## Phase workflow
 
 ```
-Phase 1  →  legacy-analysis          (always required)
-Phase 2  →  legacy-architecture      (always required)
-Phase 3  →  target-architecture             (always required)
-             ↓ ask user: which targets?
-Phase 4a →  ui-ux-design              (if any client UI)
-Phase 4b →  backend-development       (optional)
-Phase 4c →  frontend-development      (optional)
-Phase 4d →  ios-development           (optional)
-Phase 4e →  android-development       (optional)
-             ↓ phases 4a–4e can run in parallel
-Phase 5  →  compare-legacy-to-new     (after any dev phase)
-Phase 6  →  Final Validation
+Phase 1    →  legacy-analysis          (always required)
+Phase 2    →  legacy-architecture      (always required)
+Phase 2.5  →  tech-stack-selection     (always required — user confirms all tech choices)
+Phase 3    →  target-architecture      (always required)
+               ↓ ask user: which targets?
+Phase 4a   →  ui-ux-design             (if any client UI; must complete before 4c/4d/4e)
+Phase 4b   →  backend-development      (optional; can run in parallel with 4a)
+Phase 4c   →  frontend-development     (optional; requires 4a)
+Phase 4d   →  ios-development          (optional; requires 4a)
+Phase 4e   →  android-development      (optional; requires 4a)
+               ↓ 4b/4c/4d/4e can run in parallel with each other (after 4a)
+Phase 5    →  compare-legacy-to-new    (after any dev phase)
+Phase 6    →  Final Validation
 ```
 
 All outputs are written to `ai-driven-development/` inside your project.

@@ -1,6 +1,6 @@
 ---
 name: legacy-analysis
-description: "Use when analysing a legacy codebase, reverse engineering legacy architecture, identifying technical debt, mapping business flows, detecting hidden dependencies, assessing security posture, performing database schema reverse engineering, stored procedures and triggers inventory, table ownership matrix, data quality assessment, creating legacy architecture reports, risk matrix, data and integration maps before any redesign or migration project."
+description: "Run first in any modernization project. Use when: analysing a legacy codebase, reverse engineering legacy architecture, finding technical debt, mapping business flows, detecting hidden dependencies, assessing legacy security posture, inventorying database schema / stored procedures / triggers / tables, producing table ownership matrix, data quality assessment, UI screen inventory before any redesign or migration. Produces legacy_analyse.md. Required by all subsequent phases."
 tools:
   - Read
   - Write
@@ -18,8 +18,8 @@ tools:
 Read the full skill file at `.github/skills/legacy-analysis/SKILL.md` before taking any action. Follow every step exactly — no skipping, reordering, or summarizing. Validate the Definition of Done checklist before completing.
 
 ## Output
-Produce all artifacts in `ai-driven-development/docs/analysing/`:
-- `legacy_analyse.md` — Full legacy architecture analysis report
+Produce all artifacts in `ai-driven-development/docs/legacy_analysis/`:
+- `legacy_analysis.md` — Full legacy architecture analysis report
 
 ## Prerequisites
 - Access to the legacy codebase, documentation, or running system

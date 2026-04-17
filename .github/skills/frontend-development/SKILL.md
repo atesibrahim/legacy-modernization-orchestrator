@@ -14,10 +14,17 @@ argument-hint: 'Project name or path to UI/UX design artifacts and system design
 - After `target-architecture` confirms API contracts
 - Starting or continuing phased frontend implementation
 
-## Prerequisites
-- `ai-driven-development/docs/ui_design/ui_ux_pages.md`
-- `ai-driven-development/docs/target_architecture/target_architecture.md` (API contracts)
-- Backend APIs available or OpenAPI spec for mock generation
+## Prerequisites (Preflight)
+Before starting, verify the following artifacts exist:
+
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| UI/UX design | `ai-driven-development/docs/ui_design/ui_ux_pages.md` | Always |
+| Target architecture (API contracts) | `ai-driven-development/docs/target_architecture/target_architecture.md` | Always |
+| Tech stack selections | `ai-driven-development/docs/tech_stack_selections.md` | Always |
+| Backend OpenAPI spec or running API | `ai-driven-development/development/backend_development/` or OpenAPI spec URL | Recommended |
+
+**If any required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 4a: `ui-ux-design`, Phase 3: `target-architecture`, Phase 2.5: Tech Stack Selection Gate, Phase 4b: `backend-development`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
 ## Output Location
 - Create folder `ai-driven-development/development/frontend_development/{project_name}` all frontend code here.

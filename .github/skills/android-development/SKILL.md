@@ -14,10 +14,16 @@ argument-hint: 'Project name or path to UI/UX design artifacts and system design
 - After `target-architecture` confirms API contracts (OpenAPI spec available)
 - Starting or continuing phased Android mobile implementation
 
-## Prerequisites
-- `ai-driven-development/docs/ui_design/ui_ux_pages.md`
-- `ai-driven-development/docs/target_architecture/target_architecture.md` (API contracts / OpenAPI spec)
-- Backend APIs available or OpenAPI spec for mock generation
+## Prerequisites (Preflight)
+Before starting, verify the following artifacts exist:
+
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| UI/UX design | `ai-driven-development/docs/ui_design/ui_ux_pages.md` | Always |
+| Target architecture (API contracts) | `ai-driven-development/docs/target_architecture/target_architecture.md` | Always |
+| Backend OpenAPI spec or running API | `ai-driven-development/development/backend_development/` or OpenAPI spec URL | Recommended |
+
+**If any required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 4a: `ui-ux-design`, Phase 3: `target-architecture`, Phase 4b: `backend-development`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
 ## Output Location
 Create folder `ai-driven-development/development/mobile_development/android/{project_name}` — all Android code here.
@@ -157,26 +163,68 @@ Before writing any code, add the Android phase checklist from [STANDARDS.md](./S
            .build()
    ```
 
-2. **AuthInterceptor** — attaches `Authorization: Bearer <token>`, handles 401 refresh:
+2. **AuthInterceptor** — attaches `Authorization: Bearer <token>` on every request:
    ```kotlin
    class AuthInterceptor @Inject constructor(
        private val tokenManager: TokenManager
    ) : Interceptor {
        override fun intercept(chain: Chain): Response {
+           val token = tokenManager.accessToken
            val request = chain.request().newBuilder()
-               .header("Authorization", "Bearer ${tokenManager.accessToken}")
+               .apply { if (token != null) header("Authorization", "Bearer $token") }
                .build()
-           val response = chain.proceed(request)
-           if (response.code == 401) {
-               // attempt refresh (synchronised)
-               val newToken = runBlocking { tokenManager.refresh() }
-               return chain.proceed(request.newBuilder()
-                   .header("Authorization", "Bearer $newToken")
-                   .build())
-           }
-           return response
+           return chain.proceed(request)
        }
    }
+   ```
+
+3. **TokenAuthenticator** — handles 401 token refresh using OkHttp `Authenticator` (avoids `runBlocking` deadlock):
+   ```kotlin
+   class TokenAuthenticator @Inject constructor(
+       private val tokenManager: TokenManager
+   ) : Authenticator {
+       private val mutex = Mutex()
+
+       override fun authenticate(route: Route?, response: Response): Request? {
+           // Avoid infinite retry loops
+           if (response.request.header("Authorization") == null) return null
+
+           val newToken = runCatching {
+               runBlocking { // safe here: OkHttp calls Authenticator on its own thread, not a coroutine dispatcher
+                   mutex.withLock {
+                       // Re-check after acquiring lock in case another thread already refreshed
+                       val refreshed = tokenManager.accessToken
+                       if (refreshed != null && refreshed != response.request.header("Authorization")?.removePrefix("Bearer ")) {
+                           refreshed
+                       } else {
+                           tokenManager.refresh()
+                       }
+                   }
+               }
+           }.getOrNull() ?: return null  // refresh failed — propagate 401
+
+           return response.request.newBuilder()
+               .header("Authorization", "Bearer $newToken")
+               .build()
+       }
+   }
+   ```
+   Register in `NetworkModule`:
+   ```kotlin
+   @Provides @Singleton
+   fun provideOkHttpClient(
+       authInterceptor: AuthInterceptor,
+       tokenAuthenticator: TokenAuthenticator
+   ): OkHttpClient =
+       OkHttpClient.Builder()
+           .addInterceptor(authInterceptor)
+           .authenticator(tokenAuthenticator)
+           .addInterceptor(HttpLoggingInterceptor().apply {
+               level = if (BuildConfig.DEBUG) BODY else NONE
+           })
+           .connectTimeout(30, SECONDS)
+           .readTimeout(30, SECONDS)
+           .build()
    ```
 
 3. **TokenManager** (`core/security/TokenManager.kt`) — EncryptedSharedPreferences:
@@ -481,6 +529,51 @@ class LoginScreenTest {
 - [ ] Proguard rules for Retrofit, Hilt, Room, Moshi/Gson added
 - [ ] Internal test track uploaded to Play Store and tested on 3+ physical devices
 - [ ] Privacy Policy URL added in Play Console
+
+---
+
+### Phase 12.5 — Platform Extensions *(only if required by product scope)*
+
+Implement Android platform extension features for the project. Skip any item not required.
+
+#### AppWidget (Glance API)
+- Use **Glance** (`androidx.glance:glance-appwidget`) — Jetpack Compose-based widget API (preferred over `RemoteViews` for new development)
+- Create `GlanceAppWidget` subclass with `@Composable` `Content()` function
+- Create `GlanceAppWidgetReceiver` subclass and register in `AndroidManifest.xml` with `<receiver>` + `APPWIDGET_UPDATE` intent filter
+- Define `appwidget-provider` XML in `res/xml/` with `minWidth`, `minHeight`, `updatePeriodMillis`, `previewLayout`
+- Widget sizes: use `SizeMode.Exact` (re-renders per size) or `SizeMode.Responsive` (predefined sizes)
+- Data: share via `GlanceStateDefinition` with `DataStore` (preferred), or App-specific `DataStore` file
+- Actions: use `actionRunCallback<ActionCallback>()` or `actionStartActivity<MyActivity>()`
+- Update widget programmatically: `GlanceAppWidgetManager.requestPinAppWidget()` / `GlanceAppWidget.update(context, glanceId)`
+
+#### WorkManager (Background Tasks)
+- Use `WorkManager` (`androidx.work:work-runtime-ktx`) for deferrable, guaranteed background work
+- `OneTimeWorkRequest`: for single-run tasks with input/output data
+- `PeriodicWorkRequest`: minimum interval 15 minutes; use `Constraints` (network, charging, battery not low)
+- Implement `CoroutineWorker` (preferred over `Worker`) with `doWork(): Result` returning `Result.success()`, `Result.retry()`, or `Result.failure()`
+- Chain work with `WorkManager.beginWith().then().enqueue()`
+- Tag work for cancellation: `cancelAllWorkByTag(tag)` / `cancelUniqueWork(name)`
+- Observe: `WorkManager.getWorkInfoByIdLiveData(id)` or Flow equivalent
+- Expedited work (immediate foreground-service-equivalent): implement `getForegroundInfo()` in `CoroutineWorker`
+
+#### App Actions & Shortcuts (App Intents)
+- **Built-in intents**: implement `capability` declarations in `shortcuts.xml` (via `res/xml/shortcuts.xml`) for Google Assistant integration
+- **Shortcuts**: `ShortcutInfoCompat` with `addDynamicShortcuts()` via `ShortcutManagerCompat`
+  - Static shortcuts: declared in `shortcuts.xml` (`<shortcut>` elements)
+  - Dynamic shortcuts: `ShortcutInfoCompat.Builder().setId().setShortLabel().setIntent().build()`
+  - Max 15 shortcuts (5 visible in launcher long-press)
+- **Pinned shortcuts**: `ShortcutManagerCompat.requestPinShortcut()`
+- **Android 12+ capability reporting**: use `UiModeManager.setApplicationNightMode()` for per-app dark mode shortcuts
+
+#### Notification Styles (Rich Notifications)
+- `NotificationCompat.BigTextStyle`: expanded multi-line text
+- `NotificationCompat.BigPictureStyle`: image with summary text
+- `NotificationCompat.InboxStyle`: list of up to 5 text rows
+- `NotificationCompat.MessagingStyle`: conversation thread with avatars (use for chat apps; required for Bubbles API)
+- **Bubbles** (Android 11+): `BubbleMetadata` attached to `MessagingStyle` notification; requires `CATEGORY_MESSAGE` + conversation shortcut
+- **Notification channels**: group related notifications; set `IMPORTANCE_DEFAULT` / `IMPORTANCE_HIGH` appropriately; do not change importance after channel creation (user controls it)
+- **Direct Reply**: `RemoteInput.Builder()` + `NotificationCompat.Action` with `addRemoteInput()`
+- Android 13+: `POST_NOTIFICATIONS` runtime permission — request with `ActivityResultContracts.RequestPermission()`
 
 ---
 

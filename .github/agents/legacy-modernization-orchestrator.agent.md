@@ -19,7 +19,7 @@ argument-hint: 'Legacy project path or name to begin full end-to-end redesign wo
 ## Phase Overview
 
 ```
-Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional parallel phases) → Phase 5 → Phase 6 → Phase 7
+Phase 1 → Phase 2 → Phase 2.5 → Phase 3 → [Scope Selection] → Phase 4 (optional parallel phases) → Phase 5 → Phase 6
 ```
 
 > **Before Phase 4, the orchestrator MUST ask the user which development targets are needed.**
@@ -36,12 +36,26 @@ Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional para
 | 4c | [`frontend-development`](./frontend-development.agent.md) | Web Frontend Implementation | **Optional** |
 | 4d | [`ios-development`](./ios-development.agent.md) | iOS Mobile App | **Optional** |
 | 4e | [`android-development`](./android-development.agent.md) | Android Mobile App | **Optional** |
+| 4f | `data-migration` | Data Migration & ETL | **Optional** |
+| 4g | `security-review` | Security Audit (OWASP Top 10) | **Optional** |
+| 4h | `devops-infra` | Infrastructure-as-Code & CI/CD | **Optional** |
 | 5 | [`compare-legacy-to-new`](./compare-legacy-to-new.agent.md) | Gap Analysis & Comparison | After any dev phase complete |
 | 6 | Final Validation | Cutover Readiness | After Phase 5 |
 
 ### Parallelizable phases (after Phase 3 + scope confirmed)
-- Phase 4a (UI/UX) runs in parallel with all dev phases
-- Phase 4b, 4c, 4d, 4e can all run in parallel with each other once 4a API contracts are available
+- Phase 4a (UI/UX) **must complete before** 4c, 4d, and 4e — frontend and mobile phases require wireframes and API contracts from 4a
+- Phase 4a **can run in parallel with** Phase 4b (backend), since backend does not depend on UI wireframes
+- Phase 4b, 4c, 4d, 4e can all run in parallel with each other once 4a is complete
+- Phase 4f (data-migration) can run in parallel with all Phase 4 sub-phases; it depends on Phase 3 (target schema known) but not on any other Phase 4 sub-phase
+- Phase 4g (security-review) runs after Phase 4b/4c/4d/4e code exists; it can overlap with Phase 5
+- Phase 4h (devops-infra) can run in parallel with Phase 4b once target architecture is confirmed; it produces IaC, CI/CD pipelines, and monitoring config
+
+### Cross-platform mobile — not supported
+> **Flutter, React Native, and KMM are not supported.** When a project requires cross-platform mobile:
+> - Option 1: Build native — use Phase 4d (`ios-development`) and/or Phase 4e (`android-development`)
+> - Option 2: Document the gap — note in `tech_stack_selections.md` that cross-platform is out of scope; a future skill may add this support
+>
+> Do **NOT** attempt to generate Flutter/React Native/KMM code via `ios-development` or `android-development` — the output will be incorrect.
 
 ---
 
@@ -53,17 +67,17 @@ Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional para
 4. **Skip optional phases that are out of scope** — do not execute them; mark as N/A in tracker
 5. **Validate DoD before proceeding** — if DoD not met, refine current phase before moving on
 6. **Document phase status** — update the tracker file after each phase
-7. **Parallelize where safe** — Phases 4a–4e can all run simultaneously once scope is confirmed
+7. **Parallelize where safe** — Phase 4a must complete before 4c/4d/4e (they depend on wireframes); 4a can run in parallel with 4b; 4b/4c/4d/4e can run in parallel with each other
 
 ---
 
 ## Scope Selection (Before Phase 4)
 
-**After Phase 1 completes**, read `legacy_analyse.md` **Section 10 — Technology Profile** to auto-detect which development targets exist in the legacy repository. Pre-fill the scope answers from this analysis and **present them to the user for confirmation** before proceeding to Phase 4.
+**After Phase 1 completes**, read `legacy_analysis.md` **Section 10 — Technology Profile** to auto-detect which development targets exist in the legacy repository. Pre-fill the scope answers from this analysis and **present them to the user for confirmation** before proceeding to Phase 4.
 
 ### Auto-Detection Rules
 
-| Technology Profile in legacy_analyse.md | Default Scope |
+| Technology Profile in legacy_analysis.md | Default Scope |
 |---|---|
 | `backend-only` | Backend ✅ · Web Frontend ❌ · iOS ❌ · Android ❌ |
 | `frontend-only` | Backend ❌ · Web Frontend ✅ · iOS ❌ · Android ❌ |
@@ -139,7 +153,7 @@ Create `ai-driven-development/redesign_progress.md` to track all phases:
 > Invoke the `legacy-analysis` agent — it will follow all steps in its skill
 
 **Produce**:
-- `ai-driven-development/docs/analysing/legacy_analyse.md`
+- `ai-driven-development/docs/legacy_analysis/legacy_analysis.md`
 
 **DoD Gate** — do NOT proceed to Phase 2 until ALL are checked:
 - [ ] 100% of services, modules, APIs listed and categorized
@@ -156,7 +170,7 @@ Create `ai-driven-development/redesign_progress.md` to track all phases:
 **Agent**: [`legacy-architecture`](./legacy-architecture.agent.md)
 **Role**: Senior Master Architect
 
-**Requires**: Phase 1 complete (`legacy_analyse.md`)
+**Requires**: Phase 1 complete (`legacy_analysis.md`)
 
 **Execute**:
 > Invoke the `legacy-architecture` agent — it will follow all steps in its skill
@@ -327,6 +341,8 @@ Using this template:
 - [ ] User has answered all questions for all in-scope tiers
 - [ ] `ai-driven-development/docs/tech_stack_selections.md` created with all confirmed choices
 - [ ] No section left with placeholder `[choice]` values for in-scope tiers
+- [ ] All mandatory keys populated: Backend Language/Framework, Database, Auth Provider (if backend in scope); Frontend Framework (if web in scope); iOS minimum target (if iOS in scope); Android minimum SDK (if Android in scope)
+- [ ] Template reference: `.github/skills/tech-stack-selection/tech_stack_selections.template.md` — use as schema reference to ensure all keys are present
 
 ---
 
@@ -339,7 +355,7 @@ Using this template:
 **Execute**:
 > Invoke the `target-architecture` agent — it will read `tech_stack_selections.md` for all flexible tech choices and follow all steps in its skill.
 >
-> **Pass the Technology Profile from `legacy_analyse.md` Section 10** so the target-architecture agent can skip layers, diagrams, tech choices, and ADRs that are not applicable to this repository's scope.
+> **Pass the Technology Profile from `legacy_analysis.md` Section 10** so the target-architecture agent can skip layers, diagrams, tech choices, and ADRs that are not applicable to this repository's scope.
 
 **Produce**:
 - `ai-driven-development/docs/target_architecture/target_architecture.md`
@@ -361,7 +377,7 @@ Using this template:
 
 > **All Phase 4 sub-phases are optional except 4a (required whenever any UI is in scope).**
 > Only execute the sub-phases confirmed in the Scope Selection step.
-> Phases 4a–4e can all run in parallel once scope is confirmed.
+> Phase 4a must complete before 4c/4d/4e (they depend on wireframes); 4a can run in parallel with 4b; 4b/4c/4d/4e can run in parallel with each other.
 
 ---
 
@@ -519,17 +535,21 @@ Using this template:
 ---
 
 ## Phase 6: Final Validation & Cutover Readiness
-**Role**: Full team review
+**Agent skill:** [`.github/skills/final-validation/SKILL.md`](../skills/final-validation/SKILL.md)  
+**Role**: Full team review — release readiness, rollback readiness, stakeholder sign-off, go/no-go decision.
 
-**Checklist** — all must be ✅ before production cutover:
+> Read `.github/skills/final-validation/SKILL.md` in full before starting Phase 6. Follow every step. All DoD items must be ✅ before production cutover.
+
+**Summary checklist** (full detail in skill):
 
 ### Functional
 - [ ] All legacy features covered (from comparison report)
 - [ ] UAT (User Acceptance Testing) completed with real users
 - [ ] Edge cases from legacy tested in new system
+- [ ] Zero open ❌ items in compare-legacy-to-new functional coverage table
 
 ### Technical
-- [ ] Load test passed (P95 meets SLA)
+- [ ] Load test passed — no performance regression blockers (Step 3.5 of Phase 5)
 - [ ] Security scan passed (no critical CVEs, OWASP ZAP clean)
 - [ ] Data migration scripts tested in staging with production-like data
 - [ ] Rollback plan documented and tested in staging
@@ -547,6 +567,10 @@ Using this template:
 - [ ] Architecture docs updated with any deviations from design
 - [ ] `redesign_progress.md` all in-scope phases marked ✅ Complete
 
+### Go/No-Go
+- [ ] Go/No-Go decision recorded with stakeholder sign-off
+- [ ] Post-cutover smoke test plan defined and owner assigned
+
 ---
 
 ## Artifact Map
@@ -556,8 +580,8 @@ Full list of all possible outputs — only artifacts for in-scope targets will b
 ai-driven-development/
 ├── redesign_progress.md                         ← Phase tracker (always)
 ├── docs/
-│   ├── analysing/
-│   │   └── legacy_analyse.md                    ← Phase 1 (always)
+│   ├── legacy_analysis/
+│   │   └── legacy_analysis.md                    ← Phase 1 (always)
 │   ├── legacy_architecture/
 │   │   ├── legacy_architecture.md              ← Phase 2 (always)
 │   │   ├── legacy_architecture.html            ← Phase 2 (always)
@@ -582,6 +606,29 @@ ai-driven-development/
 │       └── android/
 │           ├── android_development_todo.md      ← Phase 4e (if Android in scope)
 │           └── {project_name}/                  ← Phase 4e Gradle project
+│   └── data_migration/                          ← Phase 4f (if data migration in scope)
+│       ├── data_migration_todo.md
+│       ├── schema_migrations/
+│       ├── validation/
+│       ├── cleansing/
+│       └── rollback/
+│   └── security_review/                         ← Phase 4g (if security review in scope)
+│       ├── security_review_report.md
+│       └── security_review_report.html
+└── development/
+    └── infra/                                   ← Phase 4h (if devops-infra in scope)
+        ├── infra_todo.md
+        ├── kubernetes/
+        ├── helm/
+        ├── terraform/
+        ├── ci-cd/
+        ├── monitoring/
+        └── secrets/
+└── docs/
+    └── final_validation/                        ← Phase 6 (always)
+        ├── release_readiness_checklist.md
+        ├── go_no_go_decision.md
+        └── smoke_test_plan.md
 ```
 
 ---

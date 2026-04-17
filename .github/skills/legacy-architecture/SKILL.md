@@ -25,8 +25,14 @@ argument-hint: 'Legacy system name or path to analysis report to base diagrams f
 - Need visual blueprints of the legacy system for team alignment
 - Prior to designing the new target architecture
 
-## Prerequisites
-- Completed `legacy_analyse.md` from the `legacy-analysis` skill
+## Prerequisites (Preflight)
+Before starting, verify the following artifact exists:
+
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| Legacy analysis report | `ai-driven-development/docs/legacy_analysis/legacy_analysis.md` | Always |
+
+**If the required artifact is missing**: Stop. Report: "Artifact `ai-driven-development/docs/legacy_analysis/legacy_analysis.md` not found. This is produced by Phase 1 (`legacy-analysis`). Options: (a) Run Phase 1 now, (b) Provide the path to the artifact manually."
 
 ## Output Location
 Create folder `ai-driven-development/docs/legacy_architecture/` and produce:
@@ -73,8 +79,59 @@ Required diagram sections (match the template structure):
 - **4.2** — Component Dependency Diagram (all modules, coupling visible)
 - **4.3** — Data Flow Diagram (request → processing → response)
 - **4.4** — Authentication/Authorization Flow (login sequence)
+- **4.5** — Database Architecture (ER overview, ownership, God-table highlights) — *skip if NoSQL-only*
+- **4.6** — Deployment Topology (servers, network zones, load balancers, environments)
 
 > **Important**: Replace ALL placeholder node labels with the ACTUAL legacy system components discovered during analysis. The template is a starting point only.
+
+#### Diagram 4.5 — Database Architecture
+Produce an entity-relationship overview (not a full-column ER — key entities and relationships only):
+
+- Include all major tables/collections grouped by owning module (use Mermaid `subgraph` or `erDiagram`)
+- Highlight **God tables** (shared by 3+ modules) with a distinct style or annotation
+- Show **cross-module DB coupling** edges (dashed arrows between subgraphs)
+- Mark tables with > 1M rows as high-volume (use a note or label)
+- For NoSQL stores: show collection groupings and their primary access patterns instead of ER notation
+
+```mermaid
+erDiagram
+  CUSTOMERS ||--o{ ORDERS : places
+  ORDERS ||--|{ ORDER_LINES : contains
+  ORDER_LINES }o--|| PRODUCTS : references
+  CUSTOMERS ||--o{ ADDRESSES : has
+```
+
+#### Diagram 4.6 — Deployment Topology
+Map the runtime infrastructure as a Mermaid `graph TD` (or `C4Context` style):
+
+- **Compute**: All servers, VMs, containers, Lambda functions with their roles
+- **Load balancers & reverse proxies**: nginx, HAProxy, AWS ALB, Cloudflare, etc.
+- **CDN**: If present — origin and edge cache points
+- **Network zones**: DMZ, internal app tier, DB tier, admin zone (use `subgraph` per zone)
+- **Environment inventory**: List all environments (prod, staging, UAT, dev) and whether they are isolated or shared
+- **External service endpoints**: DNS, NTP, SMTP relay, VPN gateways
+
+```mermaid
+graph TD
+  subgraph DMZ
+    LB[Load Balancer nginx]
+    CDN[CDN CloudFront]
+  end
+  subgraph AppTier
+    APP1[App Server 1]
+    APP2[App Server 2]
+  end
+  subgraph DBTier
+    DB[(PostgreSQL Primary)]
+    DBreplica[(PostgreSQL Replica)]
+  end
+  CDN --> LB
+  LB --> APP1
+  LB --> APP2
+  APP1 --> DB
+  APP2 --> DB
+  DB --> DBreplica
+```
 
 ### Step 4.1 — Validate the Generated HTML File
 
@@ -82,7 +139,7 @@ After writing `legacy_architecture.html`, run through the **File Creation Valida
 
 Key checks for this skill's output:
 - `<!DOCTYPE html>` appears exactly **once** (no accidental file append)
-- All 4 required diagrams are present as `<pre class="mermaid">` blocks (not `<div>`)
+- All 6 required diagrams are present as `<pre class="mermaid">` blocks (not `<div>`)
 - Every `subgraph` block is closed with `end`
 - `alt … else … end` in sequenceDiagram is fully closed
 - No `\n` inside quoted node labels — use `<br/>` for multi-line labels
@@ -140,6 +197,8 @@ Full Mermaid.js HTML file containing all diagrams from Step 4 above, customized 
 - [ ] Component dependency diagram (all modules included, coupling visible)
 - [ ] Data flow diagram (input → processing → output for main flows)
 - [ ] Authentication/authorization flow diagram
+- [ ] Database architecture diagram (entity groupings, God tables, cross-module coupling)
+- [ ] Deployment topology diagram (network zones, servers, LB, CDN, environments)
 - [ ] All diagrams rendered correctly in HTML (verify in browser)
 
 ### Technical Accuracy

@@ -14,9 +14,15 @@ argument-hint: 'Application name and list of primary user roles or workflows to 
 - Prior to frontend and mobile development
 - Need wireframes, design system, or UX specifications
 
-## Prerequisites
-- `ai-driven-development/docs/target_architecture/target_architecture.md`
-- Legacy screen inventory (from `legacy-analysis`)
+## Prerequisites (Preflight)
+Before starting, verify the following artifacts exist:
+
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| Target architecture | `ai-driven-development/docs/target_architecture/target_architecture.md` | Always |
+| Legacy screen inventory | `ai-driven-development/docs/legacy_analysis/legacy_analysis.md` (Step 1.5 — UI Screen Inventory) | If Frontend or Mobile in scope |
+
+**If any required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 3: `target-architecture`, Phase 1: `legacy-analysis`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
 ## Output Location
 Create folder `ai-driven-development/docs/ui_design/` and produce:
@@ -164,6 +170,139 @@ Apply the **Responsive Design Breakpoints** and adaptation rules from [STANDARDS
 
 ---
 
+### Step 8 — Design-to-Code Handoff
+
+Produce handoff artifacts that allow frontend/mobile developers to implement the design system without ambiguity.
+
+#### 8.1 — Design Tokens (`tokens.json`)
+Export all design tokens in **W3C Design Token Community Group format**:
+
+```json
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "primary": { "$value": "#2563EB", "$type": "color" },
+    "primary-hover": { "$value": "#1D4ED8", "$type": "color" },
+    "error": { "$value": "#DC2626", "$type": "color" },
+    "surface": { "$value": "#FFFFFF", "$type": "color" },
+    "surface-muted": { "$value": "#F9FAFB", "$type": "color" },
+    "on-surface": { "$value": "#111827", "$type": "color" }
+  },
+  "typography": {
+    "font-family-sans": { "$value": "Inter, system-ui, sans-serif", "$type": "fontFamily" },
+    "font-size-base": { "$value": "16px", "$type": "dimension" },
+    "font-size-sm": { "$value": "14px", "$type": "dimension" },
+    "font-weight-regular": { "$value": 400, "$type": "fontWeight" },
+    "font-weight-medium": { "$value": 500, "$type": "fontWeight" },
+    "font-weight-bold": { "$value": 700, "$type": "fontWeight" },
+    "line-height-normal": { "$value": 1.5, "$type": "number" }
+  },
+  "spacing": {
+    "xs": { "$value": "4px", "$type": "dimension" },
+    "sm": { "$value": "8px", "$type": "dimension" },
+    "md": { "$value": "16px", "$type": "dimension" },
+    "lg": { "$value": "24px", "$type": "dimension" },
+    "xl": { "$value": "32px", "$type": "dimension" }
+  },
+  "border-radius": {
+    "sm": { "$value": "4px", "$type": "dimension" },
+    "md": { "$value": "8px", "$type": "dimension" },
+    "full": { "$value": "9999px", "$type": "dimension" }
+  },
+  "shadow": {
+    "card": { "$value": "0 1px 3px rgba(0,0,0,0.1)", "$type": "shadow" }
+  }
+}
+```
+
+Save to: `ai-driven-development/docs/ui_design/tokens.json`
+
+#### 8.2 — Component Prop API Definition
+For each component in the design system, define the prop API contract that developers must implement:
+
+```markdown
+## Component: Button
+
+### Props
+| Prop | Type | Default | Required | Description |
+|---|---|---|---|---|
+| `variant` | `'primary' \| 'secondary' \| 'ghost' \| 'danger'` | `'primary'` | No | Visual style |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | No | Size preset |
+| `label` | `string` | — | Yes | Visible button text |
+| `disabled` | `boolean` | `false` | No | Disables interaction |
+| `loading` | `boolean` | `false` | No | Shows spinner, disables click |
+| `icon` | `string \| undefined` | `undefined` | No | Icon name from icon set |
+| `onClick` | `() => void` | — | No | Click handler |
+
+### States
+- default, hover, active, focused (keyboard), disabled, loading
+
+### Accessibility
+- `role="button"`, `aria-disabled` when disabled, `aria-label` when icon-only
+```
+
+Produce a component prop API definition for every component in the design system inventory. Save to `ai-driven-development/docs/ui_design/component_api.md`.
+
+#### 8.3 — Storybook Story Stubs
+For each component, provide a Storybook story stub that developers can fill in:
+
+```typescript
+// src/components/Button/Button.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
+
+const meta: Meta<typeof Button> = {
+  title: 'Components/Button',
+  component: Button,
+  tags: ['autodocs'],
+  argTypes: {
+    variant: { control: 'select', options: ['primary', 'secondary', 'ghost', 'danger'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+  },
+};
+export default meta;
+type Story = StoryObj<typeof Button>;
+
+export const Primary: Story = { args: { label: 'Click me', variant: 'primary' } };
+export const Disabled: Story = { args: { label: 'Disabled', disabled: true } };
+export const Loading: Story = { args: { label: 'Saving...', loading: true } };
+```
+
+Save stubs to `ai-driven-development/docs/ui_design/storybook_stubs/`.
+
+#### 8.4 — Design Implementation Checklist
+Produce `ai-driven-development/docs/ui_design/design-implementation-checklist.md`:
+
+```markdown
+# Design Implementation Checklist — [Project Name]
+
+## Design Tokens
+- [ ] `tokens.json` imported and CSS custom properties generated
+- [ ] No hard-coded color hex values in component code (use token variables only)
+- [ ] Typography scale applied via token variables
+
+## Components (one block per component)
+### Button
+- [ ] All 4 variants implemented
+- [ ] All 3 sizes implemented
+- [ ] Loading state shows spinner and disables click
+- [ ] Keyboard focus ring visible (WCAG AA)
+- [ ] Storybook story present with all variants
+
+### [Add one block per design-system component]
+
+## Screens
+### [Screen Name] — [Route]
+- [ ] Matches wireframe layout at mobile (≤ 640px)
+- [ ] Matches wireframe layout at desktop (≥ 1024px)
+- [ ] Loading state implemented
+- [ ] Empty state implemented
+- [ ] Error state implemented
+- [ ] ARIA labels present on interactive elements
+```
+
+---
+
 ## Definition of Done (DoD)
 
 ### UX Quality
@@ -185,6 +324,12 @@ Apply the **Responsive Design Breakpoints** and adaptation rules from [STANDARDS
 - [ ] Color contrast ratios verified (WCAG AA minimum)
 - [ ] Keyboard navigation path documented for each screen
 - [ ] ARIA roles/labels specified for custom components
+
+### Design Handoff *(new)*
+- [ ] `tokens.json` exported in W3C format
+- [ ] Component prop API defined for every component
+- [ ] Storybook story stubs produced
+- [ ] `design-implementation-checklist.md` produced
 
 ### Validation
 - [ ] Design reviewed by product owner / stakeholder

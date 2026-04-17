@@ -14,12 +14,18 @@ argument-hint: 'Project name or path to legacy analysis and legacy design artifa
 - Need to define the target architecture before development begins
 - Require formal architecture decision records (ADR), service boundaries, and API contracts
 
-## Prerequisites
-- `ai-driven-development/docs/analysing/legacy_analyse.md`
-- `ai-driven-development/docs/legacy_architecture/legacy_architecture.md`
-- `ai-driven-development/docs/tech_stack_selections.md` ← **all flexible tech choices confirmed by user in Phase 2.5**
+## Prerequisites (Preflight)
+Before starting, verify the following artifacts exist:
 
-> **Before starting any design work**, read both `legacy_analyse.md` **Section 10 — Technology Profile** (to confirm scope) and `tech_stack_selections.md` (to load all confirmed technology choices). Apply every confirmed choice directly — do NOT ask the user again. Skip all design steps, tech choices, diagrams, and ADRs that are not applicable to the confirmed scope. Do NOT design layers that do not exist in the target system.
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| Legacy analysis report | `ai-driven-development/docs/analysing/legacy_analysis.md` | Always |
+| Legacy architecture report | `ai-driven-development/docs/legacy_architecture/legacy_architecture.md` | Always |
+| Tech stack selections | `ai-driven-development/docs/tech_stack_selections.md` | Always |
+
+**If any required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 1: `legacy-analysis`, Phase 2: `legacy-architecture`, Phase 2.5: Tech Stack Selection Gate), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
+
+> **Before starting any design work**, read `legacy_analysis.md` **Section 10 — Technology Profile** (to confirm scope) and `tech_stack_selections.md` (to load all confirmed technology choices). Apply every confirmed choice directly — do NOT ask the user again. Skip all design steps, tech choices, diagrams, and ADRs that are not applicable to the confirmed scope. Do NOT design layers that do not exist in the target system.
 
 ## Output Location
 Create in folder `ai-driven-development/docs/target_architecture/` and produce:
@@ -74,7 +80,7 @@ Create in folder `ai-driven-development/docs/target_architecture/` and produce:
 > **Run before Steps 1–9.** The number of bounded contexts and in-scope tiers determines whether to proceed linearly or decompose design into parallel sub-tasks.
 
 **Review from prerequisites:**
-- Count bounded contexts hinted at in `legacy_analyse.md` (module count, God-tables, integration clusters)
+- Count bounded contexts hinted at in `legacy_analysis.md` (module count, God-tables, integration clusters)
 - Count in-scope tiers from `tech_stack_selections.md` (Backend / Frontend / iOS / Android)
 
 **Choose a strategy:**
@@ -140,7 +146,7 @@ Before any code:
 - Define authentication: Bearer JWT in Authorization header
 
 ### Step 5 — Data Architecture
-Ground every decision in the DB analysis findings from `legacy_analyse.md` (Section 3):
+Ground every decision in the DB analysis findings from `legacy_analysis.md` (Section 3):
 
 - **Legacy DB Findings Input**: Review the Table Ownership Matrix, DB anti-patterns, query hotspots, and data quality issues before designing the target data model — these directly inform bounded context boundaries and migration risk
 - **Data Ownership**: Each bounded context owns its data (no cross-context DB joins); use the legacy Table Ownership Matrix to propose initial ownership assignments
@@ -219,7 +225,7 @@ Produce an ADR for each major decision **applicable to the confirmed scope**:
 > ✅ = required for all scopes · *(backend)* = required only if backend is in scope · *(frontend)* = web frontend only · *(mobile)* = iOS or Android only
 
 ### Architecture
-- [ ] Technology Profile read from `legacy_analyse.md` and confirmed scope recorded ✅
+- [ ] Technology Profile read from `legacy_analysis.md` and confirmed scope recorded ✅
 - [ ] Target architecture diagram created — only layers in scope ✅
 - [ ] Each service/module has clear, non-overlapping responsibility ✅
 - [ ] Bounded contexts defined and context map produced *(backend)*

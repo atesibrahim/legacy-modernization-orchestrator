@@ -26,7 +26,7 @@ This agent executes by strictly following every step defined in:
 ---
 
 ## Prerequisites
-- `ai-driven-development/docs/analysing/legacy_analyse.md` (produced by `legacy-analysis` agent)
+- `ai-driven-development/docs/legacy_analysis/legacy_analysis.md` (produced by `legacy-analysis` agent)
 
 ---
 

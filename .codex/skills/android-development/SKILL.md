@@ -1,7 +1,7 @@
 ---
 name: android-development
-description: Kotlin Jetpack Compose Android app — MVVM Clean Architecture, Coroutines Flow, EncryptedSharedPreferences/Keystore, Retrofit/OkHttp, Room, FCM, JUnit/Mockk/Turbine, Play Store deployment.
-argument-hint: Project name or path to UI/UX design artifacts and system design to implement
+description: 'Native Android app development for modernized systems. Trigger phrases: "build Android app", "implement Kotlin Jetpack Compose app", "build native Android app", "Android MVVM Clean Architecture", "Android EncryptedSharedPreferences token storage", "Retrofit OkHttp networking", "Room database persistence", "FCM push notifications", "Android deep linking", "JUnit Mockk Turbine tests", "Espresso Compose UI tests", "submit to Play Store", "Glance AppWidget widget", "WorkManager background tasks". Outputs: android_development_todo.md + full Gradle project under development/mobile_development/android/. NOT for iOS — use ios-development. NOT for cross-platform (Flutter/RN not supported). Requires ui-ux-design + target-architecture.'
+argument-hint: 'Project name or path to UI/UX design artifacts and system design to implement'
 ---
 
 # android-development

@@ -1,5 +1,7 @@
 # Android Development Standards
 
+> **Tier 2 — Skill-local standards.** Extends [Core Standards (Tier 1)](../../standards/core.md). Core standards apply universally; this file adds Kotlin/Jetpack Compose–specific architecture rules, Clean Architecture layer rules, and Play Store compliance standards.
+
 These are the **non-negotiable, project-independent** standards for all Kotlin/Jetpack Compose Android implementations.
 The SKILL.md procedure references these. Do not deviate — justify any exception with a code comment.
 

@@ -1,6 +1,6 @@
 ---
 name: backend-development
-description: "Use when building Java Spring Boot / .NET ASP.NET Core / Python FastAPI / Go Gin-Fiber backend, implementing clean architecture hexagonal architecture, setting up domain-driven design modules, implementing REST APIs OpenAPI security JWT OAuth2, database ORM repositories, testing unit integration Testcontainers, observability metrics tracing logging, phased development plan backend implementation."
+description: "Use when: implementing the backend service (Java Spring Boot / .NET ASP.NET Core / Python FastAPI / Go Gin-Fiber), building REST APIs with OpenAPI + JWT/OAuth2, implementing clean/hexagonal architecture with DDD, setting up ORM repositories, unit + integration tests with Testcontainers, observability (metrics, tracing, logging). NOT for frontend or mobile. Requires target-architecture + tech stack confirmed."
 tools:
   - Read
   - Write

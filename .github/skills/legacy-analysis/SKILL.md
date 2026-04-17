@@ -15,8 +15,8 @@ argument-hint: 'Path or description of the legacy project to analyze'
 - Required to produce risk matrix, technical debt report, integration map, or database inventory
 
 ## Output Location
-Create folder `ai-driven-development/docs/analysing/` in the root and produce:
-- `legacy_analyse.md` — Full analysis report
+Create folder `ai-driven-development/docs/legacy_analysis/` in the root and produce:
+- `legacy_analysis.md` — Full analysis report
 
 ---
 
@@ -47,7 +47,7 @@ Classify the repository as one of:
 | `fullstack-mobile` | Backend + iOS and/or Android |
 | `fullstack` | Backend + Web Frontend + Mobile |
 
-Record the profile in `legacy_analyse.md` **Section 10 — Technology Profile** (see Output Format).
+Record the profile in `legacy_analysis.md` **Section 10 — Technology Profile** (see Output Format).
 
 > ⚠️ This profile is consumed by the `target-architecture` and `legacy-modernization-orchestrator` agents to skip inapplicable layers. It must be accurate — if ambiguous, list evidence for and against each tier.
 
@@ -74,7 +74,7 @@ Record the profile in `legacy_analyse.md` **Section 10 — Technology Profile** 
 - **Track A — DB Analyst**: Execute Step 2 (full database deep dive) independently
 - **Track B — Codebase Analyst**: Execute Steps 1, 3, 4, 5 (inventory, code quality, runtime, data flow)
 
-After both tracks complete, this agent runs Steps 6, 7, 8 (dependency mapping, security, risk) and merges all findings into `legacy_analyse.md`.
+After both tracks complete, this agent runs Steps 6, 7, 8 (dependency mapping, security, risk) and merges all findings into `legacy_analysis.md`.
 
 **Large — per-tier sub-tasks + specialist tracks:**
 
@@ -90,11 +90,11 @@ Spawn one sub-task per detected tier, each covering Steps 1 + 3 + 4 + 5 scoped t
 | Cross-cutting analyst | Full repo (deps, security, risk) | 6, 7, 8 — starts after tier tasks done |
 
 **Sub-task handoff protocol:**
-1. Each sub-task reads its scoped source path and produces a partial findings file: `ai-driven-development/docs/analysing/_partial_{tier}.md`
-2. This orchestrating agent reads all partial files and merges them into the final `legacy_analyse.md`, filling every section of the Output Format
+1. Each sub-task reads its scoped source path and produces a partial findings file: `ai-driven-development/docs/legacy_analysis/_partial_{tier}.md`
+2. This orchestrating agent reads all partial files and merges them into the final `legacy_analysis.md`, filling every section of the Output Format
 
 **Record decomposition plan before starting:**
-Add to `legacy_analyse.md` header:
+Add to `legacy_analysis.md` header:
 ```
 ## Analysis Plan
 - Scale: [Small / Medium / Large]
@@ -115,6 +115,26 @@ Catalog everything that exists:
 - **Database**: High-level list of all data stores (RDBMS, NoSQL, file-based) — detailed analysis in Step 2
 - **External Integrations**: LDAP, SSO, payment gateways, messaging systems, 3rd-party APIs
 - **Build & Deployment**: CI/CD pipelines, build scripts, deployment tools, environments
+
+### Step 1.5 — UI & Screen Inventory *(skip if no Frontend or Mobile detected in Technology Profile)*
+Document every user-facing interface to ensure nothing is missed in redesign:
+
+- **Screen / Page Inventory**: List every screen, page, view, dialog, and modal with its name and primary purpose
+- **Navigation Patterns**: Document navigation structure (sidebar menus, tab bars, breadcrumbs, wizard flows, deep links)
+- **UI Framework & Version**: Identify the exact UI technology (e.g., JSP 2.3, Angular.js 1.x, jQuery 3.x, WinForms, Swing) including version and EOL status
+- **Most-Used Screens**: Flag the 5–10 highest-traffic screens (from analytics, access logs, or stakeholder interviews)
+- **Most-Complained-About Screens**: Document screens with known usability issues (from support tickets, user feedback, or interviews)
+- **Accessibility Audit**: Check for ARIA attributes, keyboard navigability, colour contrast, and screen reader compatibility — record any WCAG 2.1 AA violations
+- **Responsive & Mobile**: Note whether UI is responsive; document any mobile-specific views or native wrappers
+- **UI Anti-Patterns**: Identify cluttered forms, inconsistent navigation, modal abuse, missing loading states, non-standard controls
+
+Output format:
+```
+| Screen Name | Purpose | Framework | Traffic | Issues |
+|---|---|---|---|---|
+| Customer Search | Find customer by name/ID | JSP + jQuery | High | Slow load, no pagination |
+| Order Entry | Create new order | Angular.js 1.6 | High | 30+ fields, no validation feedback |
+```
 
 ### Step 2 — Database Deep Dive
 Perform a thorough reverse-engineering of every persistent data store:
@@ -139,6 +159,47 @@ Perform a thorough reverse-engineering of every persistent data store:
 - **Cross-Module DB Coupling**: Map which application modules read/write which tables; produce a **Table Ownership Matrix** (table rows × module columns, annotated R/W/RW)
 - **Data Quality Issues**: NULLs in logically mandatory columns, orphaned foreign-key values, duplicate records without unique constraints, inconsistent formats (dates, phone numbers, status codes), stale/unreferenced rows
 - **Backup & Recovery**: Backup type (full/incremental/logical), frequency, retention period, tested restoration procedure, point-in-time recovery (PITR) capability, RPO/RTO SLAs
+
+### Step 2.5 — NoSQL & Polyglot Persistence *(skip if none detected)*
+For each non-relational data store identified in Step 1:
+
+- **Document Stores (MongoDB, CouchDB, etc.)**:
+  - Collections inventory with document structure and typical document size
+  - Indexes (single field, compound, text, geospatial) — identify missing indexes on query-heavy fields
+  - Aggregation pipelines in use — document business logic embedded in aggregations
+  - Schema-on-read abuse: collections where documents have wildly different shapes
+
+- **Key-Value Stores (Redis, Memcached)**:
+  - Key naming patterns — document the convention (or lack thereof)
+  - TTL policy per key type — identify keys with no TTL (memory leak risk)
+  - Pub/Sub channels in use and their consumers
+  - Memory sizing: current usage vs configured `maxmemory`; eviction policy (`allkeys-lru`, `noeviction`, etc.)
+  - Data serialization format (JSON, MessagePack, custom binary)
+
+- **Search Engines (Elasticsearch, OpenSearch, Solr)**:
+  - Index inventory with field mappings and analyzer configuration
+  - Query patterns (full-text, filter, aggregation, geo)
+  - Index size, shard count, replication factor — flag over-sharded or under-replicated indexes
+  - Synchronization mechanism from primary DB to search index (change data capture, batch re-index, dual-write)
+
+- **Column-Family Stores (Cassandra, DynamoDB, HBase)**:
+  - Table inventory with partition key, clustering key, and secondary indexes
+  - Query access patterns that drove the schema design
+  - Consistency level per operation (`QUORUM`, `ONE`, `EVENTUAL`)
+  - Hot partition risk: partition keys with uneven write distribution
+
+- **File-Based Stores (S3, Azure Blob, GCS, NFS)**:
+  - Bucket/container inventory with naming conventions and lifecycle policies
+  - File types and average file size; retention period
+  - Access patterns: read-heavy, write-once, archive
+  - Security: public vs private access; encryption at rest and in transit
+
+- **Anti-Patterns per store type**:
+  - Using Redis as a primary database (no persistence configured)
+  - MongoDB collections with unbounded array fields
+  - Elasticsearch used as the primary data store (not a search index)
+  - Cassandra queries that require `ALLOW FILTERING`
+  - S3 objects with no lifecycle expiry policy (unbounded cost growth)
 
 ### Step 3 — Codebase Analysis
 Examine the code quality and structural health:
@@ -194,7 +255,7 @@ Score each risk by **Impact (1-5) × Likelihood (1-5)**:
 
 ## Output Format
 
-### Legacy Architecture Report (legacy_analyse.md)
+### Legacy Architecture Report (legacy_analysis.md)
 ```markdown
 # Legacy Architecture Report
 

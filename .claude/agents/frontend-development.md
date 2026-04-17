@@ -1,6 +1,6 @@
 ---
 name: frontend-development
-description: "Use when building React / Vue / Angular / Svelte TypeScript frontend, implementing design system components, state management TanStack Query Zustand Pinia NgRx, API integration Axios, code splitting lazy loading performance optimization, Vitest Playwright testing, phased frontend development plan. For mobile clients use ios-development or android-development agents instead."
+description: "Use when: building web frontend in React / Vue / Angular / Svelte with TypeScript, implementing design system components, setting up state management (TanStack Query / Zustand / Pinia / NgRx), API integration with Axios, Vitest + Playwright testing, performance optimization. NOT for mobile — use ios-development or android-development for native mobile. Requires ui-ux-design + target-architecture."
 tools:
   - Read
   - Write
