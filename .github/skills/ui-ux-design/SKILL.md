@@ -16,7 +16,7 @@ argument-hint: 'Application name and list of primary user roles or workflows to 
 
 ## Prerequisites
 - `ai-driven-development/docs/target_architecture/target_architecture.md`
-- Legacy screen inventory (from `analysing-legacy`)
+- Legacy screen inventory (from `legacy-analysis`)
 
 ## Output Location
 Create folder `ai-driven-development/docs/ui_design/` and produce:

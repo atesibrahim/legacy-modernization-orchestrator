@@ -10,7 +10,7 @@ Works with **Claude Code**, **OpenAI Codex CLI**, and **GitHub Copilot**.
 | Agent | Role |
 |-------|------|
 | `legacy-modernization-orchestrator` | Master orchestrator — runs all phases in order |
-| `analysing-legacy` | Legacy codebase analysis, technical debt, DB schema, security posture |
+| `legacy-analysis` | Legacy codebase analysis, technical debt, DB schema, security posture |
 | `legacy-architecture` | Legacy architecture diagrams (mermaid HTML) |
 | `target-architecture` | Target architecture — Clean/Hexagonal/DDD, Java 21, Spring Boot 3.5, React 18 |
 | `ui-ux-design` | Wireframes, design system, WCAG, HTML previews |
@@ -82,7 +82,7 @@ After installing, use agents in two ways:
 **As a slash command (skill):**
 ```
 /legacy-modernization-orchestrator path/to/my-legacy-app
-/analysing-legacy path/to/my-legacy-app
+/legacy-analysis path/to/my-legacy-app
 /target-architecture MyProject
 /backend-development MyProject
 ```
@@ -90,7 +90,7 @@ After installing, use agents in two ways:
 **As a subagent (invoked by the orchestrator or directly):**
 ```
 @legacy-modernization-orchestrator path/to/my-legacy-app
-@analysing-legacy path/to/my-legacy-app
+@legacy-analysis path/to/my-legacy-app
 ```
 
 **Typical full workflow:**
@@ -103,7 +103,7 @@ The orchestrator runs all phases automatically, asking you for scope (which dev 
 
 ```bash
 $legacy-modernization-orchestrator path/to/my-legacy-app
-$analysing-legacy path/to/my-legacy-app
+$legacy-analysis path/to/my-legacy-app
 $target-architecture MyProject
 $backend-development MyProject
 ```
@@ -117,7 +117,7 @@ Agents are defined in `.github/agents/`. Use the agent picker in VS Code Copilot
 ## Phase workflow
 
 ```
-Phase 1  →  analysing-legacy          (always required)
+Phase 1  →  legacy-analysis          (always required)
 Phase 2  →  legacy-architecture      (always required)
 Phase 3  →  target-architecture             (always required)
              ↓ ask user: which targets?

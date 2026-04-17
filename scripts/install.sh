@@ -66,7 +66,7 @@ install_claude() {
 
   echo ""
   echo "  Claude Code install complete → $CLAUDE_DIR"
-  echo "  Verify: type /analysing-legacy or @analysing-legacy in Claude Code"
+  echo "  Verify: type /legacy-analysis or @legacy-analysis in Claude Code"
 }
 
 install_codex() {
@@ -80,7 +80,7 @@ install_codex() {
 
   echo ""
   echo "  Codex install complete → $CODEX_DIR"
-  echo "  Verify: type \$analysing-legacy in Codex"
+  echo "  Verify: type \$legacy-analysis in Codex"
 }
 
 for runtime in "${RUNTIMES[@]}"; do
@@ -94,7 +94,7 @@ done
 echo "══════════════════════════════════════════════════════════"
 echo "  Installation complete!"
 echo ""
-echo "  Claude Code: /analysing-legacy  or  @analysing-legacy"
-echo "  Codex CLI  : \$analysing-legacy"
+echo "  Claude Code: /legacy-analysis  or  @legacy-analysis"
+echo "  Codex CLI  : \$legacy-analysis"
 echo "══════════════════════════════════════════════════════════"
 echo ""

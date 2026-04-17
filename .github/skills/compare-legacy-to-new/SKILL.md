@@ -10,7 +10,7 @@ argument-hint: 'Path to legacy analysis and new system design artifacts to compa
 **Senior Master Architect / Analyst / Developer** — Produce an objective, evidence-based comparison between the legacy system and the new design. Identify what was preserved, what was improved, what was eliminated, and what risks remain in the transition.
 
 ## When to Use
-- After legacy analysis (`analysing-legacy`, `legacy-architecture`) and target design (`target-architecture`) are complete, and at least one in-scope development target is complete (`backend-development`, `frontend-development`, `ios-development`, and/or `android-development`)
+- After legacy analysis (`legacy-analysis`, `legacy-architecture`) and target design (`target-architecture`) are complete, and at least one in-scope development target is complete (`backend-development`, `frontend-development`, `ios-development`, and/or `android-development`)
 - Need to validate that all legacy functionality is covered in the new system
 - Presenting migration strategy to stakeholders
 - Risk assessment before production cutover

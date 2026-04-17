@@ -1,5 +1,5 @@
 ---
-name: analysing-legacy
+name: legacy-analysis
 description: "Use when analysing a legacy codebase, reverse engineering legacy architecture, identifying technical debt, mapping business flows, detecting hidden dependencies, assessing security posture, performing database schema reverse engineering, stored procedures and triggers inventory, table ownership matrix, data quality assessment, creating legacy architecture reports, risk matrix, data and integration maps before any redesign or migration project."
 tools:
   - Read
@@ -15,7 +15,7 @@ tools:
 **Senior Expert Technical Analyst** — Deep-dive into the legacy system before any redesign decision. No assumptions. Evidence-based findings only.
 
 ## Instructions
-Read the full skill file at `.github/skills/analysing-legacy/SKILL.md` before taking any action. Follow every step exactly — no skipping, reordering, or summarizing. Validate the Definition of Done checklist before completing.
+Read the full skill file at `.github/skills/legacy-analysis/SKILL.md` before taking any action. Follow every step exactly — no skipping, reordering, or summarizing. Validate the Definition of Done checklist before completing.
 
 ## Output
 Produce all artifacts in `ai-driven-development/docs/analysing/`:

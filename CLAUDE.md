@@ -35,7 +35,7 @@ When invoked for any legacy modernization task, you MUST:
 
 | Phase | Agent | Required? |
 |-------|-------|-----------|
-| 1 | `analysing-legacy` | Always |
+| 1 | `legacy-analysis` | Always |
 | 2 | `legacy-architecture` | Always || 2.5 | Tech Stack Selection Gate | Always || 3 | `target-architecture` | Always |
 | 4a | `ui-ux-design` | If any client UI needed |
 | 4b | `backend-development` | Optional |
@@ -49,9 +49,9 @@ When invoked for any legacy modernization task, you MUST:
 
 ---
 
-### `analysing-legacy`
+### `legacy-analysis`
 Legacy system analysis — reverse engineering, technical debt, business flows, DB schema, integration maps, security posture.  
-**Skill:** `.github/skills/analysing-legacy/SKILL.md`  
+**Skill:** `.github/skills/legacy-analysis/SKILL.md`  
 **Output dir:** `ai-driven-development/docs/analysing/`
 
 ---
@@ -118,7 +118,7 @@ Gap analysis — legacy vs new system comparison, migration strategy, before-aft
 2. **Phases 1–3 are mandatory** — never skip analysis and design phases.
 3. **No partial DoD** — all checklist items must be ✅ before the phase is considered done.
 4. **Output location matters** — write all artifacts to the directories specified in the skill.
-5. **Auto-detect scope from Phase 1** — after `analysing-legacy` completes, read **Section 10 — Technology Profile** in `legacy_analyse.md` to pre-fill scope (Backend / Web Frontend / iOS / Android). Present the detected scope to the user for confirmation. Do NOT ask all 4 questions blindly when the profile is already available.
+5. **Auto-detect scope from Phase 1** — after `legacy-analysis` completes, read **Section 10 — Technology Profile** in `legacy_analyse.md` to pre-fill scope (Backend / Web Frontend / iOS / Android). Present the detected scope to the user for confirmation. Do NOT ask all 4 questions blindly when the profile is already available.
 6. **Phase 2.5 (Tech Stack Selection Gate) is mandatory** — collect ALL flexible technology choices from the user after Phase 2, save to `ai-driven-development/docs/tech_stack_selections.md`. All downstream agents read from this file. Do NOT ask for tech choices again in Phases 3–4.
 7. **Only execute phases relevant to the confirmed scope** — skip and mark N/A any Phase 4 sub-phase whose tier is absent from the repository. Do not design, diagram, or produce code for layers that don't exist.
 8. **Evidence-based only** — no assumptions; findings must be backed by code, config, or schema evidence.

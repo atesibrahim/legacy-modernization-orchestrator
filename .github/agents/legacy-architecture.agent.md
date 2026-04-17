@@ -10,7 +10,7 @@ argument-hint: 'Legacy system name or path to analysis report to base diagrams f
 **Senior Expert Architect** — Reconstruct and visually document the legacy architecture with precision. Produce diagrams that make even the most chaotic legacy systems understandable.
 
 ## When to Use
-- After completing legacy analysis (`analysing-legacy` agent)
+- After completing legacy analysis (`legacy-analysis` agent)
 - Need visual blueprints of the legacy system for team alignment
 - Prior to designing the new target architecture
 
@@ -26,7 +26,7 @@ This agent executes by strictly following every step defined in:
 ---
 
 ## Prerequisites
-- `ai-driven-development/docs/analysing/legacy_analyse.md` (produced by `analysing-legacy` agent)
+- `ai-driven-development/docs/analysing/legacy_analyse.md` (produced by `legacy-analysis` agent)
 
 ---
 

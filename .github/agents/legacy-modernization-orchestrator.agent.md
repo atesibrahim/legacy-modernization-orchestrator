@@ -27,7 +27,7 @@ Phase 1 → Phase 2 → Phase 3 → [Scope Selection] → Phase 4 (optional para
 
 | Phase | Agent | Role | Required? |
 |---|---|---|---|
-| 1 | [`analysing-legacy`](./analysing-legacy.agent.md) | Legacy Analysis | Always |
+| 1 | [`legacy-analysis`](./legacy-analysis.agent.md) | Legacy Analysis | Always |
 | 2 | [`legacy-architecture`](./legacy-architecture.agent.md) | Legacy Architecture Visualization | Always |
 | 2.5 | Tech Stack Selection Gate | User confirms all target tech choices | Always |
 | 3 | [`target-architecture`](./target-architecture.agent.md) | Target Architecture Design | Always |
@@ -114,7 +114,7 @@ Create `ai-driven-development/redesign_progress.md` to track all phases:
 
 | Phase | Agent | Status | Started | Completed | Notes |
 |---|---|---|---|---|---|
-| 1 | analysing-legacy | ⬜ Not Started | — | — | |
+| 1 | legacy-analysis | ⬜ Not Started | — | — | |
 | 2 | legacy-architecture | ⬜ Not Started | — | — | |
 | 2.5 | tech-stack-selection | ⬜ Not Started | — | — | |
 | 3 | target-architecture | ⬜ Not Started | — | — | |
@@ -132,11 +132,11 @@ Create `ai-driven-development/redesign_progress.md` to track all phases:
 ---
 
 ## Phase 1: Legacy Analysis
-**Agent**: [`analysing-legacy`](./analysing-legacy.agent.md)
+**Agent**: [`legacy-analysis`](./legacy-analysis.agent.md)
 **Role**: Senior Expert Technical Analyst
 
 **Execute**:
-> Invoke the `analysing-legacy` agent — it will follow all steps in its skill
+> Invoke the `legacy-analysis` agent — it will follow all steps in its skill
 
 **Produce**:
 - `ai-driven-development/docs/analysing/legacy_analyse.md`
@@ -324,10 +324,9 @@ Using this template:
 ```
 
 **DoD Gate** — do NOT proceed to Phase 3 until ALL are checked:
-- [ ] User either typed `skip`/`default` (full defaults applied) or answered all questions for all in-scope tiers
+- [ ] User has answered all questions for all in-scope tiers
 - [ ] `ai-driven-development/docs/tech_stack_selections.md` created with all confirmed choices
 - [ ] No section left with placeholder `[choice]` values for in-scope tiers
-- [ ] Custom values entered by the user are preserved exactly as typed
 
 ---
 
@@ -559,9 +558,10 @@ ai-driven-development/
 ├── docs/
 │   ├── analysing/
 │   │   └── legacy_analyse.md                    ← Phase 1 (always)
-│   ├── target_architecture/
+│   ├── legacy_architecture/
 │   │   ├── legacy_architecture.md              ← Phase 2 (always)
 │   │   ├── legacy_architecture.html            ← Phase 2 (always)
+│   ├── target_architecture/
 │   │   ├── target_architecture.md                     ← Phase 3 (always)
 │   │   └── target_architecture.html                   ← Phase 3 (always)
 │   ├── ui_design/

@@ -21,7 +21,7 @@ const PACKAGE_ROOT = path.resolve(__dirname, '..');
 const INSTALL_DIRNAME = 'legacy-modernization-orchestrator';
 
 const AGENTS = [
-  'analysing-legacy',
+  'legacy-analysis',
   'legacy-architecture',
   'target-architecture',
   'ui-ux-design',
@@ -173,7 +173,7 @@ function install(scope, selectedRuntimes) {
 
       console.log('');
       console.log(`  Claude Code → ${claudeBase}`);
-      console.log('  Usage: /analysing-legacy  or  @analysing-legacy');
+      console.log('  Usage: /legacy-analysis  or  @legacy-analysis');
     }
 
     if (runtime === 'codex') {
@@ -192,7 +192,7 @@ function install(scope, selectedRuntimes) {
 
       console.log('');
       console.log(`  Codex CLI → ${codexBase}`);
-      console.log('  Usage: $analysing-legacy');
+      console.log('  Usage: $legacy-analysis');
     }
 
     console.log('');

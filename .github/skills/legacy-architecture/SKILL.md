@@ -21,12 +21,12 @@ argument-hint: 'Legacy system name or path to analysis report to base diagrams f
 **Senior Master Architect** — Reconstruct and visually document the legacy architecture with precision. Produce diagrams that make even the most chaotic legacy systems understandable.
 
 ## When to Use
-- After completing legacy analysis (`analysing-legacy` skill)
+- After completing legacy analysis (`legacy-analysis` skill)
 - Need visual blueprints of the legacy system for team alignment
 - Prior to designing the new target architecture
 
 ## Prerequisites
-- Completed `legacy_analyse.md` from the `analysing-legacy` skill
+- Completed `legacy_analyse.md` from the `legacy-analysis` skill
 
 ## Output Location
 Create folder `ai-driven-development/docs/legacy_architecture/` and produce:

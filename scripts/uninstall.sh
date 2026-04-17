@@ -7,7 +7,7 @@ set -e
 SCOPE="global"
 RUNTIMES=("claude" "codex")
 AGENTS=(
-  analysing-legacy legacy-architecture target-architecture ui-ux-design
+  legacy-analysis legacy-architecture target-architecture ui-ux-design
   backend-development frontend-development ios-development android-development
   compare-legacy-to-new legacy-modernization-orchestrator
 )

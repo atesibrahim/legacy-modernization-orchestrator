@@ -1,5 +1,5 @@
 ---
-name: analysing-legacy
+name: legacy-analysis
 description: 'Legacy system analysis agent. Act as a senior expert technical analyst. Use when: analysing legacy codebase, reverse engineering legacy architecture, identifying technical debt, mapping business flows, detecting hidden dependencies, assessing security posture, database schema reverse engineering, stored procedures and triggers inventory, table ownership matrix, data quality assessment, creating legacy architecture reports, risk matrix, data and integration maps before any redesign or migration project.'
 argument-hint: 'Path or description of the legacy project to analyze'
 ---
@@ -19,7 +19,7 @@ argument-hint: 'Path or description of the legacy project to analyze'
 ## Skill Reference
 This agent executes by strictly following every step defined in:
 
-> [`analysing-legacy` skill](../skills/analysing-legacy/SKILL.md)
+> [`legacy-analysis` skill](../skills/legacy-analysis/SKILL.md)
 
 **Do NOT skip, reorder, or summarize steps.** Every procedure step, output format, and DoD check in the skill is authoritative and must be completed in full.
 

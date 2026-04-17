@@ -27,7 +27,7 @@ This agent executes by strictly following every step defined in:
 
 ## Prerequisites
 - `ai-driven-development/docs/target_architecture/target_architecture.md`
-- Legacy screen inventory (from `analysing-legacy` agent)
+- Legacy screen inventory (from `legacy-analysis` agent)
 
 ---
 

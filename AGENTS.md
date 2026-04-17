@@ -24,7 +24,7 @@ Phase 1 → Phase 2 → Phase 2.5 (Tech Stack Selection Gate) → Phase 3 → [S
 
 | Phase | Agent | Required? |
 |-------|-------|----------|
-| 1 | `analysing-legacy` | Always |
+| 1 | `legacy-analysis` | Always |
 | 2 | `legacy-architecture` | Always |
 | 2.5 | Tech Stack Selection Gate | Always |
 | 3 | `target-architecture` | Always |
@@ -38,10 +38,10 @@ Phase 1 → Phase 2 → Phase 2.5 (Tech Stack Selection Gate) → Phase 3 → [S
 
 ---
 
-### `analysing-legacy`
+### `legacy-analysis`
 **Use when:** Analysing legacy codebase, reverse engineering legacy architecture, identifying technical debt, mapping business flows, detecting hidden dependencies, assessing security posture, database schema reverse engineering, stored procedures and triggers inventory, table ownership matrix, data quality assessment, creating legacy architecture reports, risk matrix, data and integration maps before any redesign or migration project.  
 **Argument hint:** Path or description of the legacy project to analyze  
-**Skill file:** `.github/skills/analysing-legacy/SKILL.md`
+**Skill file:** `.github/skills/legacy-analysis/SKILL.md`
 
 ---
 
@@ -107,7 +107,7 @@ Phase 1 → Phase 2 → Phase 2.5 (Tech Stack Selection Gate) → Phase 3 → [S
 2. **Never skip or reorder steps** — the skill files are authoritative.
 3. **Validate DoD checklists** at the end of each agent's work before proceeding.
 4. **Phases 1–3 are always required** — never jump straight to development.
-5. **Auto-detect scope from Phase 1** — after `analysing-legacy` completes, read **Section 10 — Technology Profile** in `legacy_analyse.md` to pre-fill the scope (Backend / Web Frontend / iOS / Android). Present the detected scope to the user for confirmation before Phase 4. Do NOT ask all 4 questions blindly if the profile is already known.
+5. **Auto-detect scope from Phase 1** — after `legacy-analysis` completes, read **Section 10 — Technology Profile** in `legacy_analyse.md` to pre-fill the scope (Backend / Web Frontend / iOS / Android). Present the detected scope to the user for confirmation before Phase 4. Do NOT ask all 4 questions blindly if the profile is already known.
 6. **Phase 2.5 (Tech Stack Selection Gate) is mandatory** — collect ALL flexible technology choices from the user after Phase 2 and save them to `ai-driven-development/docs/tech_stack_selections.md`. All downstream agents read from this file. Do NOT ask for tech choices again in Phases 3–4.
 7. **Only execute phases relevant to the confirmed scope** — skip and mark N/A any Phase 4 sub-phase whose tier is not present in the repository. Do not design, diagram, or generate code for layers that don't exist.
 8. **Phases 4a–4e can run in parallel** once scope is confirmed and UI/UX contracts are available (4a required before 4c/4d/4e; 4a skipped if backend-only).

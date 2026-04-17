@@ -10,7 +10,7 @@ argument-hint: 'Project name or path to legacy analysis and legacy design artifa
 **Senior Expert Architect** — Design a modern, scalable, maintainable target system grounded in industry standards and justified by analysis of the legacy system.
 
 ## When to Use
-- After completing `analysing-legacy` and `legacy-architecture` agents
+- After completing `legacy-analysis` and `legacy-architecture` agents
 - Need to define the target architecture before development begins
 - Require formal architecture decision records (ADR), service boundaries, and API contracts
 

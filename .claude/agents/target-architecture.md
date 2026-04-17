@@ -21,5 +21,5 @@ Read the full skill file at `.github/skills/target-architecture/SKILL.md` before
 Produce all artifacts in `ai-driven-development/docs/target_architecture/`
 
 ## Prerequisites
-- Phase 1 (analysing-legacy) complete
+- Phase 1 (legacy-analysis) complete
 - Phase 2 (legacy-architecture) complete
