@@ -36,29 +36,29 @@ Use the **professional navy/blue design system** — matching the reference `exa
   </script>
   <style>
     :root {
-      --primary: #0a2540; --secondary: #1a56db; --accent: #f59e0b;
-      --green: #10b981; --red: #ef4444; --bg: #f8fafc;
-      --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; --code-bg: #f1f5f9;
+      --primary: #1a3a5c; --secondary: #2c6fad; --accent: #e8a020;
+      --bg: #f4f6fa; --card-bg: #ffffff; --text: #222;
+      --border: #d0d7e3; --warn: #c0392b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; }
-    header { background: linear-gradient(135deg, var(--primary), #1e3a5f, var(--secondary)); color: white; padding: 36px 48px; border-bottom: 4px solid var(--accent); }
-    header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; }
-    header .subtitle { margin-top: 10px; opacity: 0.85; font-size: 1.05rem; }
-    main { max-width: 1440px; margin: 0 auto; padding: 36px 48px; }
-    .section { margin-bottom: 56px; }
-    .section h2 { font-size: 1.6rem; color: var(--primary); border-left: 5px solid var(--accent); padding-left: 16px; margin-bottom: 20px; padding-bottom: 8px; }
-    .section h3 { font-size: 1.1rem; color: var(--secondary); margin: 28px 0 10px; font-weight: 600; }
-    .diagram-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px 32px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); margin-bottom: 28px; overflow-x: auto; }
-    .diagram-title { font-size: 1.0rem; font-weight: 700; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-    .diagram-title::before { content: "⬡"; color: var(--accent); font-size: 1.2rem; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 32px 48px; border-bottom: 4px solid var(--accent); }
+    header h1 { font-size: 2rem; font-weight: 700; }
+    header p { margin-top: 8px; opacity: 0.85; font-size: 1.05rem; }
+    main { max-width: 1400px; margin: 0 auto; padding: 32px 48px; }
+    .section { margin-bottom: 48px; }
+    .section h2 { font-size: 1.5rem; color: var(--primary); border-left: 5px solid var(--accent); padding-left: 16px; margin-bottom: 16px; }
+    .section h3 { font-size: 1.1rem; color: var(--secondary); margin: 24px 0 8px; }
+    .diagram-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 24px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px; overflow-x: auto; }
+    .diagram-title { font-size: 1.0rem; font-weight: 600; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .diagram-title::before { content: "▶"; color: var(--accent); }
     .mermaid { min-width: 400px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.91rem; }
-    th { background: var(--primary); color: white; padding: 11px 16px; text-align: left; font-weight: 600; }
-    td { padding: 9px 16px; border-bottom: 1px solid var(--border); }
-    tr:nth-child(even) td { background: #f8fafc; }
-    tr:hover td { background: #eff6ff; }
-    footer { background: var(--primary); color: #64748b; text-align: center; padding: 24px; font-size: 0.85rem; margin-top: 56px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; }
+    td { padding: 8px 14px; border-bottom: 1px solid var(--border); }
+    tr:nth-child(even) td { background: #f0f4fa; }
+    tr:hover td { background: #e4ecf7; }
+    footer { background: var(--primary); color: #aac; text-align: center; padding: 20px; font-size: 0.85rem; margin-top: 48px; }
     @media (max-width: 768px) { main { padding: 20px 16px; } header { padding: 24px 20px; } }
   </style>
 </head>
@@ -66,7 +66,7 @@ Use the **professional navy/blue design system** — matching the reference `exa
 
 <header>
   <h1>Legacy System Architecture</h1>
-  <div class="subtitle">Legacy architecture diagrams — produced by legacy-architecture skill</div>
+  <p>Legacy architecture diagrams — produced by legacy-architecture skill</p>
 </header>
 
 <main>
