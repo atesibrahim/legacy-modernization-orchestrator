@@ -14,7 +14,7 @@ Use these as starting points — **replace all placeholder node labels** with th
 
 This is the base HTML structure for `legacy_architecture.html`. Populate all `<pre class="mermaid">` blocks with diagrams from the analysis.
 
-Use the **professional navy/blue design system** — matching the reference `example_legacy_architecture.html` visual style: `#0a2540` primary, `#1a56db` secondary, `#f59e0b` accent, `#f8fafc` background. Mermaid uses `theme: 'default'` with `fontFamily: 'Segoe UI, Arial, sans-serif'`.
+Use the **warm light design system** — warm cream/amber palette: `#7c4a1e` primary, `#b97230` secondary, `#d4872a` accent, `#fdfaf5` background, no dark backgrounds anywhere. Mermaid uses `theme: 'default'` with `fontFamily: 'system-ui, Segoe UI, sans-serif'`.
 
 ```html
 <!DOCTYPE html>
@@ -36,29 +36,29 @@ Use the **professional navy/blue design system** — matching the reference `exa
   </script>
   <style>
     :root {
-      --primary: #1a3a5c; --secondary: #2c6fad; --accent: #e8a020;
-      --bg: #f4f6fa; --card-bg: #ffffff; --text: #222;
-      --border: #d0d7e3; --warn: #c0392b;
+      --primary: #7c4a1e; --secondary: #b97230; --accent: #d4872a;
+      --bg: #fdfaf5; --card-bg: #ffffff; --text: #2c1a0e;
+      --border: #e8d9c4; --warn: #b91c1c;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-    header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 32px 48px; border-bottom: 4px solid var(--accent); }
+    body { font-family: system-ui, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    header { background: #fdf2e0; color: #3d1f0a; padding: 32px 48px; border-bottom: 3px solid var(--accent); }
     header h1 { font-size: 2rem; font-weight: 700; }
-    header p { margin-top: 8px; opacity: 0.85; font-size: 1.05rem; }
+    header p { margin-top: 8px; opacity: 0.75; font-size: 1.05rem; }
     main { max-width: 1400px; margin: 0 auto; padding: 32px 48px; }
     .section { margin-bottom: 48px; }
     .section h2 { font-size: 1.5rem; color: var(--primary); border-left: 5px solid var(--accent); padding-left: 16px; margin-bottom: 16px; }
     .section h3 { font-size: 1.1rem; color: var(--secondary); margin: 24px 0 8px; }
-    .diagram-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 24px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px; overflow-x: auto; }
+    .diagram-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 24px 32px; box-shadow: 0 2px 8px rgba(124,74,30,0.08); margin-bottom: 24px; overflow-x: auto; }
     .diagram-title { font-size: 1.0rem; font-weight: 600; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
     .diagram-title::before { content: "▶"; color: var(--accent); }
     .mermaid { min-width: 400px; }
     table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
-    th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; }
+    th { background: #f5e4c8; color: #5a3010; padding: 10px 14px; text-align: left; font-weight: 600; }
     td { padding: 8px 14px; border-bottom: 1px solid var(--border); }
-    tr:nth-child(even) td { background: #f0f4fa; }
-    tr:hover td { background: #e4ecf7; }
-    footer { background: var(--primary); color: #aac; text-align: center; padding: 20px; font-size: 0.85rem; margin-top: 48px; }
+    tr:nth-child(even) td { background: #fdfaf5; }
+    tr:hover td { background: #fdf0d8; }
+    footer { background: #fdf2e0; color: var(--secondary); text-align: center; padding: 20px; font-size: 0.85rem; margin-top: 48px; }
     @media (max-width: 768px) { main { padding: 20px 16px; } header { padding: 24px 20px; } }
   </style>
 </head>

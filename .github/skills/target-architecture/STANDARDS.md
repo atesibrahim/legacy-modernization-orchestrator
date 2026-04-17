@@ -14,7 +14,7 @@ Use these as starting points — **replace all placeholder names, services, and 
 
 Base HTML structure for `target_architecture.html`. Add diagram sections as needed per project scope.
 
-Use the **professional navy/blue design system** — matching the reference `example_target_architecture.html` visual style: `#0a2540` primary, `#1a56db` secondary, `#f59e0b` accent, `#f8fafc` background. Mermaid uses `theme: 'default'` with `fontFamily: 'Segoe UI, Arial, sans-serif'`.
+Use the **warm light design system** — warm off-white/terracotta palette: `#1e3a5f` primary, `#2d6da3` secondary, `#e07840` accent, `#f8f7f5` background, no dark backgrounds anywhere. Mermaid uses `theme: 'default'` with `fontFamily: 'system-ui, Segoe UI, sans-serif'`.
 
 ```html
 <!DOCTYPE html>
@@ -36,15 +36,15 @@ Use the **professional navy/blue design system** — matching the reference `exa
   </script>
   <style>
     :root {
-      --primary: #0a2540; --secondary: #1a56db; --accent: #f59e0b;
-      --green: #10b981; --red: #ef4444; --bg: #f8fafc;
-      --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; --code-bg: #f1f5f9;
+      --primary: #1e3a5f; --secondary: #2d6da3; --accent: #e07840;
+      --green: #3a8a5c; --red: #c0392b; --bg: #f8f7f5;
+      --card-bg: #ffffff; --text: #1a1a1a; --border: #e5e0d9; --code-bg: #f3f0eb;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; }
-    header { background: linear-gradient(135deg, var(--primary), #1e3a5f, var(--secondary)); color: white; padding: 36px 48px; border-bottom: 4px solid var(--accent); }
+    body { font-family: system-ui, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; }
+    header { background: #f2f5f9; color: #0d2440; padding: 36px 48px; border-bottom: 3px solid var(--accent); }
     header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; }
-    header .subtitle { margin-top: 10px; opacity: 0.85; font-size: 1.05rem; }
+    header .subtitle { margin-top: 10px; color: #3a5070; font-size: 1.05rem; }
     main { max-width: 1440px; margin: 0 auto; padding: 36px 48px; }
     .section { margin-bottom: 56px; }
     .section h2 { font-size: 1.6rem; color: var(--primary); border-left: 5px solid var(--accent); padding-left: 16px; margin-bottom: 20px; padding-bottom: 8px; }
@@ -53,13 +53,13 @@ Use the **professional navy/blue design system** — matching the reference `exa
     .diagram-title { font-size: 1.0rem; font-weight: 700; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
     .diagram-title::before { content: "⬡"; color: var(--accent); font-size: 1.2rem; }
     .mermaid { min-width: 400px; }
-    .adr { background: #eff6ff; border-left: 4px solid var(--secondary); padding: 1rem 1.2rem; border-radius: 0 8px 8px 0; margin-bottom: 1rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .adr { background: #fef6f0; border-left: 4px solid var(--accent); padding: 1rem 1.2rem; border-radius: 0 8px 8px 0; margin-bottom: 1rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     table { width: 100%; border-collapse: collapse; font-size: 0.91rem; }
-    th { background: var(--primary); color: white; padding: 11px 16px; text-align: left; font-weight: 600; }
+    th { background: #e8eef5; color: var(--primary); padding: 11px 16px; text-align: left; font-weight: 600; }
     td { padding: 9px 16px; border-bottom: 1px solid var(--border); }
-    tr:nth-child(even) td { background: #f8fafc; }
-    tr:hover td { background: #eff6ff; }
-    footer { background: var(--primary); color: #64748b; text-align: center; padding: 24px; font-size: 0.85rem; margin-top: 56px; }
+    tr:nth-child(even) td { background: #f8f7f5; }
+    tr:hover td { background: #f0ebe3; }
+    footer { background: #f2f5f9; color: var(--secondary); text-align: center; padding: 24px; font-size: 0.85rem; margin-top: 56px; }
     @media (max-width: 768px) { main { padding: 20px 16px; } header { padding: 24px 20px; } }
   </style>
 </head>

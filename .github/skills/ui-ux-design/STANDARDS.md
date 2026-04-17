@@ -117,53 +117,53 @@ Complete starting template for `ui_ux_pages.html`. Add screen sections as needed
   <script>mermaid.initialize({ startOnLoad: true, theme: 'default' });</script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a202c; }
+    body { font-family: system-ui, 'Segoe UI', sans-serif; background: #fdfaf5; color: #1a1a1a; }
     .page { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-    h1 { font-size: 2rem; font-weight: 700; color: #1a365d; margin-bottom: 0.5rem; }
-    h2 { font-size: 1.25rem; font-weight: 600; color: #2d3748; margin: 2rem 0 1rem;
-         border-left: 4px solid #3182ce; padding-left: 0.75rem; }
-    .wireframe { background: white; border: 2px dashed #cbd5e0; border-radius: 8px;
+    h1 { font-size: 2rem; font-weight: 700; color: #7c4a1e; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.25rem; font-weight: 600; color: #1e3a5f; margin: 2rem 0 1rem;
+         border-left: 4px solid #e07840; padding-left: 0.75rem; }
+    .wireframe { background: white; border: 2px dashed #e8d9c4; border-radius: 8px;
                  padding: 1.5rem; margin-bottom: 2rem; }
-    .wireframe-label { font-size: 0.75rem; font-weight: 600; color: #718096;
+    .wireframe-label { font-size: 0.75rem; font-weight: 600; color: #9a7a5a;
                        text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
 
     /* Layout helpers */
     .layout { display: grid; gap: 1rem; }
-    .sidebar { background: #2d3748; color: white; padding: 1rem; border-radius: 6px; min-height: 400px; }
+    .sidebar { background: #ede9e2; color: #2c1a0e; padding: 1rem; border-radius: 6px; min-height: 400px; border: 1px solid #e8d9c4; }
     .nav-item { padding: 0.5rem 0.75rem; border-radius: 4px; margin-bottom: 0.25rem;
-                cursor: pointer; font-size: 0.875rem; }
-    .nav-item.active { background: #3182ce; }
+                cursor: pointer; font-size: 0.875rem; color: #5a3a1e; }
+    .nav-item.active { background: #e8c89a; color: #3d1f0a; font-weight: 600; }
     .content-area { flex: 1; }
-    .header-bar { background: white; border: 1px solid #e2e8f0; border-radius: 6px;
+    .header-bar { background: white; border: 1px solid #e8d9c4; border-radius: 6px;
                   padding: 1rem; display: flex; align-items: center; justify-content: space-between;
                   margin-bottom: 1rem; }
-    .card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; }
+    .card { background: white; border: 1px solid #e8d9c4; border-radius: 8px; padding: 1.25rem; }
     .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
                  gap: 1rem; margin-bottom: 1rem; }
     .kpi { text-align: center; }
-    .kpi-value { font-size: 2rem; font-weight: 700; color: #3182ce; }
-    .kpi-label { font-size: 0.875rem; color: #718096; margin-top: 0.25rem; }
+    .kpi-value { font-size: 2rem; font-weight: 700; color: #1e3a5f; }
+    .kpi-label { font-size: 0.875rem; color: #9a7a5a; margin-top: 0.25rem; }
     .table-mock { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-    .table-mock th { background: #f7fafc; padding: 0.75rem; text-align: left;
-                     border-bottom: 2px solid #e2e8f0; color: #4a5568; font-weight: 600; }
-    .table-mock td { padding: 0.75rem; border-bottom: 1px solid #e2e8f0; color: #2d3748; }
-    .table-mock tr:hover td { background: #f7fafc; }
+    .table-mock th { background: #f5e4c8; padding: 0.75rem; text-align: left;
+                     border-bottom: 2px solid #e8d9c4; color: #5a3010; font-weight: 600; }
+    .table-mock td { padding: 0.75rem; border-bottom: 1px solid #e8d9c4; color: #2c1a0e; }
+    .table-mock tr:hover td { background: #fdf5e8; }
     .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
            border-radius: 6px; font-size: 0.875rem; font-weight: 500; border: none; cursor: pointer; }
-    .btn-primary   { background: #3182ce; color: white; }
-    .btn-secondary { background: #edf2f7; color: #2d3748; }
+    .btn-primary   { background: #1e3a5f; color: white; }
+    .btn-secondary { background: #f3ede4; color: #2c1a0e; }
     .badge { display: inline-flex; padding: 0.125rem 0.5rem; border-radius: 9999px;
              font-size: 0.75rem; font-weight: 600; }
-    .badge-success { background: #c6f6d5; color: #276749; }
-    .badge-warning { background: #fefcbf; color: #744210; }
-    .badge-error   { background: #fed7d7; color: #9b2c2c; }
+    .badge-success { background: #d1fae5; color: #065f46; }
+    .badge-warning { background: #fef9c3; color: #713f12; }
+    .badge-error   { background: #fee2e2; color: #9b2c2c; }
     .form-group { margin-bottom: 1rem; }
     .form-label { display: block; font-size: 0.875rem; font-weight: 500;
-                  color: #4a5568; margin-bottom: 0.375rem; }
-    .form-input { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e0;
-                  border-radius: 6px; font-size: 0.875rem; }
+                  color: #5a3a1e; margin-bottom: 0.375rem; }
+    .form-input { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #e8d9c4;
+                  border-radius: 6px; font-size: 0.875rem; background: #fff; }
     .diagram { background: white; padding: 1.5rem; border-radius: 8px;
-               box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+               box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 2rem; }
   </style>
 </head>
 <body>
@@ -190,7 +190,7 @@ Complete starting template for `ui_ux_pages.html`. Add screen sections as needed
             <h3 style="font-size:1.25rem; font-weight:600;">Dashboard</h3>
             <div style="display:flex; gap:0.5rem; align-items:center;">
               <button class="btn btn-primary">+ New Item</button>
-              <div style="width:2rem; height:2rem; background:#3182ce; border-radius:50%;"></div>
+              <div style="width:2rem; height:2rem; background:#1e3a5f; border-radius:50%;"></div>
             </div>
           </div>
           <div class="card-grid">

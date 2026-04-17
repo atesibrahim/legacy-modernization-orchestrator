@@ -20,29 +20,29 @@ Complete starting template for `compare_legacy_to_new_system.html`.
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>mermaid.initialize({ startOnLoad: true, theme: 'default' });</script>
   <style>
-    body { font-family: Arial, sans-serif; padding: 2rem; background: #f7fafc; color: #2d3748; }
-    h1 { color: #1a365d; }
-    h2 { color: #2b6cb0; border-bottom: 2px solid #bee3f8; padding-bottom: 0.4rem; margin-top: 2rem; }
+    body { font-family: system-ui, 'Segoe UI', sans-serif; padding: 2rem; background: #fdfaf5; color: #1a1a1a; }
+    h1 { color: #7c4a1e; font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; }
+    h2 { color: #1e3a5f; border-bottom: 2px solid #e8d9c4; padding-bottom: 0.4rem; margin-top: 2rem; }
     .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-    .panel { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .panel.legacy { border-top: 4px solid #fc8181; }
-    .panel.new    { border-top: 4px solid #68d391; }
+    .panel { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .panel.legacy { border-top: 4px solid #e07070; }
+    .panel.new    { border-top: 4px solid #5db882; }
     .panel h3 { margin-bottom: 1rem; }
-    .panel.legacy h3 { color: #c53030; }
+    .panel.legacy h3 { color: #9b2c2c; }
     .panel.new h3    { color: #276749; }
     .badge { display: inline-flex; padding: 0.125rem 0.6rem; border-radius: 9999px;
              font-size: 0.75rem; font-weight: 700; margin: 0.125rem; }
-    .badge-green  { background: #c6f6d5; color: #276749; }
-    .badge-red    { background: #fed7d7; color: #9b2c2c; }
-    .badge-yellow { background: #fefcbf; color: #744210; }
+    .badge-green  { background: #d1fae5; color: #065f46; }
+    .badge-red    { background: #fee2e2; color: #9b2c2c; }
+    .badge-yellow { background: #fef9c3; color: #713f12; }
     table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.875rem; }
-    th { background: #ebf8ff; padding: 0.75rem; text-align: left; border-bottom: 2px solid #bee3f8; }
-    td { padding: 0.75rem; border-bottom: 1px solid #e2e8f0; }
-    tr:hover td { background: #f7fafc; }
+    th { background: #f5e4c8; color: #5a3010; padding: 0.75rem; text-align: left; border-bottom: 2px solid #e8d9c4; font-weight: 600; }
+    td { padding: 0.75rem; border-bottom: 1px solid #e8d9c4; }
+    tr:hover td { background: #fdf5e8; }
     .diagram { background: white; padding: 1.5rem; border-radius: 8px;
-               box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+               box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 2rem; }
     .coverage-full    { color: #276749; font-weight: bold; }
-    .coverage-partial { color: #744210; font-weight: bold; }
+    .coverage-partial { color: #713f12; font-weight: bold; }
     .coverage-missing { color: #9b2c2c; font-weight: bold; }
   </style>
 </head>
