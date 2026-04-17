@@ -31,6 +31,19 @@ const AGENTS = [
   'android-development',
   'compare-legacy-to-new',
   'legacy-modernization-orchestrator',
+  // Tech-stack specific backend skills
+  'java-springboot',
+  'dotnet-aspnetcore',
+  'python-fastapi',
+  'go-gin-fiber',
+  // Optional phase skills
+  'data-migration',
+  'security-review',
+  'devops-infra',
+  'final-validation',
+  // Cross-cutting reference skills
+  'agent-governance',
+  'quality-playbook',
 ];
 
 const args = process.argv.slice(2);
