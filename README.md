@@ -180,4 +180,4 @@ bash scripts/uninstall.sh --global --all
 
 ## License
 
-MIT
+Apache 2.0
