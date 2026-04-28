@@ -39,12 +39,16 @@ Produce in `ai-driven-development/docs/legacy_architecture/`:
 
 ## Definition of Done
 > The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
+>
+> **Maintenance rule:** This DoD must be an exact copy of the DoD in `../skills/legacy-architecture/SKILL.md`. Any update to one must be applied to the other in the same PR.
 
 ### Diagrams
 - [ ] High-level architecture diagram (system boundary clearly shown)
 - [ ] Component dependency diagram (all modules included, coupling visible)
 - [ ] Data flow diagram (input → processing → output for main flows)
 - [ ] Authentication/authorization flow diagram
+- [ ] Database architecture diagram (entity groupings, God tables, cross-module coupling)
+- [ ] Deployment topology diagram (network zones, servers, LB, CDN, environments)
 - [ ] All diagrams rendered correctly in HTML (verify in browser)
 
 ### Technical Accuracy
@@ -59,8 +63,8 @@ Produce in `ai-driven-development/docs/legacy_architecture/`:
 - [ ] Coupling hotspot map produced
 
 ### Validation
-- [ ] Diagram walkthrough completed with legacy system team/owner
-- [ ] Diagrams reviewed for accuracy against production behavior
+- [ ] Diagram walkthrough completed with system design team
+- [ ] Diagrams reviewed for accuracy against design decisions
 - [ ] Mermaid syntax validated and diagrams render without errors in browser
 
 ---

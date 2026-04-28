@@ -2,7 +2,9 @@
 name: final-validation
 description: 'Final validation and cutover readiness for modernized systems. Trigger phrases: "perform final validation", "check release readiness", "conduct go/no-go review", "validate functional completeness", "verify performance metrics", "review security clearance", "ensure operational readiness", "obtain stakeholder approval". Outputs: release_readiness_checklist.md, go_no_go_decision.md, smoke_test_plan.md. Requires Phase 5 comparison report + Phase 4 outputs.'
 argument-hint: 'Project name or path to system design artifacts to base final validation on'
-
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 ## Role
@@ -266,6 +268,36 @@ List any ⚠️ partial or open items accepted with documented justification:
 
 ---
 
+### Step 9.1 — Token Spend Summary
+
+At Phase 6, update the `## Token Budget` section of `ai-driven-development/redesign_progress.md` with the actual token spend (if available from the model's usage metadata), and include a summary in `go_no_go_decision.md`:
+
+```markdown
+## Token Spend Summary
+
+| Phase | Estimated tokens | Actual tokens | Notes |
+|---|---|---|---|
+| 1 — legacy-analysis | [estimate] | [actual or N/A] | |
+| 2 — legacy-architecture | [estimate] | [actual or N/A] | |
+| 2.5 — tech-stack-selection | [estimate] | [actual or N/A] | |
+| 3 — target-architecture | [estimate] | [actual or N/A] | |
+| 4a — ui-ux-design | [estimate or N/A] | [actual or N/A] | |
+| 4b — backend-development | [estimate or N/A] | [actual or N/A] | |
+| 4c — frontend-development | [estimate or N/A] | [actual or N/A] | |
+| 4d — ios-development | [estimate or N/A] | [actual or N/A] | |
+| 4e — android-development | [estimate or N/A] | [actual or N/A] | |
+| 4f — data-migration | [estimate or N/A] | [actual or N/A] | |
+| 4g — security-review | [estimate or N/A] | [actual or N/A] | |
+| 4h — devops-infra | [estimate or N/A] | [actual or N/A] | |
+| 5 — compare-legacy-to-new | [estimate] | [actual or N/A] | |
+| 6 — final-validation | [estimate] | [actual or N/A] | |
+| **Total** | **[sum]** | **[sum or N/A]** | |
+```
+
+> **Note**: Actual token counts are sourced from the model's usage metadata if exposed by the runtime (e.g. `usage.total_tokens` in OpenAI-compatible APIs, or the session token counter in Claude Code). If not available, record as `N/A`. This table is for retrospective cost tracking and future estimate calibration — it is **not a go/no-go gate**.
+
+---
+
 ## Output Files
 
 ### `release_readiness_checklist.md`
@@ -305,6 +337,8 @@ Executable smoke test table from Step 8.
 
 ## Definition of Done (DoD)
 
+> 📋 **Quality review**: Before making the Go/No-Go decision, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §3 — Phase 6 quality gates.
+
 - [ ] All Phase 5 comparison report ❌ Missing items resolved or formally accepted
 - [ ] UAT completed with product owner sign-off
 - [ ] Performance regression table complete — zero blocking regressions (or accepted with written sign-off)
@@ -317,144 +351,7 @@ Executable smoke test table from Step 8.
 
 ---
 
-## Agentic Evaluation Framework
-
-This section defines how to audit any agent's output for DoD compliance. Use it when reviewing a completed phase, when taking over an in-progress project, or when running a quality gate before proceeding to the next phase.
-
----
-
-### Evaluation Protocol
-
-**For each completed phase**, run the following 4-step evaluation:
-
-#### Step E1 — Artifact Presence Check
-
-Read `ai-driven-development/redesign_progress.md` and the relevant skill's **Output Directory** table. For every expected output file:
-- ✅ `Present` — file exists at the specified path
-- ❌ `Missing` — file does not exist → **Phase is not complete**
-
-```markdown
-## Artifact Presence — Phase {N} [{skill-name}]
-| Expected Artifact | Path | Status |
-|---|---|---|
-| legacy_analysis.md | ai-driven-development/docs/legacy_analysis/ | ✅ Present |
-| risk_matrix.md | ai-driven-development/docs/legacy_analysis/ | ❌ Missing |
-```
-
-**If any artifact is missing**: Mark phase as `❌ Incomplete` and do not proceed.
-
----
-
-#### Step E2 — DoD Checkbox Audit
-
-Read the skill's **Definition of Done (DoD)** section. For each checkbox item:
-- ✅ `Pass` — the item is demonstrably satisfied by the artifact content
-- ⚠️ `Partial` — item is partially satisfied; record what is missing
-- ❌ `Fail` — item is not satisfied and is blocking
-
-Record the DoD audit result:
-
-```markdown
-## DoD Audit — Phase {N} [{skill-name}]
-| DoD Item | Status | Evidence / Gap |
-|---|---|---|
-| Legacy modules/packages listed | ✅ Pass | Section 2 of legacy_analysis.md |
-| All DB tables inventoried | ⚠️ Partial | 47/52 tables documented; stored proc inventory missing |
-| Security findings listed | ✅ Pass | Section 6 of legacy_analysis.md |
-| Integration map complete | ❌ Fail | integration_map.md not created |
-```
-
-**Scoring**:
-- **Green (proceed)**: All items ✅ Pass or ⚠️ Partial with documented acceptance
-- **Yellow (proceed with risk)**: ≤ 2 ⚠️ Partial items; all ❌ Fail items formally accepted in writing
-- **Red (do not proceed)**: Any ❌ Fail item unresolved without written stakeholder acceptance
-
----
-
-#### Step E3 — Evidence Quality Check
-
-For each major finding or decision in the phase output, verify it is backed by evidence per [core.md](../standards/core.md) § Evidence Rules:
-- **Code evidence**: finding references a specific file, class, function, line range, or query
-- **Config evidence**: finding references a named config file or environment variable
-- **Schema evidence**: finding references a table name, column, constraint, or stored procedure
-
-Flag unsupported claims:
-
-```markdown
-## Evidence Gaps — Phase {N} [{skill-name}]
-| Claim | Type | Evidence Present? | Notes |
-|---|---|---|---|
-| "Password stored in plain text" | Security | ✅ Yes | User.java:45 — MD5 hash |
-| "System has high coupling" | Architecture | ⚠️ Weak | Qualitative only — no dependency metrics |
-| "DB performs poorly at scale" | Performance | ❌ No | No query plans, indexes, or timing cited |
-```
-
----
-
-#### Step E4 — Phase Readiness Score
-
-Aggregate the three checks into a single readiness score:
-
-```markdown
-## Phase Readiness Score — Phase {N} [{skill-name}]
-| Check | Result | Blocking? |
-|---|---|---|
-| Artifact Presence | ✅ 5/5 present | No |
-| DoD Audit | ⚠️ 8/10 pass, 2 partial | No (accepted) |
-| Evidence Quality | ❌ 2 unsupported claims | YES — must remediate |
-
-**Overall**: 🔴 NOT READY TO PROCEED — remediate evidence gaps first
-```
-
-Readiness levels:
-- 🟢 **READY** — All checks green/yellow, no unresolved blockers
-- 🟡 **CONDITIONALLY READY** — Proceed with documented accepted risks
-- 🔴 **NOT READY** — One or more blocking items must be remediated
-
----
-
-### Cross-Phase Consistency Check
-
-After all phases complete (before Phase 6 go/no-go), run a cross-phase consistency audit:
-
-| Consistency Rule | Check |
-|---|---|
-| Tech stack in Phase 3 matches `tech_stack_selections.md` | Read both documents; verify no contradictions |
-| API contracts in Phase 3 match Phase 4b implementation | Spot-check 3 endpoints from target_architecture vs backend code |
-| UI component names in Phase 4a match Phase 4c implementation | Spot-check 5 component names from wireframes vs frontend code |
-| Data model in Phase 3 matches Phase 4f migration scripts | Compare ERD from target architecture vs migration DDL |
-| Security findings in Phase 4g match Phase 5 risk register | All open findings referenced in comparison report |
-
-Record any contradictions as cross-phase discrepancies and resolve before issuing a Go decision.
-
----
-
-### Evaluation Output Format
-
-When running a full project evaluation (e.g., before Phase 6 or when taking over an in-progress project), produce:
-
-```markdown
-# Project Evaluation Report — [Project Name] — [Date]
-
-## Phases Evaluated
-| Phase | Agent | Readiness | Notes |
-|---|---|---|---|
-| 1 | legacy-analysis | 🟢 READY | All artifacts present, DoD 12/12 |
-| 2 | legacy-architecture | 🟡 CONDITIONALLY READY | 1 diagram outdated — accepted |
-| 3 | target-architecture | 🟢 READY | |
-| 4a | ui-ux-design | 🟢 READY | |
-| 4b | backend-development | 🔴 NOT READY | OpenAPI spec missing |
-| 5 | compare-legacy-to-new | ⏳ Not started | Blocked by Phase 4b |
-
-## Blockers
-1. Phase 4b: OpenAPI spec not generated (DoD item 3/10 ❌ Fail)
-
-## Accepted Risks
-1. Phase 2: Architecture diagram for batch processor subsystem is outdated — accepted by [Name] [date]
-
-## Recommended Next Action
-Remediate Phase 4b OpenAPI spec, then proceed to Phase 5.
-```
+> **Agentic Evaluation Framework** — The cross-phase DoD audit protocol (artifact presence check, DoD checkbox audit, evidence quality check, phase readiness scoring, and cross-phase consistency check) has been moved to the canonical governance reference: [`.github/skills/agent-governance/SKILL.md § 8`](../agent-governance/SKILL.md). Consult that document when reviewing any completed phase or running a pre-cutover quality gate.
 
 ---
 

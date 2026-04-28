@@ -1,0 +1,68 @@
+{
+  "skill": "tech-stack-selection",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "TSS-01",
+      "description": "User answered all questions for all in-scope tiers (or selected the default stack)",
+      "verifier": "manual"
+    },
+    {
+      "id": "TSS-02",
+      "description": "`ai-driven-development/docs/tech_stack_selections.md` created with all confirmed choices",
+      "verifier": "glob",
+      "glob": "ai-driven-development/docs/tech_stack_selections.md"
+    },
+    {
+      "id": "TSS-03",
+      "description": "No placeholder values remaining for any in-scope tier (all placeholders either resolved or explicitly deferred with an owner + phase deadline)",
+      "verifier": "manual"
+    },
+    {
+      "id": "TSS-04",
+      "description": "§ Common complete: Container/Deployment, CI/CD, Cloud Provider, Secret Management, Observability all populated",
+      "verifier": "manual"
+    },
+    {
+      "id": "TSS-05",
+      "description": "§ Backend complete (if in scope): Language/Framework, Database, Auth Provider all populated",
+      "verifier": "manual"
+    },
+    {
+      "id": "TSS-06",
+      "description": "§ Web Frontend complete (if in scope): Framework populated",
+      "verifier": "manual"
+    },
+    {
+      "id": "TSS-07",
+      "description": "§ Mobile complete (if any mobile target is in scope): Framework populated",
+      "verifier": "manual"
+    },
+    {
+      "id": "TSS-08",
+      "description": "§ Mobile complete (if Framework = Flutter or React Native): Minimum iOS Target and Minimum SDK populated",
+      "verifier": "manual"
+    },
+    {
+      "id": "TSS-09",
+      "description": "§ iOS complete (if native iOS is in scope): Minimum iOS Target populated",
+      "verifier": "manual"
+    },
+    {
+      "id": "TSS-10",
+      "description": "§ Android complete (if native Android is in scope): Minimum SDK populated",
+      "verifier": "manual"
+    },
+    {
+      "id": "TSS-11",
+      "description": "Every custom/unfamiliar technology either has supporting documentation recorded in the `Notes` column **or** is marked as a placeholder with a phase-deadline note",
+      "verifier": "manual"
+    },
+    {
+      "id": "TSS-12",
+      "description": "All downstream agents confirmed: they will read `tech_stack_selections.md` and not ask for tech choices again",
+      "verifier": "manual"
+    }
+  ]
+}

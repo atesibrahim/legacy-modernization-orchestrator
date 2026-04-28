@@ -1,0 +1,97 @@
+{
+  "skill": "frontend-development",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "FE-01",
+      "description": "TypeScript strict mode — zero errors, zero `any` types",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-02",
+      "description": "Zero critical ESLint errors including a11y rules",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-03",
+      "description": "Consistent folder structure across all features",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-04",
+      "description": "All screens implemented matching wireframes",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-05",
+      "description": "All API integrations complete and tested",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-06",
+      "description": "Auth flow working end-to-end with backend",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-07",
+      "description": "UI matches design system (colors, spacing, typography)",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-08",
+      "description": "Loading states on every async operation",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-09",
+      "description": "Error states with actionable messages",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-10",
+      "description": "Empty states for all lists",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-11",
+      "description": "Lighthouse Performance score > 80",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-12",
+      "description": "Initial bundle < 500KB (JS)",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-13",
+      "description": "No memory leaks (verified with browser DevTools performance profiler or framework devtools — React DevTools Profiler / Vue DevTools / Angular DevTools)",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-14",
+      "description": "Unit test coverage: shared components 100%, hooks 80%+",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-15",
+      "description": "E2E tests cover critical user journeys",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-16",
+      "description": "Accessibility tests pass (axe-core)",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-17",
+      "description": "Production build succeeds",
+      "verifier": "manual"
+    },
+    {
+      "id": "FE-18",
+      "description": "Environment variables documented",
+      "verifier": "manual"
+    }
+  ]
+}

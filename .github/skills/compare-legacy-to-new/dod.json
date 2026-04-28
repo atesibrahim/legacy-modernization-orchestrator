@@ -1,0 +1,92 @@
+{
+  "skill": "compare-legacy-to-new",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "CLN-01",
+      "description": "Legacy performance baseline documented (P50/P95/P99 latency, throughput, batch duration)",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-02",
+      "description": "Regression thresholds defined per metric",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-03",
+      "description": "Load test scenarios defined and executed against new system",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-04",
+      "description": "Performance comparison table complete with Pass/Fail per metric",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-05",
+      "description": "Zero blocking performance regressions (or written stakeholder acceptance on record)",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-06",
+      "description": "Every legacy module/feature mapped to new equivalent (no gaps)",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-07",
+      "description": "All ❌ Missing items have documented resolution plan",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-08",
+      "description": "All architectural dimensions compared (auth, data, deployment, observability)",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-09",
+      "description": "Architecture evolution diagram showing legacy → new",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-10",
+      "description": "Technology migration map",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-11",
+      "description": "Functional coverage table",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-12",
+      "description": "All diagrams render correctly in HTML",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-13",
+      "description": "Improvements quantified with metrics where possible",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-14",
+      "description": "Regressions or partial migrations explicitly flagged",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-15",
+      "description": "Migration strategy chosen and justified",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-16",
+      "description": "Report reviewed by lead architect AND product owner",
+      "verifier": "manual"
+    },
+    {
+      "id": "CLN-17",
+      "description": "Cutover checklist reviewed and items assigned owners",
+      "verifier": "manual"
+    }
+  ]
+}

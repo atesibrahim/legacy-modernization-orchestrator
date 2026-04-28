@@ -1,0 +1,57 @@
+{
+  "skill": "java-springboot",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "JS-01",
+      "description": "`./mvnw verify` (or `./gradlew build`) completes with zero test failures and zero compilation errors",
+      "verifier": "cmd"
+    },
+    {
+      "id": "JS-02",
+      "description": "`./mvnw spring-boot:build-image` produces a runnable Docker image",
+      "verifier": "cmd"
+    },
+    {
+      "id": "JS-03",
+      "description": "JaCoCo line coverage report shows ≥ 70% (`target/site/jacoco/index.html`)",
+      "verifier": "manual"
+    },
+    {
+      "id": "JS-04",
+      "description": "`./mvnw checkstyle:check` passes with zero violations (if Checkstyle configured)",
+      "verifier": "cmd"
+    },
+    {
+      "id": "JS-05",
+      "description": "`./mvnw spotbugs:check` passes with zero high-priority bugs (if SpotBugs configured)",
+      "verifier": "cmd"
+    },
+    {
+      "id": "JS-06",
+      "description": "`./mvnw dependency-check:check` passes — zero dependencies with CVSS ≥ 7",
+      "verifier": "cmd"
+    },
+    {
+      "id": "JS-07",
+      "description": "`@Transactional` boundaries confirmed at service layer only — zero in controllers",
+      "verifier": "manual"
+    },
+    {
+      "id": "JS-08",
+      "description": "No `EntityManager` or `Session` exposed beyond infrastructure layer",
+      "verifier": "manual"
+    },
+    {
+      "id": "JS-09",
+      "description": "`/actuator/health` returns `{\"status\":\"UP\"}` in local run",
+      "verifier": "manual"
+    },
+    {
+      "id": "JS-10",
+      "description": "`/actuator/prometheus` returns metrics in Prometheus text format",
+      "verifier": "manual"
+    }
+  ]
+}

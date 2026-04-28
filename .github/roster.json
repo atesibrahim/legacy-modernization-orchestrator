@@ -1,0 +1,360 @@
+{
+  "_comment": "Single source of truth for the skill/agent roster. All downstream files must agree with this file. Run 'npm run validate:roster' to check consistency.",
+  "version": "1.0",
+  "skills": [
+    {
+      "name": "legacy-modernization-orchestrator",
+      "phase": "orchestrator",
+      "tier": "orchestrator",
+      "skill_path": ".github/agents/legacy-modernization-orchestrator.agent.md",
+      "agent_path": ".github/agents/legacy-modernization-orchestrator.agent.md",
+      "required": "always",
+      "depends_on": [],
+      "outputs": [],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "legacy-analysis",
+      "phase": "1",
+      "tier": "1",
+      "skill_path": ".github/skills/legacy-analysis/SKILL.md",
+      "agent_path": ".github/agents/legacy-analysis.agent.md",
+      "required": "always",
+      "depends_on": [],
+      "outputs": [
+        "ai-driven-development/docs/legacy_analysis/legacy_analysis.md"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "legacy-architecture",
+      "phase": "2",
+      "tier": "1",
+      "skill_path": ".github/skills/legacy-architecture/SKILL.md",
+      "agent_path": ".github/agents/legacy-architecture.agent.md",
+      "required": "always",
+      "depends_on": [
+        "legacy-analysis"
+      ],
+      "outputs": [
+        "ai-driven-development/docs/legacy_architecture/legacy_architecture.md",
+        "ai-driven-development/docs/legacy_architecture/legacy_architecture.html"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "tech-stack-selection",
+      "phase": "2.5",
+      "tier": "1",
+      "skill_path": ".github/skills/tech-stack-selection/SKILL.md",
+      "agent_path": ".github/agents/tech-stack-selection.agent.md",
+      "required": "always",
+      "depends_on": [
+        "legacy-architecture"
+      ],
+      "outputs": [
+        "ai-driven-development/docs/tech_stack_selections.md"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "target-architecture",
+      "phase": "3",
+      "tier": "1",
+      "skill_path": ".github/skills/target-architecture/SKILL.md",
+      "agent_path": ".github/agents/target-architecture.agent.md",
+      "required": "always",
+      "depends_on": [
+        "tech-stack-selection"
+      ],
+      "outputs": [
+        "ai-driven-development/docs/target_architecture/target_architecture.md",
+        "ai-driven-development/docs/target_architecture/target_architecture.html"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "ui-ux-design",
+      "phase": "4a",
+      "tier": "1",
+      "skill_path": ".github/skills/ui-ux-design/SKILL.md",
+      "agent_path": ".github/agents/ui-ux-design.agent.md",
+      "required": "if-ui",
+      "depends_on": [
+        "target-architecture"
+      ],
+      "outputs": [
+        "ai-driven-development/docs/ui_design/ui_ux_pages.md",
+        "ai-driven-development/docs/ui_design/ui_ux_pages.html",
+        "ai-driven-development/docs/ui_design/tokens.json",
+        "ai-driven-development/docs/ui_design/component_api.md",
+        "ai-driven-development/docs/ui_design/design-implementation-checklist.md"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "backend-development",
+      "phase": "4b",
+      "tier": "1",
+      "skill_path": ".github/skills/backend-development/SKILL.md",
+      "agent_path": ".github/agents/backend-development.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "target-architecture"
+      ],
+      "outputs": [
+        "ai-driven-development/development/backend_development/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "frontend-development",
+      "phase": "4c",
+      "tier": "1",
+      "skill_path": ".github/skills/frontend-development/SKILL.md",
+      "agent_path": ".github/agents/frontend-development.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "ui-ux-design"
+      ],
+      "outputs": [
+        "ai-driven-development/development/frontend_development/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "ios-development",
+      "phase": "4d",
+      "tier": "1",
+      "skill_path": ".github/skills/ios-development/SKILL.md",
+      "agent_path": ".github/agents/ios-development.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "ui-ux-design"
+      ],
+      "outputs": [
+        "ai-driven-development/development/mobile_development/ios/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "android-development",
+      "phase": "4e",
+      "tier": "1",
+      "skill_path": ".github/skills/android-development/SKILL.md",
+      "agent_path": ".github/agents/android-development.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "ui-ux-design"
+      ],
+      "outputs": [
+        "ai-driven-development/development/mobile_development/android/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "data-migration",
+      "phase": "4f",
+      "tier": "1",
+      "skill_path": ".github/skills/data-migration/SKILL.md",
+      "agent_path": ".github/agents/data-migration.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "target-architecture"
+      ],
+      "outputs": [
+        "ai-driven-development/development/data_migration/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "security-review",
+      "phase": "4g",
+      "tier": "1",
+      "skill_path": ".github/skills/security-review/SKILL.md",
+      "agent_path": ".github/agents/security-review.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "target-architecture"
+      ],
+      "outputs": [
+        "ai-driven-development/docs/security_review/security_review_report.md",
+        "ai-driven-development/docs/security_review/security_review_report.html"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "devops-infra",
+      "phase": "4h",
+      "tier": "1",
+      "skill_path": ".github/skills/devops-infra/SKILL.md",
+      "agent_path": ".github/agents/devops-infra.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "target-architecture"
+      ],
+      "outputs": [
+        "ai-driven-development/development/infra/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "cross-platform-mobile",
+      "phase": "4i",
+      "tier": "1",
+      "skill_path": ".github/skills/cross-platform-mobile/SKILL.md",
+      "agent_path": ".github/agents/cross-platform-mobile.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "ui-ux-design",
+        "tech-stack-selection"
+      ],
+      "outputs": [
+        "ai-driven-development/development/mobile_development/cross-platform/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "compare-legacy-to-new",
+      "phase": "5",
+      "tier": "1",
+      "skill_path": ".github/skills/compare-legacy-to-new/SKILL.md",
+      "agent_path": ".github/agents/compare-legacy-to-new.agent.md",
+      "required": "after-dev",
+      "depends_on": [
+        "legacy-analysis",
+        "legacy-architecture"
+      ],
+      "outputs": [
+        "ai-driven-development/docs/legacy_vs_new_system/compare_legacy_to_new_system.md",
+        "ai-driven-development/docs/legacy_vs_new_system/compare_legacy_to_new_system.html"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "final-validation",
+      "phase": "6",
+      "tier": "1",
+      "skill_path": ".github/skills/final-validation/SKILL.md",
+      "agent_path": ".github/agents/final-validation.agent.md",
+      "required": "after-compare",
+      "depends_on": [
+        "compare-legacy-to-new"
+      ],
+      "outputs": [
+        "ai-driven-development/docs/final_validation/release_readiness_checklist.md",
+        "ai-driven-development/docs/final_validation/go_no_go_decision.md",
+        "ai-driven-development/docs/final_validation/smoke_test_plan.md"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "java-springboot",
+      "phase": "4b",
+      "tier": "2",
+      "skill_path": ".github/skills/java-springboot/SKILL.md",
+      "agent_path": ".github/agents/java-springboot.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "target-architecture",
+        "tech-stack-selection"
+      ],
+      "outputs": [
+        "ai-driven-development/development/backend_development/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "dotnet-aspnetcore",
+      "phase": "4b",
+      "tier": "2",
+      "skill_path": ".github/skills/dotnet-aspnetcore/SKILL.md",
+      "agent_path": ".github/agents/dotnet-aspnetcore.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "target-architecture",
+        "tech-stack-selection"
+      ],
+      "outputs": [
+        "ai-driven-development/development/backend_development/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "python-fastapi",
+      "phase": "4b",
+      "tier": "2",
+      "skill_path": ".github/skills/python-fastapi/SKILL.md",
+      "agent_path": ".github/agents/python-fastapi.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "target-architecture",
+        "tech-stack-selection"
+      ],
+      "outputs": [
+        "ai-driven-development/development/backend_development/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "go-gin-fiber",
+      "phase": "4b",
+      "tier": "2",
+      "skill_path": ".github/skills/go-gin-fiber/SKILL.md",
+      "agent_path": ".github/agents/go-gin-fiber.agent.md",
+      "required": "optional",
+      "depends_on": [
+        "target-architecture",
+        "tech-stack-selection"
+      ],
+      "outputs": [
+        "ai-driven-development/development/backend_development/"
+      ],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "quality-playbook",
+      "phase": "advisory",
+      "tier": "advisory",
+      "skill_path": ".github/skills/quality-playbook/SKILL.md",
+      "agent_path": ".github/agents/quality-playbook.agent.md",
+      "required": "advisory",
+      "depends_on": [],
+      "outputs": [],
+      "installer": true,
+      "status": "active"
+    },
+    {
+      "name": "agent-governance",
+      "phase": "advisory",
+      "tier": "advisory",
+      "skill_path": ".github/skills/agent-governance/SKILL.md",
+      "agent_path": ".github/agents/agent-governance.agent.md",
+      "required": "advisory",
+      "depends_on": [],
+      "outputs": [],
+      "installer": true,
+      "status": "active"
+    }
+  ]
+}

@@ -39,6 +39,15 @@ Produce in `ai-driven-development/docs/legacy_analysis/` (create if not exists):
 
 ## Definition of Done
 > The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
+>
+> **Maintenance rule:** This DoD must be an exact copy of the DoD in `../skills/legacy-analysis/SKILL.md`. Any update to one must be applied to the other in the same PR.
+
+### Technology Profile
+- [ ] Technology Profile (Section 10) produced before any other analysis step
+- [ ] Each detected tier (Backend / Web Frontend / iOS / Android / Cross-Platform Mobile) listed with file/directory evidence
+- [ ] Mobile Framework recorded when any mobile tier is detected
+- [ ] Repository profile classification recorded (e.g., `backend-only`, `fullstack-web`)
+- [ ] Scope recommendation documented (which Phase 4 targets apply)
 
 ### Completeness
 - [ ] 100% of services, modules, and APIs listed and categorized
@@ -79,4 +88,3 @@ Produce in `ai-driven-development/docs/legacy_analysis/` (create if not exists):
 
 ## Next Agent
 When this analysis is complete, invoke the [`legacy-architecture`](./legacy-architecture.agent.md) agent to visualize the architecture.
-

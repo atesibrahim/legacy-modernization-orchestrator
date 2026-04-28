@@ -14,6 +14,8 @@ argument-hint: 'Project name or path to system design artifacts to base backend 
 - Starting or continuing backend implementation phases
 - Need phased development plan for backend, or ready to implement a specific phase
 
+> **Parallelism:** 4b can run in parallel with 4a and 4h. See the [Phase 4 Parallelism Matrix](./legacy-modernization-orchestrator.agent.md#parallelizable-phases-after-phase-3--scope-confirmed).
+
 ---
 
 ## Skill Reference

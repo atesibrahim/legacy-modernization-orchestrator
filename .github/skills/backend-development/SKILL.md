@@ -2,6 +2,9 @@
 name: backend-development
 description: 'Backend development skill for legacy modernization. Act as a senior master backend developer. Use when: building Java Spring Boot / .NET ASP.NET Core / Python FastAPI / Go Gin-Fiber backend, implementing clean architecture hexagonal architecture, setting up domain-driven design modules, implementing REST APIs OpenAPI security JWT OAuth2, database ORM repositories, testing unit integration Testcontainers, observability metrics tracing logging, phased development plan backend implementation.'
 argument-hint: 'Project name or path to system design artifacts to base backend implementation on'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Backend Development
@@ -145,9 +148,9 @@ Record the decomposition plan (bounded context list → sub-task assignment) in 
    - `application-dev.yml` — local dev overrides
    - `application-prod.yml` — production (secrets via env vars)
 
-4. **Health check**: Verify `/actuator/health` returns 200
+4. **Health check**: Verify the health endpoint returns 200. _(Java: `/actuator/health`; .NET/Python/Go: `/health` — see Tier-2 skill for exact route.)_
 
-5. **Global exception handler**: `@ControllerAdvice` with standardized error response:
+5. **Global exception handler**: Framework-level handler at the application boundary with standardized error response. _(Java: `@ControllerAdvice`; .NET: exception middleware; Python: FastAPI exception handlers; Go: error-handling middleware.)_
 ```json
 {
   "code": "VALIDATION_ERROR",
@@ -159,7 +162,7 @@ Record the decomposition plan (bounded context list → sub-task assignment) in 
 
 ### Phase 2 — Review Phase 1
 - [ ] Project compiles and runs
-- [ ] Actuator health endpoint works
+- [ ] Health endpoint returns 200
 - [ ] Exception handler returns standardized errors
 - [ ] All profiles configured correctly
 - [ ] No hard-coded secrets anywhere
@@ -207,9 +210,9 @@ For each bounded context identified in system design:
 - Caching configuration (if applicable)
 
 ### Phase 6 — Review Phase 5
-- [ ] All use cases testable without Spring context
-- [ ] No `@Transactional` in controllers
-- [ ] No `EntityManager` exposed beyond infrastructure layer
+- [ ] All use cases testable without framework context (no infrastructure imports in domain/application layers)
+- [ ] Transaction boundaries confined to service layer, not controllers
+- [ ] No ORM session / entity manager exposed beyond the infrastructure layer
 - [ ] Mappers produce correct output (unit tests for mappers)
 
 ---
@@ -218,7 +221,7 @@ For each bounded context identified in system design:
 **Goal**: Expose secure, documented REST APIs.
 
 **API Layer**:
-- `@RestController` classes — thin, only delegate to service
+- Controller / handler classes — thin, only delegate to service _(Java: `@RestController`; .NET: `[ApiController]`; Python: `APIRouter`; Go: handler functions registered on the router)_
 - Request/Response DTOs (separate from domain DTOs)
 - Path: `/api/v1/{resource}`
 - HTTP verbs: GET (read), POST (create), PUT (update), PATCH (partial), DELETE
@@ -277,7 +280,7 @@ For each bounded context identified in system design:
 ### Phase 10 — Review Phase 9
 - [ ] All integrations have circuit breakers or retry logic
 - [ ] No uncaught exceptions from external calls leaking to API
-- [ ] Scheduled jobs have ShedLock (multi-instance deployment safe)
+- [ ] Scheduled jobs are multi-instance safe (distributed lock via stack-appropriate mechanism — e.g. ShedLock for Java, Hangfire for .NET, APScheduler + DB lock for Python, leader-election sidecar or DB advisory lock for Go)
 - [ ] All async flows have dead letter handling
 
 ---
@@ -304,7 +307,7 @@ For each bounded context identified in system design:
 - See stack-specific Docker template: [`../java-springboot/STANDARDS.md`](../java-springboot/STANDARDS.md) § Docker Image Template
 
 **Health Checks**:
-- Liveness and readiness endpoints (e.g. `/actuator/health`, `/actuator/health/readiness` for Java)
+- Liveness and readiness endpoints. _(Java: `/actuator/health` + `/actuator/health/readiness`; .NET: `/healthz`/`/readyz`; Python/Go: `/health` — see Tier-2 skill for exact routes.)_
 - Custom health indicators for DB and messaging
 
 > Language-specific observability setup — Java: see [`../java-springboot/SKILL.md`](../java-springboot/SKILL.md) § Phase 11 · .NET: see [`../dotnet-aspnetcore/SKILL.md`](../dotnet-aspnetcore/SKILL.md) § Phase 11 · Python: see [`../python-fastapi/SKILL.md`](../python-fastapi/SKILL.md) § Phase 11 · Go: see [`../go-gin-fiber/SKILL.md`](../go-gin-fiber/SKILL.md) § Phase 11.
@@ -349,6 +352,8 @@ For each bounded context identified in system design:
 
 ## Definition of Done (DoD)
 
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §2 — Common Anti-Patterns, §3 — Phase 4b quality gates, §4 — Cross-Cutting Concerns checklist, and §7 — Code Review Checklist.
+
 ### Code Quality
 - [ ] Clean architecture layers enforced (no framework in domain)
 - [ ] No critical SonarQube/SpotBugs issues
@@ -375,7 +380,7 @@ For each bounded context identified in system design:
 
 ### Observability
 - [ ] Logs structured (JSON in prod), correlation IDs included
-- [ ] Metrics available at `/actuator/prometheus`
+- [ ] Metrics scrape endpoint available _(Java: `/actuator/prometheus`; .NET: `/metrics`; Python: `/metrics`; Go: `/metrics` — see Tier-2 skill for exact route)_
 - [ ] Errors fully traceable via trace ID
 
 ### Deployment

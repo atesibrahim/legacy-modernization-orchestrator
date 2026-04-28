@@ -1,6 +1,6 @@
 ---
 name: ui-ux-design
-description: 'UI/UX design for modernized web and mobile applications. Trigger phrases: "design new user interface", "create wireframes for modernized app", "build design system", "define user journeys", "design React web app screens", "design iOS Android screens", "apply WCAG accessibility", "create design tokens", "produce component library", "design-to-code handoff". Outputs: ui_ux_pages.md + ui_ux_pages.html wireframes + tokens.json (W3C format) + component_api.md + Storybook stubs + design-implementation-checklist.md. NOT for backend-only projects (skip if no UI layer). Requires target-architecture to exist.'
+description: "UI/UX design skill for legacy system redesign. Act as a senior master UI/UX developer. Use when: designing user interfaces for modernized application, creating wireframes mockups design systems, defining user journeys for web React and mobile iOS Android, applying WCAG accessibility standards, building responsive mobile-first design, producing HTML design previews, creating component design system tokens typography colors."
 argument-hint: 'Application name and list of primary user roles or workflows to design for'
 ---
 

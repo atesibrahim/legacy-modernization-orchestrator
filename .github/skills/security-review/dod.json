@@ -1,0 +1,58 @@
+{
+  "skill": "security-review",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "SR-01",
+      "description": "Threat model (STRIDE) completed for all trust boundaries; all Critical and High risks have mitigating controls; threat model signed off",
+      "verifier": "manual"
+    },
+    {
+      "id": "SR-02",
+      "description": "All OWASP Top 10 categories audited for every in-scope layer",
+      "verifier": "manual"
+    },
+    {
+      "id": "SR-03",
+      "description": "Zero Critical findings remaining unmitigated",
+      "verifier": "manual"
+    },
+    {
+      "id": "SR-04",
+      "description": "Zero High findings without documented accepted-risk justification",
+      "verifier": "manual"
+    },
+    {
+      "id": "SR-05",
+      "description": "All dependency vulnerability scans pass with CVSS < 7",
+      "verifier": "manual"
+    },
+    {
+      "id": "SR-06",
+      "description": "Secrets scan reports zero verified secrets in codebase or image history",
+      "verifier": "manual"
+    },
+    {
+      "id": "SR-07",
+      "description": "CORS and CSP configurations reviewed and compliant",
+      "verifier": "manual"
+    },
+    {
+      "id": "SR-08",
+      "description": "All Docker images pass Trivy scan and run as non-root",
+      "verifier": "manual"
+    },
+    {
+      "id": "SR-09",
+      "description": "`security_review_report.md` and `security_review_report.html` committed to `ai-driven-development/docs/security_review/`",
+      "verifier": "glob",
+      "glob": "ai-driven-development/docs/security_review/"
+    },
+    {
+      "id": "SR-10",
+      "description": "Report reviewed and signed off by lead developer before go-live",
+      "verifier": "manual"
+    }
+  ]
+}

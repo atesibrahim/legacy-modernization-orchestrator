@@ -25,24 +25,9 @@ The SKILL.md procedure references these. Do not deviate — create an ADR if a j
 
 ## Standard Error Response Format
 
-All APIs return this JSON structure for errors:
+All APIs MUST use the RFC 9457 Problem Details shape defined in [core.md §10](../../standards/core.md#10-standard-error-response-format-rfc-9457). Language-specific implementation details are in each Tier-2 skill's STANDARDS.md.
 
-```json
-{
-  "code": "VALIDATION_ERROR",
-  "message": "Request validation failed",
-  "details": ["field 'email' must not be blank"],
-  "traceId": "abc-123-def-456"
-}
-```
-
-Map HTTP status codes consistently:
-- `400` — Validation / bad request  
-- `401` — Not authenticated  
-- `403` — Authenticated but not authorized  
-- `404` — Resource not found  
-- `409` — Conflict (duplicate)  
-- `500` — Unexpected server error (never expose stack traces)
+Summary: `type` · `title` · `status` · `detail` · `instance` · `traceId` (mandatory extension) · optional `errors` map for field-level validation failures.
 
 ---
 

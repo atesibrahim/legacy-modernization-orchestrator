@@ -53,15 +53,20 @@ Complete starting template for `compare_legacy_to_new_system.html`.
     .diagram { background: white; padding: 1.5rem; border-radius: 8px;
                box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 2rem;
                overflow: hidden; position: relative; min-height: 140px; }
-    .coverage-full    { color: #276749; font-weight: bold; }
-    .coverage-partial { color: #713f12; font-weight: bold; }
-    .coverage-missing { color: #9b2c2c; font-weight: bold; }
+    .coverage-full     { color: #276749; font-weight: bold; }
+    .coverage-partial  { color: #713f12; font-weight: bold; }
+    .coverage-planned  { color: #1a56db; font-weight: bold; }
+    .coverage-missing  { color: #9b2c2c; font-weight: bold; }
+    .coverage-removed  { color: #6b7280; font-weight: bold; }
   </style>
 </head>
 <body>
   <h1>Legacy vs New System: Comparison Report</h1>
 
   <!-- Side-by-side summary cards -->
+  <!-- ⚠ REPLACE ALL VALUES BELOW WITH YOUR ACTUAL STACK.
+       The panels below use a Java / Spring / React example.
+       Read legacy_analysis.md and tech_stack_selections.md before filling in real values. -->
   <div class="compare-grid">
     <div class="panel legacy">
       <h3>🏚 Legacy System</h3>
@@ -76,39 +81,41 @@ Complete starting template for `compare_legacy_to_new_system.html`.
     </div>
     <div class="panel new">
       <h3>🏗 New System</h3>
-      <p><strong>Architecture:</strong> Modular Monolith</p>
-      <p><strong>Language:</strong> Java 21 / React 18 / Kotlin</p>
-      <p><strong>Frontend:</strong> React 18 + TypeScript</p>
-      <p><strong>Auth:</strong> JWT + OAuth2/LDAP</p>
-      <p><strong>DB Access:</strong> Spring Data JPA</p>
+      <p><strong>Architecture:</strong> [Target architecture style]</p>
+      <p><strong>Language:</strong> [Stack from tech_stack_selections.md]</p>
+      <p><strong>Frontend:</strong> [Framework from tech_stack_selections.md]</p>
+      <p><strong>Auth:</strong> JWT + OAuth2 / OIDC</p>
+      <p><strong>DB Access:</strong> [ORM / query layer per stack]</p>
       <p><strong>Deployment:</strong> Docker + CI/CD</p>
-      <p><strong>Tests:</strong> JUnit 5 + Playwright</p>
+      <p><strong>Tests:</strong> [Unit + Integration + E2E per stack]</p>
       <p><strong>Observability:</strong> Logs + Metrics + Traces</p>
     </div>
   </div>
 
   <!-- Architecture Evolution Diagram -->
+  <!-- ⚠ REPLACE ALL NODE LABELS BELOW WITH YOUR ACTUAL STACK.
+       Example uses JSP → React / JPA — substitute real legacy and new technology names. -->
   <h2>Architecture Evolution</h2>
   <div class="diagram">
     <pre class="mermaid">
 graph LR
     subgraph "LEGACY"
-        L_UI[JSP UI] --> L_APP[Monolithic App]
-        L_APP --> L_DB[(Shared DB - JDBC/SP)]
-        L_APP --> L_EXT[External Systems - SOAP]
-        L_AUTH[Custom Session Auth] --> L_APP
+        L_UI[Legacy UI] --> L_APP[Monolithic App]
+        L_APP --> L_DB[(Shared DB)]
+        L_APP --> L_EXT[External Systems]
+        L_AUTH[Custom Auth] --> L_APP
     end
     subgraph "MIGRATION"
         M[Anticorruption Layer / Strangler Fig]
     end
     subgraph "NEW"
-        N_WEB[React 18 SPA] --> N_GW[API Gateway]
+        N_WEB[New Web Client] --> N_GW[API Gateway]
         N_MOB[Mobile iOS/Android] --> N_GW
         N_GW --> N_AUTH[Auth Service - JWT/OAuth2]
         N_GW --> N_SVC1[Domain Service A]
         N_GW --> N_SVC2[Domain Service B]
-        N_SVC1 --> N_DB1[(Domain DB A - JPA)]
-        N_SVC2 --> N_DB2[(Domain DB B - JPA)]
+        N_SVC1 --> N_DB1[(Domain DB A)]
+        N_SVC2 --> N_DB2[(Domain DB B)]
         N_OBS[Observability Stack] -.->|monitor| N_GW
     end
     LEGACY --> M
@@ -117,28 +124,30 @@ graph LR
   </div>
 
   <!-- Technology Migration Map -->
+  <!-- ⚠ REPLACE ALL NODE LABELS BELOW WITH YOUR ACTUAL STACK.
+       Example uses Java 8 / Spring Batch / JSP → Java 21 / React — substitute real technology names. -->
   <h2>Technology Migration Map</h2>
   <div class="diagram">
     <pre class="mermaid">
 graph LR
     subgraph "Legacy Technologies"
-        L1[Java 8]
-        L2[JSP / jQuery]
-        L3[JDBC + Stored Procedures]
-        L4[Custom Session Auth]
-        L5[Manual WAR Deployment]
-        L6[File-based Messaging]
-        L7[Cron Shell Scripts]
-        L8[Manual Log Files]
+        L1[Legacy Language / Runtime]
+        L2[Legacy UI Technology]
+        L3[Legacy DB Access Layer]
+        L4[Legacy Auth Mechanism]
+        L5[Legacy Deployment Method]
+        L6[Legacy Messaging / Integration]
+        L7[Legacy Scheduling]
+        L8[Legacy Observability]
     end
     subgraph "New Technologies"
-        N1[Java 21 Virtual Threads]
-        N2[React 18 + TypeScript]
-        N3[Spring Data JPA + Hibernate]
-        N4[JWT + OAuth2 / LDAP]
+        N1[New Language / Runtime]
+        N2[New Frontend Framework]
+        N3[New DB / ORM Layer]
+        N4[JWT + OAuth2 / OIDC]
         N5[Docker + CI/CD Pipeline]
-        N6[Kafka / RabbitMQ]
-        N7[Spring Batch + Scheduler]
+        N6[Message Broker]
+        N7[Scheduler / Job Framework]
         N8[Structured Logs + Metrics + Traces]
     end
     L1 -->|"upgrade"| N1
@@ -163,8 +172,12 @@ graph LR
           <td class="coverage-full">✅ Full</td></tr>
       <tr><td>[Feature B]</td><td>[Legacy impl]</td><td>[New impl]</td>
           <td class="coverage-partial">⚠️ Partial</td></tr>
-      <tr><td>[Feature C]</td><td>[Legacy impl]</td><td>—</td>
-          <td class="coverage-missing">❌ Planned</td></tr>
+      <tr><td>[Feature C — roadmapped]</td><td>[Legacy impl]</td><td>—</td>
+          <td class="coverage-planned">🔄 Planned</td></tr>
+      <tr><td>[Feature D — no plan]</td><td>[Legacy impl]</td><td>—</td>
+          <td class="coverage-missing">❌ Missing</td></tr>
+      <tr><td>[Feature E — dropped]</td><td>[Legacy impl]</td><td>N/A</td>
+          <td class="coverage-removed">🗑️ Removed</td></tr>
     </tbody>
   </table>
 
@@ -225,9 +238,11 @@ graph LR
 
 | Symbol | Meaning |
 |---|---|
-| ✅ Full | Feature fully implemented and equivalent in new system |
-| ⚠️ Partial | Feature implemented but missing edge cases or minor functionality |
-| ❌ Missing / Planned | Feature not yet implemented in new system — requires action plan |
+| `✅ Full` | Feature fully implemented with functional parity |
+| `⚠️ Partial` | Implemented but missing edge cases or minor behaviour |
+| `🔄 Planned` | Absent but roadmapped — ticket/sprint and delivery date must exist |
+| `❌ Missing` | Absent with no remediation plan — blocks cutover if critical |
+| `🗑️ Removed` | Intentionally not migrated — stakeholder sign-off required |
 | 🗑️ Removed | Feature intentionally removed — sign-off from business required |
 
 ---

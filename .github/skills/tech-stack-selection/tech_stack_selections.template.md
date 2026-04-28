@@ -53,9 +53,31 @@
 
 ---
 
+## § Mobile
+
+> Leave all fields as `N/A` if no mobile targets are in scope.
+>
+> If `Framework = Native (separate iOS + Android)`, only `Framework` is mandatory here. Fill `§ iOS` and/or `§ Android` instead.
+>
+> If `Framework = Flutter` or `React Native`, fill the full `§ Mobile` section and mark `§ iOS` / `§ Android` as `N/A` unless separate native apps are also required.
+
+| Concern | Selection | Notes |
+|---|---|---|
+| Framework | <!-- REQUIRED if any mobile target is in scope: Native (separate iOS + Android) / Flutter / React Native --> | |
+| Minimum iOS Target | <!-- REQUIRED if Framework = Flutter or React Native and iOS support is needed: e.g. iOS 16 / iOS 17 --> | |
+| Minimum SDK | <!-- REQUIRED if Framework = Flutter or React Native and Android support is needed: e.g. API 26 (Android 8.0) / API 28 --> | |
+| State Management | <!-- e.g. Riverpod / BLoC / Zustand / Redux Toolkit / N/A --> | |
+| Secure Storage | <!-- e.g. flutter_secure_storage / react-native-keychain / N/A --> | |
+| Local Persistence | <!-- e.g. sqflite / Isar / WatermelonDB / MMKV / None / N/A --> | |
+| Push Notifications | <!-- e.g. Firebase Cloud Messaging (FCM) / None / N/A --> | |
+| Crash Reporting | <!-- e.g. Firebase Crashlytics / Sentry / None / N/A --> | |
+| Analytics | <!-- e.g. Firebase Analytics / Mixpanel / Amplitude / None / N/A --> | |
+
+---
+
 ## § iOS
 
-> Leave all fields as `N/A` if iOS is not in scope.
+> Leave all fields as `N/A` if native iOS is not in scope.
 
 | Concern | Selection | Notes |
 |---|---|---|
@@ -71,7 +93,7 @@
 
 ## § Android
 
-> Leave all fields as `N/A` if Android is not in scope.
+> Leave all fields as `N/A` if native Android is not in scope.
 
 | Concern | Selection | Notes |
 |---|---|---|
@@ -94,7 +116,9 @@ Before proceeding to Phase 3, confirm all mandatory keys are filled:
 - [ ] § Backend — Database selected
 - [ ] § Backend — Auth Provider selected
 - [ ] § Web Frontend — Framework selected (or marked N/A)
-- [ ] § iOS — Minimum iOS Target selected (or marked N/A)
-- [ ] § Android — Minimum SDK selected (or marked N/A)
+- [ ] § Mobile — Framework selected if any mobile target is in scope
+- [ ] § Mobile — Minimum iOS Target and Minimum SDK selected if Framework = Flutter or React Native
+- [ ] § iOS — Minimum iOS Target selected if native iOS is in scope (or marked N/A)
+- [ ] § Android — Minimum SDK selected if native Android is in scope (or marked N/A)
 
 > **If any mandatory key is blank**, stop and collect the missing choice from the user before proceeding to Phase 3.

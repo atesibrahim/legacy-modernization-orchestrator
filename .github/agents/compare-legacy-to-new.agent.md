@@ -10,7 +10,7 @@ argument-hint: 'Path to legacy analysis and new system design artifacts to compa
 **Senior Expert Architect / Analyst / Developer** — Produce an objective, evidence-based comparison between the legacy system and the new design. Identify what was preserved, what was improved, what was eliminated, and what risks remain in the transition.
 
 ## When to Use
-- After legacy analysis (`legacy-analysis`, `legacy-architecture`) and target design (`target-architecture`) are complete, and at least one in-scope development target is complete (`backend-development`, `frontend-development`, `ios-development`, and/or `android-development`)
+- After legacy analysis (`legacy-analysis`, `legacy-architecture`) and target design (`target-architecture`) are complete, and at least one in-scope implementation target is complete (`backend-development`, `frontend-development`, `ios-development`, `android-development`, and/or `cross-platform-mobile`)
 - Need to validate that all legacy functionality is covered in the new system
 - Presenting migration strategy to stakeholders
 - Risk assessment before production cutover
@@ -35,6 +35,7 @@ This agent executes by strictly following every step defined in:
   - `ai-driven-development/development/frontend_development/` (or screen inventory)
   - `ai-driven-development/development/mobile_development/ios/` (or screen inventory)
   - `ai-driven-development/development/mobile_development/android/` (or screen inventory)
+  - `ai-driven-development/development/mobile_development/cross-platform/` (or screen inventory)
 
 ---
 
@@ -47,6 +48,15 @@ Produce in `ai-driven-development/docs/legacy_vs_new_system/`:
 
 ## Definition of Done
 > The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
+>
+> **Maintenance rule:** This DoD must be an exact copy of the DoD in `../skills/compare-legacy-to-new/SKILL.md`. Any update to one must be applied to the other in the same PR.
+
+### Performance
+- [ ] Legacy performance baseline documented (P50/P95/P99 latency, throughput, batch duration)
+- [ ] Regression thresholds defined per metric
+- [ ] Load test scenarios defined and executed against new system
+- [ ] Performance comparison table complete with Pass/Fail per metric
+- [ ] Zero blocking performance regressions (or written stakeholder acceptance on record)
 
 ### Coverage
 - [ ] Every legacy module/feature mapped to new equivalent (no gaps)
@@ -72,4 +82,3 @@ Produce in `ai-driven-development/docs/legacy_vs_new_system/`:
 
 ## Next Agent
 Final step: return to the [`legacy-modernization-orchestrator`](./legacy-modernization-orchestrator.agent.md) for Phase 6 final validation and cutover readiness.
-

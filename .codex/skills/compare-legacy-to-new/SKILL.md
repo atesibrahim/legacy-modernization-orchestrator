@@ -1,6 +1,6 @@
 ---
 name: compare-legacy-to-new
-description: 'Gap analysis and migration strategy comparing the legacy system to the redesigned system. Trigger phrases: "compare legacy to new system", "validate feature parity", "gap analysis legacy vs new", "map legacy components to new equivalents", "create migration strategy", "before-after architecture diagrams", "check that all legacy features are covered", "identify improvements and regressions", "performance baseline comparison", "cutover readiness". Outputs: compare_legacy_to_new_system.md + .html with functional coverage table, architecture evolution diagram, technology migration map, performance comparison, and risk/migration strategy. Requires legacy-analysis + legacy-architecture + target-architecture + at least one Phase 4 development artifact.'
+description: "Legacy vs new system comparison and gap analysis skill. Act as a senior master architect analyst developer. Use when: comparing legacy system with redesigned system, gap analysis between legacy and new, mapping legacy components to new equivalents, creating migration strategy, producing before-after diagrams in HTML mermaid, validating that all legacy functionality is covered in new design, identifying improvements and regressions."
 argument-hint: 'Path to legacy analysis and new system design artifacts to compare'
 ---
 

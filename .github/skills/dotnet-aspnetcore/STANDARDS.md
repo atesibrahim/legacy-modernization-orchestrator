@@ -115,19 +115,20 @@ Rules:
 
 ## Problem Details Error Response Format
 
-All errors must follow RFC 7807 Problem Details. Register in `Program.cs`:
+All errors must follow the RFC 9457 canonical shape defined in [core.md §10](../../standards/core.md#10-standard-error-response-format-rfc-9457). Register in `Program.cs`:
 ```csharp
 builder.Services.AddProblemDetails();
 ```
 
-Example response:
+ASP.NET Core's `ProblemDetails` covers `type`, `title`, `status`, `detail`, `instance`. Add `traceId` as a mandatory extension and `errors` for validation failures:
 ```json
 {
-  "type": "https://tools.ietf.org/html/rfc7807",
+  "type": "https://tools.ietf.org/html/rfc9457",
   "title": "Validation failed",
   "status": 422,
   "detail": "One or more fields failed validation.",
   "instance": "/api/v1/orders",
+  "traceId": "abc-123-def-456",
   "errors": {
     "customerId": ["'CustomerId' must not be empty."]
   }

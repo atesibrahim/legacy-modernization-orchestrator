@@ -1,6 +1,6 @@
 ---
 name: ios-development
-description: "Use when: building native Swift SwiftUI iOS app, implementing MVVM with Combine/async-await, Keychain token storage, URLSession networking, CoreData/SwiftData persistence, APNs push notifications, deep linking, XCTest unit + UI testing, App Store deployment, WidgetKit, BackgroundTasks, App Intents. NOT for Android or cross-platform. Requires ui-ux-design + target-architecture."
+description: "iOS mobile development agent for legacy modernization. Act as a senior expert iOS developer. Use when: building Swift SwiftUI iOS mobile app, implementing MVVM architecture, Combine async-await, Keychain token storage, URLSession networking, CoreData local persistence, push notifications, deep linking, unit testing XCTest, UI testing, App Store deployment, phased iOS development plan."
 tools:
   - Read
   - Write

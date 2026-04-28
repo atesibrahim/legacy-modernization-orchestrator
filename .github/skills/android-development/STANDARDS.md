@@ -180,12 +180,14 @@ Access via `BuildConfig.API_BASE_URL` (configured in `build.gradle.kts`).
 - [ ] Phase 4: Review Phase 3
 - [ ] Phase 5: Networking Layer & Auth
 - [ ] Phase 6: Review Phase 5
+- [ ] Phase 6.5: Feature Decomposition Check
 - [ ] Phase 7: Core Feature Implementation
 - [ ] Phase 8: Review Phase 7
 - [ ] Phase 9: Persistence & Offline Support
 - [ ] Phase 10: Push Notifications & Deep Linking
 - [ ] Phase 11: Testing
 - [ ] Phase 12: Release Preparation & Play Store
+- [ ] Phase 12.5: Platform Extensions (if required)
 ```
 
 ---

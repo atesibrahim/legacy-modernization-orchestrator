@@ -2,12 +2,15 @@
 name: frontend-development
 description: 'Frontend development skill for legacy modernization. Act as a senior expert frontend developer. Use when: building React / Vue / Angular / Svelte TypeScript frontend, implementing design system components, state management TanStack Query Zustand Pinia NgRx, API integration Axios, code splitting lazy loading performance optimization, Vitest Playwright testing, phased frontend development plan. For mobile clients use ios-development or android-development skills instead.'
 argument-hint: 'Project name or path to UI/UX design artifacts and system design to implement'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Frontend Development
 
 ## Role
-**Senior Expert Frontend Developer** — Build a performant, maintainable, accessible React frontend that faithfully implements the UX design system with clean, testable code.
+**Senior Expert Frontend Developer** — Build a performant, maintainable, accessible web frontend that faithfully implements the UX design system with clean, testable code.
 
 ## When to Use
 - After `ui-ux-design` skill produces wireframes and design system
@@ -69,7 +72,7 @@ Before starting, verify the following artifacts exist:
 
 > See [STANDARDS.md](./STANDARDS.md) for the project folder structure, TypeScript configuration, ESLint rules, API integration patterns, token storage rules, and phase tracker template.
 
-> **Framework adaptation**: The procedure below uses **React 18 + TypeScript** as the reference implementation. If the confirmed framework in `tech_stack_selections.md` is Vue 3, Angular 18, or Svelte 5, apply the equivalent toolchain from the Per-Framework Toolchain table above — same architectural patterns (component-based, typed, tested, accessible), different framework APIs.
+> **Framework dispatch rule**: Before Phase 1, read `tech_stack_selections.md` § Web Frontend → Framework. The procedure below uses **React 18 + TypeScript** as the reference implementation. Wherever you see a React-specific API (hooks, JSX, lazy, memo, React Testing Library), substitute the confirmed framework's equivalent from the Per-Framework Toolchain table — same architectural patterns (component-based, typed, tested, accessible), different framework APIs. Per-framework notes are provided inline at each affected step. If a Tier-2 frontend skill exists for the confirmed framework (`react-frontend`, `vue-frontend`, `angular-frontend`, `svelte-frontend`), read it alongside this skill for exact code templates.
 
 ---
 
@@ -83,10 +86,11 @@ Before writing any code, add the frontend phase checklist from [STANDARDS.md](./
 ### Phase 1 — Project Setup & Tooling
 **Goal**: Running project with full tooling configured.
 
-1. **Vite + React + TypeScript scaffold**:
-```bash
-pnpm create vite frontend -- --template react-ts
-```
+1. **Scaffold**:
+   - _React_: `pnpm create vite frontend -- --template react-ts`
+   - _Vue_: `pnpm create vite frontend -- --template vue-ts`
+   - _Angular_: `ng new frontend --strict --style=scss`
+   - _Svelte_: `pnpm create svelte@latest frontend` (choose SvelteKit + TypeScript)
 
 2. **`tsconfig.json`** with strict mode:
 ```json
@@ -98,11 +102,14 @@ pnpm create vite frontend -- --template react-ts
   }
 }
 ```
+_(Angular CLI generates this; add `paths` alias manually. Svelte: configure in `svelte.config.js` + `tsconfig.json`.)_
 
 3. **ESLint + Prettier**:
    - `@typescript-eslint/recommended`
-   - `eslint-plugin-react-hooks`
-   - `eslint-plugin-jsx-a11y` (accessibility linting)
+   - _React_: `eslint-plugin-react-hooks`, `eslint-plugin-jsx-a11y`
+   - _Vue_: `eslint-plugin-vue`, `eslint-plugin-vuejs-accessibility`
+   - _Angular_: `@angular-eslint/eslint-plugin`, `@angular-eslint/eslint-plugin-template`
+   - _Svelte_: `eslint-plugin-svelte`, `eslint-plugin-jsx-a11y`
 
 4. **Vite path aliases**: `@/` maps to `src/`
 
@@ -159,6 +166,8 @@ pnpm create vite frontend -- --template react-ts
 **Goal**: Working login, token management, protected routes.
 
 1. **Auth API hooks** (`src/features/auth/api/`):
+
+   _(React — `useMutation` from TanStack Query):_
 ```typescript
 // hooks/useLogin.ts
 export const useLogin = () => useMutation({
@@ -169,12 +178,17 @@ export const useLogin = () => useMutation({
   },
 });
 ```
+   _(Vue — `useMutation` from TanStack Query Vue adapter; same pattern.)_
+   _(Angular — inject `AuthService`, call `this.authService.login(credentials)` returning an `Observable`; subscribe in the component or use `AsyncPipe`.)_
+   _(Svelte — `useMutation` from TanStack Query Svelte adapter; same pattern.)_
 
 2. **Token storage**: `sessionStorage` for access token (never `localStorage` for JWTs), `httpOnly` cookie preferred for refresh token
 
-3. **Axios interceptor**: Auto-attach Bearer token, auto-refresh on 401
+3. **Axios interceptor**: Auto-attach Bearer token, auto-refresh on 401. _(Angular: use `HttpInterceptor` instead of Axios.)_
 
-4. **Protected Route wrapper**:
+4. **Protected Route / Guard**:
+
+   _(React — route wrapper component):_
 ```typescript
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -182,6 +196,9 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   return <>{children}</>;
 };
 ```
+   _(Vue — Vue Router navigation guard: `router.beforeEach` checking auth store.)_
+   _(Angular — `CanActivateFn` guard checking `AuthService.isAuthenticated()`.)_
+   _(Svelte — SvelteKit `load` function in `+layout.ts` redirecting unauthenticated users.)_
 
 5. **Login screen**: Matching wireframe from `ui_ux_pages.html`
 
@@ -235,21 +252,25 @@ For **each feature**, follow this pattern:
 4. **Hooks** (`hooks/`): Business logic extracted from components
 5. **Page component**: Compose feature components, use layout from shared
 
-**Data fetching pattern**:
+**Data fetching pattern** _(React / Vue / Svelte — TanStack Query; Angular — `HttpClient` + `AsyncPipe`):_
 ```typescript
+// React / Vue / Svelte (TanStack Query)
 const { data, isLoading, isError, error } = useQuery({
   queryKey: ['items', filters],
   queryFn: () => itemsApi.getAll(filters),
-  staleTime: 5 * 60 * 1000, // 5 min
+  staleTime: 5 * 60 * 1000,
 });
-
-if (isLoading) return <Spinner />;
-if (isError) return <ErrorState error={error} />;
-if (!data?.length) return <EmptyState />;
+// Render: show Spinner on isLoading, ErrorState on isError, EmptyState when !data?.length
+```
+```typescript
+// Angular — in component
+items$ = this.itemsService.getAll(filters); // Observable<Item[]>
+// Template: *ngIf with async pipe, show skeleton/error/empty components
 ```
 
-**Mutation pattern**:
+**Mutation pattern** _(React / Vue / Svelte — TanStack Query; Angular — service method returning Observable):_
 ```typescript
+// React / Vue / Svelte
 const { mutate, isPending } = useMutation({
   mutationFn: itemsApi.create,
   onSuccess: () => {
@@ -258,6 +279,13 @@ const { mutate, isPending } = useMutation({
     onClose();
   },
   onError: (error) => toast.error(getApiErrorMessage(error)),
+});
+```
+```typescript
+// Angular — in component method
+this.itemsService.create(payload).subscribe({
+  next: () => { this.snackBar.open('Item created'); this.dialogRef.close(); },
+  error: (err) => this.snackBar.open(getApiErrorMessage(err)),
 });
 ```
 
@@ -288,7 +316,7 @@ const { mutate, isPending } = useMutation({
 
 3. **Optimistic updates** for high-frequency mutations (delete, status toggle)
 
-4. **Offline handling**: Show banner when network is unavailable (React Query's `useNetworkMode`)
+4. **Offline handling**: Show banner when network is unavailable. _(React/Vue/Svelte: TanStack Query `useNetworkMode`; Angular: `fromEvent(window, 'offline')` observable.)_
 
 5. **OpenAPI code generation** (optional but recommended):
 ```bash
@@ -306,31 +334,41 @@ pnpm dlx openapi-typescript http://localhost:8080/v3/api-docs -o src/shared/type
 ### Phase 10 — Performance Optimization
 **Goal**: Lighthouse score > 80, bundle < 500KB initial.
 
-1. **Code splitting**: Each route lazy-loaded:
-```typescript
-const Dashboard = lazy(() => import('./features/dashboard/Dashboard'));
-```
+1. **Code splitting / lazy loading**: Each route lazy-loaded at the framework level:
+   - _React_: `const Dashboard = lazy(() => import('./features/dashboard/Dashboard'));`
+   - _Vue_: `component: () => import('./features/dashboard/Dashboard.vue')` in route config
+   - _Angular_: `loadComponent: () => import('./features/dashboard/Dashboard').then(m => m.DashboardComponent)` (or `loadChildren` for module-based)
+   - _Svelte_: SvelteKit handles route-level code splitting automatically
 
 2. **Image optimization**: Use WebP where possible, `loading="lazy"` on images
 
 3. **Bundle analysis**:
 ```bash
-pnpm run build -- --report # Rollup bundle visualizer
+pnpm run build -- --report # Rollup/Vite bundle visualizer (React, Vue, Svelte)
+# Angular: ng build --stats-json && npx webpack-bundle-analyzer dist/stats.json
 ```
 
-4. **React rendering optimization**:
-   - `React.memo` on expensive list item components
-   - `useMemo` / `useCallback` only where profiling shows benefit (avoid premature optimization)
-   - Virtualization for lists > 100 items (TanStack Virtual)
+4. **Component rendering optimization** (apply only where profiling shows benefit — avoid premature optimization):
+   - _React_: `React.memo` on expensive list items, `useMemo`/`useCallback` for stable references
+   - _Vue_: `v-once` for truly static subtrees, `computed` properties for derived state
+   - _Angular_: `ChangeDetectionStrategy.OnPush`, `trackBy` on `*ngFor`
+   - _Svelte_: reactive declarations (`$:`) are already optimized; avoid unnecessary reactive blocks
+   - All frameworks: Virtualization for lists > 100 items (TanStack Virtual)
 
-5. **Cache strategy**: Set appropriate `staleTime` and `gcTime` per query type
+5. **Cache strategy**: Set appropriate `staleTime` and `gcTime` per query type _(React/Vue/Svelte: TanStack Query; Angular: HTTP caching headers + optional client-side cache service.)_
 
 ---
 
 ### Phase 11 — Testing
 **Goal**: Verified, trustworthy test suite.
 
-**Unit Tests** (Vitest + React Testing Library):
+**Unit Tests** — use the testing tool from the Per-Framework Toolchain table:
+   - _React_: Vitest + React Testing Library
+   - _Vue_: Vitest + Vue Test Utils
+   - _Angular_: Jest + Angular Testing Library (or built-in `TestBed`)
+   - _Svelte_: Vitest + `@testing-library/svelte`
+
+Reference pattern _(React — substitute framework-equivalent render/query APIs):_
 ```typescript
 describe('Button', () => {
   it('calls onClick when not disabled', async () => {
@@ -345,19 +383,20 @@ describe('Button', () => {
 
 Coverage targets:
 - All shared components: 100%
-- All custom hooks: ≥ 80%
+- All custom hooks / composables / services: ≥ 80%
 - Feature components: ≥ 60%
 
-**E2E Tests** (Playwright):
+**E2E Tests** (Playwright — all frameworks):
 - Login → access protected page → logout flow
 - Critical business workflows (create, update, delete core entities)
 - Error state testing (mock API 500 response)
 
-**Accessibility Tests**:
+**Accessibility Tests** (axe-core — all frameworks):
 ```typescript
+// React: vitest-axe; Vue/Svelte: @axe-core/playwright in E2E; Angular: axe-core + jest-axe
 import { axe } from 'vitest-axe';
 it('has no accessibility violations', async () => {
-  const { container } = render(<LoginPage />);
+  const { container } = render(<LoginPage />); // substitute framework render
   expect(await axe(container)).toHaveNoViolations();
 });
 ```
@@ -373,6 +412,8 @@ it('has no accessibility violations', async () => {
 ---
 
 ## Definition of Done (DoD)
+
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §3 — Phase 4c quality gates, §4 — Cross-Cutting Concerns checklist, and §7 — Code Review Checklist.
 
 ### Code Quality
 - [ ] TypeScript strict mode — zero errors, zero `any` types
@@ -393,7 +434,7 @@ it('has no accessibility violations', async () => {
 ### Performance
 - [ ] Lighthouse Performance score > 80
 - [ ] Initial bundle < 500KB (JS)
-- [ ] No memory leaks (verified with React DevTools Profiler)
+- [ ] No memory leaks (verified with browser DevTools performance profiler or framework devtools — React DevTools Profiler / Vue DevTools / Angular DevTools)
 
 ### Testing
 - [ ] Unit test coverage: shared components 100%, hooks 80%+

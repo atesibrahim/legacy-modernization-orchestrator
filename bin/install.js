@@ -12,10 +12,12 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import readline from 'readline';
+import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PACKAGE_ROOT = path.resolve(__dirname, '..');
+const PKG_VERSION  = JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8')).version;
 
 // Stable directory name used to store the full skill/agent files globally
 const INSTALL_DIRNAME = 'legacy-modernization-orchestrator';
@@ -29,9 +31,12 @@ const AGENTS = [
   'frontend-development',
   'ios-development',
   'android-development',
+  'cross-platform-mobile',
   'compare-legacy-to-new',
   'legacy-modernization-orchestrator',
-  // Tech-stack specific backend skills
+  // Phase 2.5 gate (skill + template only — no .agent.md wrapper)
+  'tech-stack-selection',
+  // Tier-2 backend language skills
   'java-springboot',
   'dotnet-aspnetcore',
   'python-fastapi',
@@ -86,6 +91,31 @@ function removeIfExists(p) {
   return false;
 }
 
+function computeDirChecksum(dir) {
+  if (!fs.existsSync(dir)) return '';
+  const hash = crypto.createHash('sha256');
+  function walk(d) {
+    for (const entry of fs.readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+      if (entry.name === '.installed') continue;
+      const p = path.join(d, entry.name);
+      if (entry.isDirectory()) { walk(p); } else { hash.update(entry.name); hash.update(fs.readFileSync(p)); }
+    }
+  }
+  walk(dir);
+  return hash.digest('hex').slice(0, 16);
+}
+
+function readInstalled(dir) {
+  const f = path.join(dir, '.installed');
+  if (!fs.existsSync(f)) return null;
+  try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return null; }
+}
+
+function writeInstalled(dir, version, checksum) {
+  const data = { version, checksum, installedAt: new Date().toISOString() };
+  fs.writeFileSync(path.join(dir, '.installed'), JSON.stringify(data, null, 2) + '\n', 'utf8');
+}
+
 /**
  * Copy a file, replacing all occurrences of relative `.github/skills/` and
  * `.github/agents/` paths with the absolute paths where those files are installed.
@@ -135,7 +165,19 @@ function install(scope, selectedRuntimes) {
   for (const agent of AGENTS) {
     const src  = path.join(ghSkillsSrc, agent);
     const dest = path.join(skillsInstallDir, agent);
-    if (fs.existsSync(src)) { copyDir(src, dest); console.log(`  ✓ skills/${agent}`); }
+    if (!fs.existsSync(src)) continue;
+    const newChecksum = computeDirChecksum(src);
+    const existing    = readInstalled(dest);
+    if (existing && existing.version === PKG_VERSION && existing.checksum === newChecksum) {
+      console.log(`  ✓ skills/${agent} (up to date)`);
+      continue;
+    }
+    if (existing && (existing.version !== PKG_VERSION || existing.checksum !== newChecksum)) {
+      console.log(`  ⚠  skills/${agent}: drift detected — v${existing.version} → v${PKG_VERSION}, reinstalling`);
+    }
+    copyDir(src, dest);
+    writeInstalled(dest, PKG_VERSION, newChecksum);
+    console.log(`  ✓ skills/${agent}`);
   }
   console.log(`  → ${skillsInstallDir}`);
 
@@ -282,6 +324,15 @@ async function interactive() {
   install(scope, selected);
 }
 
+function ciInstall() {
+  console.log('');
+  console.log('  Legacy Modernization Orchestrator');
+  console.log('  Non-interactive environment detected — using defaults: global, all runtimes.');
+  console.log('  Override with: --local, --claude, or --codex flags.');
+  console.log('');
+  install('global', ['claude', 'codex']);
+}
+
 // ── entry point ───────────────────────────────────────────────────────────────
 
 const hasFlags = isGlobal || isLocal || claudeOnly || codexOnly || args.includes('--all');
@@ -292,6 +343,8 @@ if (isUninstall) {
 } else if (hasFlags) {
   const scope = isLocal ? 'local' : 'global';
   install(scope, runtimes);
+} else if (!process.stdin.isTTY) {
+  ciInstall();
 } else {
   interactive();
 }

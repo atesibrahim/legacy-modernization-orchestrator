@@ -7,18 +7,32 @@ Works with **Claude Code**, **OpenAI Codex CLI**, and **GitHub Copilot**.
 
 ## Agents
 
-| Agent | Role |
-|-------|------|
-| `legacy-modernization-orchestrator` | Master orchestrator — runs all phases in order |
-| `legacy-analysis` | Legacy codebase analysis, technical debt, DB schema, security posture |
-| `legacy-architecture` | Legacy architecture diagrams (mermaid HTML) |
-| `target-architecture` | Target architecture — Clean/Hexagonal/DDD, Java 21, Spring Boot 3.5, React 18 |
-| `ui-ux-design` | Wireframes, design system, WCAG, HTML previews |
-| `backend-development` | Java 21 Spring Boot 3.5 backend, JWT/OAuth2, JPA, Testcontainers |
-| `frontend-development` | React 18 TypeScript, Redux Toolkit, TanStack Query, Playwright |
-| `ios-development` | Swift SwiftUI, MVVM, Keychain, CoreData, XCTest |
-| `android-development` | Kotlin Compose, MVVM, Room, Retrofit, Mockk |
-| `compare-legacy-to-new` | Gap analysis, migration strategy, before/after diagrams |
+Agents are organized by the phase in which they are invoked. The master orchestrator chains them automatically; each agent can also be invoked standalone.
+
+| Phase | Agent / Skill | Role |
+|-------|--------------|------|
+| Master | `legacy-modernization-orchestrator` | Master orchestrator — chains all phases end-to-end |
+| 1 | `legacy-analysis` | Legacy codebase analysis, technical debt, DB schema, integration map, security posture |
+| 2 | `legacy-architecture` | Legacy architecture diagrams — Mermaid HTML, component map, data flow, deployment topology |
+| 2.5 | `tech-stack-selection` | Tech stack selection gate — confirms backend, frontend, DB, mobile, cloud, and infra choices |
+| 3 | `target-architecture` | Target architecture — Clean/Hexagonal/DDD, multi-stack (Java / .NET / Python / Go), API-first design |
+| 4a | `ui-ux-design` | Wireframes, design system, user journeys, WCAG accessibility, HTML previews, design tokens |
+| 4b | `backend-development` | Backend service — REST APIs, JWT/OAuth2, clean architecture, ORM, unit + integration tests, observability |
+| 4b+ | `java-springboot` | Tier-2 — Java 21 + Spring Boot 3, Spring Data JPA, Micrometer, JUnit 5, Testcontainers |
+| 4b+ | `dotnet-aspnetcore` | Tier-2 — .NET 9 + ASP.NET Core, EF Core, Serilog, xUnit, Testcontainers.NET |
+| 4b+ | `python-fastapi` | Tier-2 — Python 3.12 + FastAPI, SQLAlchemy 2, Alembic, Pydantic v2, pytest-asyncio |
+| 4b+ | `go-gin-fiber` | Tier-2 — Go 1.23 + Gin or Fiber, GORM/sqlc, zap/zerolog, testcontainers-go |
+| 4c | `frontend-development` | React / Vue / Angular / Svelte TypeScript — Zustand / Pinia / NgRx, TanStack Query, Vitest, Playwright |
+| 4d | `ios-development` | Swift SwiftUI — MVVM, Combine/async-await, Keychain, CoreData, APNs, XCTest, App Store |
+| 4e | `android-development` | Kotlin Jetpack Compose — MVVM, Coroutines/Flow, Room, Retrofit, FCM, JUnit/Mockk, Play Store |
+| 4f | `data-migration` | Zero-data-loss schema migration — Flyway/Liquibase/Alembic/Goose, dual-write, chunking, rollback |
+| 4g | `security-review` | OWASP Top 10, CVE scanning, JWT/CORS/CSP audit, Docker image security, secrets detection |
+| 4h | `devops-infra` | Kubernetes, Helm, Terraform/Pulumi, GitHub Actions/GitLab CI, Prometheus, Grafana, Vault |
+| 4i | `cross-platform-mobile` | Flutter (Dart) or React Native (TypeScript) — single codebase for iOS + Android, Riverpod/BLoC or Zustand, Detox/integration_test, App Store + Play Store _(optional, non-default)_ |
+| 5 | `compare-legacy-to-new` | Gap analysis, feature-parity check, migration strategy, before/after Mermaid diagrams |
+| 6 | `final-validation` | Release readiness gate — functional completeness, performance baseline, smoke tests, go/no-go |
+| Advisory | `quality-playbook` | Cross-cutting quality reference — architecture patterns, testing strategy, API design, code standards |
+| Advisory | `agent-governance` | Framework governance — agent selection, phase chaining, DoD gates, project resume |
 
 ---
 
@@ -127,9 +141,14 @@ Phase 4b   →  backend-development      (optional; can run in parallel with 4a)
 Phase 4c   →  frontend-development     (optional; requires 4a)
 Phase 4d   →  ios-development          (optional; requires 4a)
 Phase 4e   →  android-development      (optional; requires 4a)
-               ↓ 4b/4c/4d/4e can run in parallel with each other (after 4a)
+Phase 4i   →  cross-platform-mobile    (optional, non-default; Flutter/RN only; mutually exclusive with 4d/4e for same target)
+               ↓ 4b/4c/4d/4e/4i can run in parallel with each other (after 4a)
+Phase 4f   →  data-migration           (optional; zero-data-loss schema + data migration)
+Phase 4g   →  security-review          (optional; OWASP Top 10, CVE scan, secrets audit)
+Phase 4h   →  devops-infra             (optional; K8s, Helm, Terraform, CI/CD, observability)
+               ↓ 4f/4g/4h can run in parallel with each other (after Phase 3)
 Phase 5    →  compare-legacy-to-new    (after any dev phase)
-Phase 6    →  Final Validation
+Phase 6    →  final-validation         (release readiness gate — go/no-go decision)
 ```
 
 All outputs are written to `ai-driven-development/` inside your project.
@@ -150,6 +169,8 @@ The `.claude/agents/`, `.claude/skills/`, and `.codex/skills/` files installed o
 .github/
   agents/          ← GitHub Copilot agent definitions (*.agent.md)
   skills/          ← Authoritative skill SKILL.md files (step-by-step procedures)
+  roster.json      ← Single source of truth for the skill/agent roster
+  standards/       ← Cross-cutting standards (core.md)
 .claude/
   agents/          ← Claude Code subagent definitions (@agent-name)
   skills/          ← Claude Code slash command skills (/agent-name)
@@ -160,9 +181,43 @@ bin/
 scripts/
   install.sh       ← Shell installer (alternative)
   uninstall.sh     ← Shell uninstaller
+  ci-validate.js   ← Framework self-tests (frontmatter, links, headings, output coverage)
+  validate-roster.js ← Roster consistency checks across all source files
+  generate-dod.js  ← Regenerate dod.json from SKILL.md DoD sections
+  check-adr-prompts.js ← Advisory ADR capture check
+  sync-wrappers.js ← Sync .claude/.codex wrappers from .github/skills
+  new-skill.sh     ← Scaffold a new skill from template
 AGENTS.md          ← Loaded by Codex CLI automatically
 CLAUDE.md          ← Loaded by Claude Code CLI automatically
+CONTRIBUTING.md    ← How to add, edit, or deprecate skills
 ```
+
+---
+
+## Validation & CI
+
+The framework ships with self-tests that verify structural integrity across all skills, agents, and documentation. Run them before every PR.
+
+```bash
+npm run ci:validate       # frontmatter YAML lint, relative link resolution,
+                          # required headings (Role / Preflight / DoD), STANDARDS_OUTPUTS coverage
+
+npm run validate:roster   # roster consistency — checks bin/install.js, AGENTS.md, CLAUDE.md,
+                          # orchestrator, README.md, STANDARDS_OUTPUTS.md, disk paths,
+                          # frontmatter schema, version metadata, deprecation status, dod.json
+
+npm run check:wrappers    # .claude/ and .codex/ wrappers match .github/skills/ sources
+npm run check:dod         # dod.json files are in sync with SKILL.md DoD sections
+npm run check:adr         # advisory — scans for decision-language that may need an ADR
+```
+
+| Script | Enforces | Fails CI? |
+|--------|----------|-----------|
+| `ci:validate` | (A) Valid YAML frontmatter in every SKILL.md and .agent.md, (B) all relative markdown links resolve, (C) every non-advisory SKILL.md has `## Role` + `## Prerequisites (Preflight)` + `## Definition of Done`, (D) every roster output appears in STANDARDS_OUTPUTS.md | Yes |
+| `validate:roster` | Roster.json is the single source of truth — installer, AGENTS.md, CLAUDE.md, orchestrator, README, STANDARDS_OUTPUTS, disk paths, frontmatter schema, version/review dates, deprecation status, dod.json all agree | Yes |
+| `check:wrappers` | Runtime wrappers (.claude/.codex) are in sync with authoritative .github/skills/ | Yes |
+| `check:dod` | dod.json machine-readable DoD matches SKILL.md markdown DoD | Yes |
+| `check:adr` | Flags files with decision-language that may need an ADR (advisory only) | No |
 
 ---
 

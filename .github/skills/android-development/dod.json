@@ -1,0 +1,112 @@
+{
+  "skill": "android-development",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "AND-01",
+      "description": "Detekt and Ktlint zero violations",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-02",
+      "description": "Clean Architecture layers respected (domain has zero Android imports)",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-03",
+      "description": "All repositories and services behind interfaces (mockable)",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-04",
+      "description": "All screens implemented matching wireframes",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-05",
+      "description": "All API integrations complete and tested against real backend",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-06",
+      "description": "Auth flow (login, token refresh, logout) working end-to-end",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-07",
+      "description": "UI matches design system (colors, typography, spacing) via MaterialTheme",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-08",
+      "description": "Loading, error, and empty states on every async screen",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-09",
+      "description": "Dark mode fully supported",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-10",
+      "description": "Font scaling supported",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-11",
+      "description": "TalkBack navigation complete and labeled",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-12",
+      "description": "Smooth scrolling (no jank in Profiler)",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-13",
+      "description": "No memory leaks (verified with Memory Profiler)",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-14",
+      "description": "App startup < 2s on API 26 mid-range emulator",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-15",
+      "description": "ViewModel unit test coverage ≥ 80%",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-16",
+      "description": "UseCase unit test coverage 100%",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-17",
+      "description": "UI tests cover login and 2+ critical journeys",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-18",
+      "description": "Accessibility checks enabled in UI tests",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-19",
+      "description": "Release AAB archives cleanly with R8",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-20",
+      "description": "ProGuard rules verified (no missing keeps)",
+      "verifier": "manual"
+    },
+    {
+      "id": "AND-21",
+      "description": "Internal test track validated",
+      "verifier": "manual"
+    }
+  ]
+}

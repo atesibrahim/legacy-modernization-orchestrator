@@ -18,6 +18,7 @@ ai-driven-development/
 │   │
 │   ├── adr/                                          ← Architecture Decision Records (as needed)
 │   │   └── ADR-{NNN}-{title}.md                     ← One file per decision
+│   │   [Created on demand by any phase — list is indicative, not exhaustive]
 │   │
 │   ├── legacy_analysis/                                    ← Phase 1: legacy-analysis
 │   │   └── legacy_analysis.md                        ← Always
@@ -104,18 +105,39 @@ ai-driven-development/
     │           ├── build.gradle.kts
     │           └── settings.gradle.kts
     │
-    └── data_migration/                               ← Phase 4f: data-migration (optional)
-        ├── data_migration_todo.md
-        ├── schema_migrations/                       ← Flyway/Alembic/Goose scripts
-        │   ├── V001__initial_schema.sql
-        │   └── V002__add_indexes.sql
-        ├── validation/                              ← Row count + checksum validation scripts
-        │   ├── validate_row_counts.sql
-        │   └── validate_checksums.sql
-        ├── cleansing/                               ← Data quality fix scripts
-        │   └── clean_nulls.sql
-        └── rollback/                               ← Rollback scripts
-            └── rollback_V001.sql
+    ├── cross-platform/                               ← Phase 4i: cross-platform-mobile (if Flutter/RN confirmed in tech_stack_selections.md)
+    │   ├── cross_platform_development_todo.md
+    │   └── {ProjectName}/                           ← Flutter or React Native project root
+    │       ├── lib/                                 ← Flutter: Dart source (core/, features/, shared/)
+    │       ├── src/                                 ← React Native: TypeScript source (navigation/, features/, components/, theme/)
+    │       ├── test/                                ← Flutter unit + widget tests
+    │       ├── integration_test/                    ← Flutter integration tests
+    │       ├── __tests__/                           ← React Native Jest tests
+    │       ├── e2e/                                 ← React Native Detox E2E tests
+    │       ├── ios/                                 ← iOS native project (generated)
+    │       └── android/                             ← Android native project (generated)
+    │
+    ├── data_migration/                               ← Phase 4f: data-migration (optional)
+    │   ├── data_migration_todo.md
+    │   ├── schema_migrations/                       ← Flyway/Alembic/Goose scripts
+    │   │   ├── V001__initial_schema.sql
+    │   │   └── V002__add_indexes.sql
+    │   ├── validation/                              ← Row count + checksum validation scripts
+    │   │   ├── validate_row_counts.sql
+    │   │   └── validate_checksums.sql
+    │   ├── cleansing/                               ← Data quality fix scripts
+    │   │   └── clean_nulls.sql
+    │   └── rollback/                               ← Rollback scripts
+    │       └── rollback_V001.sql
+    │
+    └── infra/                                        ← Phase 4h: devops-infra (optional)
+        ├── infra_todo.md
+        ├── kubernetes/                              ← Namespace, Deployment, Service, Ingress, HPA manifests
+        ├── helm/                                    ← Helm chart (Chart.yaml, values.yaml, templates/)
+        ├── terraform/                               ← Terraform/Pulumi infrastructure modules
+        ├── ci-cd/                                   ← GitHub Actions / GitLab CI pipeline definitions
+        ├── monitoring/                              ← Prometheus alerting rules, Grafana dashboards
+        └── secrets/                                 ← External Secrets Operator / Vault policy manifests
 ```
 
 ---
@@ -136,6 +158,7 @@ ai-driven-development/
 | 4f | data-migration | `development/data_migration/` |
 | 4g | security-review | `docs/security_review/security_review_report.md` + `.html` |
 | 4h | devops-infra | `development/infra/` (infra_todo.md + kubernetes/ + helm/ + terraform/ + ci-cd/ + monitoring/ + secrets/) |
+| 4i | cross-platform-mobile | `development/mobile_development/cross-platform/cross_platform_development_todo.md` + `development/mobile_development/cross-platform/{ProjectName}/` |
 | 5 | compare-legacy-to-new | `docs/legacy_vs_new_system/compare_legacy_to_new_system.md` + `.html` |
 | 6 | final-validation | `docs/final_validation/release_readiness_checklist.md` + `go_no_go_decision.md` + `smoke_test_plan.md` |
 
@@ -145,6 +168,6 @@ ai-driven-development/
 
 - `{ProjectName}` is replaced with the actual project name (PascalCase, no spaces)
 - All paths are relative to `ai-driven-development/`
-- Optional phases (4b–4g) only create their artifacts if in scope — confirmed by scope selection before Phase 4
-- ADRs are created on-demand throughout all phases, not just in a specific phase
+- Optional phases (4b–4h) only create their artifacts if in scope — confirmed by scope selection before Phase 4
+- ADRs are created on-demand throughout all phases, not just a specific phase — any skill that makes a significant technology or architectural decision should produce an ADR. The `adr/` entries in the tree are indicative examples, not an exhaustive list.
 - `redesign_progress.md` is created in Phase 1 and updated by every subsequent phase

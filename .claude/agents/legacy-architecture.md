@@ -1,6 +1,6 @@
 ---
 name: legacy-architecture
-description: "Use when: visualizing legacy architecture, diagramming legacy system components and dependencies, mapping legacy data flows, documenting legacy architectural weaknesses, producing Mermaid.js HTML diagrams (high-level, component, data flow, auth, DB, deployment). NOT for new system design — use target-architecture for that. Requires legacy-analysis output."
+description: "Legacy system architecture visualization and design agent. Act as a senior expert architect. Use when: visualizing legacy architecture, creating system diagrams for legacy systems, understanding legacy component relationships, mapping legacy data flows, identifying architectural weaknesses, producing mermaid diagrams in HTML format, documenting legacy architectural constraints before redesign."
 tools:
   - Read
   - Write

@@ -1,7 +1,10 @@
 ---
 name: legacy-analysis
-description: 'Legacy system analysis skill. Act as a senior expert technical analyst. Use when: analysing legacy codebase, reverse engineering legacy architecture, identifying technical debt, mapping business flows, detecting hidden dependencies, assessing security posture, database schema reverse engineering, stored procedures and triggers inventory, table ownership matrix, data quality assessment, creating legacy architecture reports, risk matrix, data and integration maps before any redesign or migration project.'
+description: 'Legacy system analysis skill. Act as a senior expert technical analyst. Use when: analysing legacy codebase, reverse engineering legacy architecture, identifying technical debt, mapping business flows, detecting hidden dependencies, assessing security posture, database schema reverse engineering, stored procedures and triggers inventory, table ownership matrix, data quality assessment, creating legacy architecture reports, risk matrix, data and integration maps before modernization.'
 argument-hint: 'Path or description of the legacy project to analyze'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Legacy System Analysis
@@ -33,6 +36,7 @@ Scan the repository root for evidence of each tier:
 | **Web Frontend** | `package.json` with React/Angular/Vue/Svelte, `*.tsx`, `*.jsx`, `src/` with component files, `index.html` at root with JS framework markers |
 | **iOS** | `*.xcodeproj`, `*.xcworkspace`, `*.swift`, `Info.plist`, `Podfile`, `Package.swift` with SwiftUI imports |
 | **Android** | `build.gradle` with `com.android.application`, `*.kt` under `app/src/`, `AndroidManifest.xml`, `gradle/wrapper/` |
+| **Cross-Platform Mobile** | Flutter: `pubspec.yaml`, `lib/main.dart`, `android/` + `ios/` generated shells, `flutter` SDK markers. React Native: `package.json` with `react-native`, `app.json`, `ios/` + `android/`, Metro/Babel config, `*.tsx` mobile screens under app source folders |
 
 Classify the repository as one of:
 
@@ -42,9 +46,10 @@ Classify the repository as one of:
 | `frontend-only` | Web client code only — no server-side business logic |
 | `mobile-ios-only` | iOS app only |
 | `mobile-android-only` | Android app only |
-| `mobile-only` | iOS and/or Android — no separate backend in this repo |
+| `mobile-cross-platform-only` | Flutter or React Native app only — no separate backend in this repo |
+| `mobile-only` | Any mobile app only (native and/or cross-platform) — no separate backend in this repo |
 | `fullstack-web` | Backend + Web Frontend |
-| `fullstack-mobile` | Backend + iOS and/or Android |
+| `fullstack-mobile` | Backend + any mobile tier (native and/or cross-platform) |
 | `fullstack` | Backend + Web Frontend + Mobile |
 
 Record the profile in `legacy_analysis.md` **Section 10 — Technology Profile** (see Output Format).
@@ -60,7 +65,7 @@ Record the profile in `legacy_analysis.md` **Section 10 — Technology Profile**
 **Measure codebase scale:**
 - Count total source files by primary language extension
 - Count top-level modules/packages/projects
-- Count distinct tiers detected in Step 0 (Backend / Frontend / iOS / Android)
+- Count distinct tiers detected in Step 0 (Backend / Web Frontend / iOS / Android / Cross-Platform Mobile)
 
 **Choose a strategy:**
 
@@ -92,6 +97,7 @@ Spawn one sub-task per detected tier, each covering Steps 1 + 3 + 4 + 5 scoped t
 **Sub-task handoff protocol:**
 1. Each sub-task reads its scoped source path and produces a partial findings file: `ai-driven-development/docs/legacy_analysis/_partial_{tier}.md`
 2. This orchestrating agent reads all partial files and merges them into the final `legacy_analysis.md`, filling every section of the Output Format
+3. After merge is complete, delete all `_partial_*.md` files from `ai-driven-development/docs/legacy_analysis/`
 
 **Record decomposition plan before starting:**
 Add to `legacy_analysis.md` header:
@@ -284,18 +290,22 @@ Score each risk by **Impact (1-5) × Likelihood (1-5)**:
 ## 8. Pain Points (prioritized)
 ## 9. Recommendations
 ## 10. Technology Profile
-  - 10.1 Detected Tiers (Backend / Web Frontend / iOS / Android) — list evidence per tier
-  - 10.2 Repository Profile: `backend-only` | `frontend-only` | `mobile-only` | `fullstack-web` | `fullstack-mobile` | `fullstack` | other
-  - 10.3 Scope Recommendation — which development phases are applicable
+  - 10.1 Detected Tiers (Backend / Web Frontend / iOS / Android / Cross-Platform Mobile) — list evidence per tier
+  - 10.2 Mobile Framework (if mobile detected): `Native iOS` | `Native Android` | `Flutter` | `React Native` | `Mixed` | `Unknown`
+  - 10.3 Repository Profile: `backend-only` | `frontend-only` | `mobile-cross-platform-only` | `mobile-only` | `fullstack-web` | `fullstack-mobile` | `fullstack` | other
+  - 10.4 Scope Recommendation — which development phases are applicable
 ```
 
 ---
 
 ## Definition of Done (DoD)
 
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §3 — Phase 1 quality gates.
+
 ### Technology Profile
 - [ ] Technology Profile (Section 10) produced before any other analysis step
-- [ ] Each detected tier (Backend / Frontend / iOS / Android) listed with file/directory evidence
+- [ ] Each detected tier (Backend / Web Frontend / iOS / Android / Cross-Platform Mobile) listed with file/directory evidence
+- [ ] Mobile Framework recorded when any mobile tier is detected
 - [ ] Repository profile classification recorded (e.g., `backend-only`, `fullstack-web`)
 - [ ] Scope recommendation documented (which Phase 4 targets apply)
 

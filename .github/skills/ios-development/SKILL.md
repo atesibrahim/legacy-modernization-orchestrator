@@ -2,6 +2,9 @@
 name: ios-development
 description: 'iOS mobile development skill for legacy modernization. Act as a senior expert iOS developer. Use when: building Swift SwiftUI iOS mobile app, implementing MVVM architecture, Combine async-await, Keychain token storage, URLSession networking, CoreData local persistence, push notifications, deep linking, unit testing XCTest, UI testing, App Store deployment, phased iOS development plan.'
 argument-hint: 'Project name or path to UI/UX design artifacts and system design to implement'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # iOS Development
@@ -26,8 +29,8 @@ Before starting, verify the following artifacts exist:
 **If any required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 4a: `ui-ux-design`, Phase 3: `target-architecture`, Phase 4b: `backend-development`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
 ## Output Location
-Create folder `ai-driven-development/development/mobile_development/ios/{project_name}` — all iOS code here.
-- `ai-driven-development/development/ios_development_todo.md` — phase tracker with all iOS phases checked off as they complete.
+Create folder `ai-driven-development/development/mobile_development/ios/{ProjectName}/` — all iOS code here.
+- `ai-driven-development/development/mobile_development/ios/ios_development_todo.md` — phase tracker with all iOS phases checked off as they complete.
 
 ---
 
@@ -462,6 +465,8 @@ Implement iOS platform extension features for the project. Skip any item not req
 ---
 
 ## Definition of Done (DoD)
+
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §3 — Phase 4d quality gates, §4 — Cross-Cutting Concerns checklist, and §7 — Code Review Checklist.
 
 ### Code Quality
 - [ ] SwiftLint zero warnings

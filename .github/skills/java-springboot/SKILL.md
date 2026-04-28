@@ -2,11 +2,32 @@
 name: java-springboot
 description: 'Java 21 + Spring Boot 3 backend — clean/hexagonal architecture, Spring Data JPA, Micrometer, Logback/SLF4J, JUnit 5, Testcontainers, Maven/Gradle, Dockerfile. Apply when tech_stack_selections.md confirms Java + Spring Boot as the backend stack.'
 argument-hint: 'Project name or path to system design artifacts to base backend implementation on'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
-# Spring Boot Best Practices
+# Java 21 + Spring Boot 3 — Backend Implementation
 
-Your goal is to help me write high-quality Spring Boot applications by following established best practices.
+> These are the Java-specific implementation steps that complement [`backend-development/SKILL.md`](../backend-development/SKILL.md). Apply these when `tech_stack_selections.md` confirms `Java + Spring Boot` as the backend stack.
+
+See also: [`STANDARDS.md`](./STANDARDS.md) for Java-specific architecture rules, project folder structure, and Docker image template.
+
+## Role
+**Senior Java / Spring Boot Backend Engineer** — Implement a production-ready, clean/hexagonal architecture backend using Java 21 and Spring Boot 3, following all standards in `core.md` and `backend-development/STANDARDS.md`.
+
+## Prerequisites (Preflight)
+Before starting, verify the following artifacts exist:
+
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| Tech stack selections | `ai-driven-development/docs/tech_stack_selections.md` | Always — must confirm `Java + Spring Boot` |
+| Target architecture | `ai-driven-development/docs/target_architecture/target_architecture.md` | Always |
+| Backend todo tracker | `ai-driven-development/development/backend_development/be_development_todo.md` | If continuing an in-progress phase |
+
+**If any required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 2.5: Tech Stack Selection, Phase 3: `target-architecture`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
+
+---
 
 ## Project Setup & Structure
 
@@ -173,3 +194,34 @@ public ItemDto getItem(Long id) { ... }
 - **Dependency security**: `mvn dependency-check:check` (OWASP Dependency Check plugin) — fail on CVSS ≥ 7
 - **N+1 queries**: Enable `spring.jpa.show-sql=true` in test profile; analyse Hibernate SQL output
 - **Integration tests**: `@SpringBootTest` + `MockMvc` for API layer; `@DataJpaTest` for repositories; Testcontainers for real DB
+---
+
+## Definition of Done (DoD)
+
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §2 — Common Anti-Patterns (§2.4 Anemic Domain Model, §2.7 N+1 Query) and §7 — Code Review Checklist.
+
+### Inherited from `backend-development`
+All DoD items in [`backend-development/SKILL.md`](../backend-development/SKILL.md) must be ✅ before this DoD is evaluated.
+
+### Additional DoD — Java / Spring Boot
+
+#### Build & Quality
+- [ ] `./mvnw verify` (or `./gradlew build`) completes with zero test failures and zero compilation errors
+- [ ] `./mvnw spring-boot:build-image` produces a runnable Docker image
+- [ ] JaCoCo line coverage report shows ≥ 70% (`target/site/jacoco/index.html`)
+
+#### Static Analysis
+- [ ] `./mvnw checkstyle:check` passes with zero violations (if Checkstyle configured)
+- [ ] `./mvnw spotbugs:check` passes with zero high-priority bugs (if SpotBugs configured)
+
+#### Security
+- [ ] `./mvnw dependency-check:check` passes — zero dependencies with CVSS ≥ 7
+
+#### Runtime Correctness
+- [ ] `@Transactional` boundaries confirmed at service layer only — zero in controllers
+- [ ] No `EntityManager` or `Session` exposed beyond infrastructure layer
+- [ ] `/actuator/health` returns `{"status":"UP"}` in local run
+- [ ] `/actuator/prometheus` returns metrics in Prometheus text format
+
+#### Next Skill
+When all items above are ✅, proceed to [`compare-legacy-to-new`](../compare-legacy-to-new/SKILL.md) (Phase 5).
