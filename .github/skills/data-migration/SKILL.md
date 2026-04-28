@@ -2,6 +2,9 @@
 name: data-migration
 description: 'Data migration skill for legacy modernization. Optional Phase 4f. Use when: migrating data from legacy to new schema, writing Flyway/Liquibase/Alembic/Goose schema migration scripts, implementing dual-write reconciliation, validating row counts and checksums, performing large-table chunking, repairing referential integrity, running legacy data cleansing pipelines, executing post-migration data quality audits, producing cutover freeze SQL and rollback procedures.'
 argument-hint: 'Path to legacy analysis and target architecture artifacts, plus database connection details'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Data Migration
@@ -67,8 +70,9 @@ Create `ai-driven-development/development/data_migration/data_migration_todo.md`
 - [ ] Phase 4 — ETL / Data Transfer
 - [ ] Phase 5 — Validation & Reconciliation
 - [ ] Phase 6 — Cutover Procedure
-- [ ] Phase 7 — Rollback Playbook
-- [ ] Phase 8 — Post-Migration Audit
+- [ ] Phase 7 — PII Handling in Non-Prod
+- [ ] Phase 8 — Rollback Playbook
+- [ ] Phase 9 — Post-Migration Audit
 - [ ] DoD Gate
 
 ## Notes
@@ -159,6 +163,63 @@ db/migration/
 - Script names: `V{version}__{description}.sql` — double underscore required.
 - Every script is **idempotent** — use `CREATE TABLE IF NOT EXISTS`, `ALTER TABLE ... IF NOT EXISTS`.
 - Never modify a script that has already been applied — add a new version instead.
+
+#### Liquibase conventions (Java / any stack):
+```
+db/changelog/
+├── db.changelog-master.xml
+└── changes/
+    ├── 001-create-customers.xml
+    └── 002-create-orders.xml
+```
+
+`db.changelog-master.xml` — root changelog that includes all change files:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <include file="changes/001-create-customers.xml" relativeToChangelogFile="true"/>
+    <include file="changes/002-create-orders.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>
+```
+
+`changes/001-create-customers.xml` — individual changeset:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="001" author="migration">
+        <createTable tableName="customers">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="customers"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
+```
+
+- Each `<changeSet>` has a unique `id` + `author` — never modify after applying; add a new changeset instead.
+- Always include a `<rollback>` block for every destructive or structural change.
 
 #### Alembic conventions (Python):
 ```python
@@ -331,7 +392,99 @@ WHERE NOT EXISTS (SELECT 1 FROM customers c WHERE c.id = o.customer_id);
 
 ---
 
-### Phase 7 — Rollback Playbook
+### Phase 7 — PII Handling in Non-Prod
+
+**Goal**: Ensure no real personal data exists in development, staging, or CI environments. This section is **mandatory** whenever the legacy database contains PII (names, emails, phone numbers, addresses, national IDs, payment data, health data, or any field that can identify a living individual).
+
+#### 7.1 — PII Column Inventory
+
+Before copying any data to a non-prod environment, produce a PII column inventory from `legacy_analysis.md` and the schema mapping table (Phase 1):
+
+| Table | Column | PII Category | Masking Strategy |
+|---|---|---|---|
+| `CUSTOMER` | `CUST_NM` | Name | Faker — random full name |
+| `CUSTOMER` | `EMAIL_ADDR` | Email | Deterministic hash: `anon_{MD5(email)}@example.com` |
+| `CUSTOMER` | `PHONE_NBR` | Phone | Replace with `+10000000000` |
+| `CUSTOMER` | `DOB` | Date of birth | Shift date ±1–5 years randomly |
+| `PAYMENT` | `CARD_NBR` | Payment card | Retain first 6 + last 4, mask middle: `411111XXXXXX1234` |
+| `PAYMENT` | `CVV` | Payment card | Replace with `000` |
+
+#### 7.2 — Data Masking Scripts
+
+Create `masking/mask_non_prod_data.sql` (or equivalent for the chosen migration tool). Masking **must** run automatically as part of the non-prod data-load pipeline — never require a manual step.
+
+```sql
+-- ============================================================
+-- mask_non_prod_data.sql
+-- Run AFTER data load on non-prod (dev / staging / CI) databases
+-- NEVER run on production
+-- ============================================================
+
+-- Guard: abort if accidentally run on production
+DO $$
+BEGIN
+    IF current_database() NOT LIKE '%dev%'
+       AND current_database() NOT LIKE '%staging%'
+       AND current_database() NOT LIKE '%test%'
+       AND current_database() NOT LIKE '%ci%' THEN
+        RAISE EXCEPTION 'Safety guard: this script must not run on %', current_database();
+    END IF;
+END $$;
+
+-- Mask customer names with deterministic placeholder
+UPDATE customers
+SET
+    full_name  = 'User ' || id,
+    email      = 'anon_' || MD5(email) || '@example.com',
+    phone      = '+10000000000',
+    birth_date = birth_date + (FLOOR(RANDOM() * 11) - 5)::INT * INTERVAL '1 year'
+WHERE TRUE;
+
+-- Mask payment card numbers (keep BIN + last 4)
+UPDATE payment_methods
+SET
+    card_number = SUBSTRING(card_number, 1, 6) || 'XXXXXX' || RIGHT(card_number, 4),
+    cvv         = '000',
+    cardholder_name = 'MASKED CARDHOLDER'
+WHERE TRUE;
+```
+
+> **Flyway/Liquibase non-prod overlay**: If using a migration tool, add the masking script as a repeatable migration (`R__mask_non_prod_data.sql` in Flyway) that only runs in non-prod environments via a Spring profile or environment variable gate.
+
+#### 7.3 — Data Subsetting (Large Databases)
+
+For databases > 10 GB, copying the full dataset to non-prod is unnecessary and increases PII exposure. Apply data subsetting:
+
+1. **Select a representative subset** — typically the most recent N% of records per entity (e.g., last 90 days of orders, a stratified sample of customers).
+2. **Preserve referential integrity** — include all rows referenced by foreign key constraints in the subset.
+3. **Minimum viable subset size** — enough rows to exercise all code paths (typically 5–10% of production volume, minimum 10,000 rows per primary entity).
+4. **Document the subsetting criteria** in `data_migration_todo.md` so all team members use the same dataset.
+
+Example subsetting query:
+```sql
+-- Extract a referentially-consistent subset: last 90 days of orders + their customers
+CREATE TABLE staging_export AS
+SELECT DISTINCT c.*
+FROM customers c
+INNER JOIN orders o ON o.customer_id = c.id
+WHERE o.created_at >= NOW() - INTERVAL '90 days';
+```
+
+#### 7.4 — Non-Prod Data Pipeline Checklist
+
+- [ ] PII column inventory documented in `masking/pii_inventory.md`
+- [ ] `masking/mask_non_prod_data.sql` (or equivalent) created and peer-reviewed
+- [ ] Masking script includes an environment guard (cannot run on prod)
+- [ ] Masking script is executed automatically in the CI/CD pipeline after each non-prod data refresh
+- [ ] Data subsetting criteria documented (if database > 10 GB)
+- [ ] No real email addresses, phone numbers, or payment data visible in non-prod application UI
+- [ ] **Privacy/compliance team sign-off obtained** before first non-prod data load (record sign-off date and approver in `data_migration_todo.md`)
+
+> ⚠️ **Regulatory note**: Loading unmasked PII into non-prod environments may violate GDPR Art. 25 (data protection by design), CCPA §1798.100, HIPAA Safe Harbor, and PCI DSS Requirement 6.3.3. If uncertain whether the data contains regulated PII, treat it as if it does and apply masking. Obtain written sign-off from the privacy or compliance team before proceeding.
+
+---
+
+### Phase 8 — Rollback Playbook
 
 **Goal**: Ensure the team can revert to the legacy system within the agreed RTO if critical issues occur.
 
@@ -376,7 +529,7 @@ Create `rollback/rollback_playbook.md`:
 
 ---
 
-### Phase 8 — Post-Migration Data Quality Audit
+### Phase 9 — Post-Migration Data Quality Audit
 
 **Goal**: After a stabilization period (typically 1–2 weeks), confirm data integrity in production.
 
@@ -394,6 +547,8 @@ Audit checklist:
 
 ## Definition of Done
 
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §4 — Cross-Cutting Concerns checklist and §6 — Dependency Management Rules.
+
 - [ ] Schema mapping table covers 100% of legacy tables (including decisions to archive/drop)
 - [ ] Data cleansing scripts documented and reviewed
 - [ ] Schema migration scripts committed and applied successfully on staging
@@ -401,6 +556,8 @@ Audit checklist:
 - [ ] Pre- and post-migration validation queries produce matching counts and checksums
 - [ ] Reconciliation report signed off by DBA and Product Owner
 - [ ] Cutover procedure checklist complete and rehearsed on staging
+- [ ] PII column inventory documented; masking scripts written, reviewed, and run automatically in non-prod pipeline
+- [ ] Privacy/compliance team sign-off obtained before first non-prod data load
 - [ ] Rollback playbook written and tested (rehearsed on staging)
 - [ ] Post-migration audit checklist completed after stabilization period
 - [ ] All migration artifacts committed to `ai-driven-development/development/data_migration/`

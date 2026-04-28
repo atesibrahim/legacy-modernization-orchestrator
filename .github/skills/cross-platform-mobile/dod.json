@@ -1,0 +1,92 @@
+{
+  "skill": "cross-platform-mobile",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "CROS-01",
+      "description": "Lint zero warnings (flutter_lints / ESLint-airbnb-typescript)",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-02",
+      "description": "Clean architecture layers respected (domain has zero framework/platform imports)",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-03",
+      "description": "All repositories behind interfaces (mockable in tests)",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-04",
+      "description": "All screens implemented matching wireframes from Phase 4a",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-05",
+      "description": "All API integrations complete and tested against real backend",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-06",
+      "description": "Auth flow (login, token refresh, logout) working end-to-end on both platforms",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-07",
+      "description": "Tokens stored only in secure storage (flutter_secure_storage / react-native-keychain)",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-08",
+      "description": "No secrets or API keys committed to version control",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-09",
+      "description": "Certificate pinning configured for production API calls (if required by security policy)",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-10",
+      "description": "Dependency scan passes (OWASP / `npm audit` / `flutter pub audit`) — zero CVSS ≥ 7",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-11",
+      "description": "60fps scroll on mid-range device (Flutter Release / Hermes-enabled RN) — verified in profiler",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-12",
+      "description": "App cold start < 3 seconds on mid-range device",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-13",
+      "description": "Line coverage ≥ 70%",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-14",
+      "description": "E2E / integration test covers login → primary user journey on both iOS and Android",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-15",
+      "description": "Builds produced for both iOS and Android without errors",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-16",
+      "description": "Signing configured; TestFlight / Play internal track upload succeeds",
+      "verifier": "manual"
+    },
+    {
+      "id": "CROS-17",
+      "description": "All config externalized via environment flavors / `eas.json` — no hardcoded URLs",
+      "verifier": "manual"
+    }
+  ]
+}

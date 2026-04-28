@@ -1,0 +1,53 @@
+{
+  "skill": "final-validation",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "FV-01",
+      "description": "All Phase 5 comparison report ❌ Missing items resolved or formally accepted",
+      "verifier": "manual"
+    },
+    {
+      "id": "FV-02",
+      "description": "UAT completed with product owner sign-off",
+      "verifier": "manual"
+    },
+    {
+      "id": "FV-03",
+      "description": "Performance regression table complete — zero blocking regressions (or accepted with written sign-off)",
+      "verifier": "manual"
+    },
+    {
+      "id": "FV-04",
+      "description": "Security gate passed — zero critical/high open findings",
+      "verifier": "manual"
+    },
+    {
+      "id": "FV-05",
+      "description": "Rollback plan tested in staging and duration within RTO",
+      "verifier": "manual"
+    },
+    {
+      "id": "FV-06",
+      "description": "All observability checklist items ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "FV-07",
+      "description": "Smoke test plan written with owner assigned",
+      "verifier": "manual"
+    },
+    {
+      "id": "FV-08",
+      "description": "Go/No-Go decision document produced with stakeholder signatures",
+      "verifier": "manual"
+    },
+    {
+      "id": "FV-09",
+      "description": "`release_readiness_checklist.md`, `go_no_go_decision.md`, `smoke_test_plan.md` all written to `ai-driven-development/docs/final_validation/`",
+      "verifier": "glob",
+      "glob": "ai-driven-development/docs/final_validation/"
+    }
+  ]
+}

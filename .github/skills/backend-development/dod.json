@@ -1,0 +1,107 @@
+{
+  "skill": "backend-development",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "BE-01",
+      "description": "Clean architecture layers enforced (no framework in domain)",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-02",
+      "description": "No critical SonarQube/SpotBugs issues",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-03",
+      "description": "All `TODO` comments resolved",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-04",
+      "description": "Code review completed by 1 senior developer",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-05",
+      "description": "All business use cases implemented and tested",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-06",
+      "description": "API contracts match OpenAPI spec exactly",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-07",
+      "description": "Authentication working (configured auth provider)",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-08",
+      "description": "Authorization enforced at method level on all endpoints",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-09",
+      "description": "No hardcoded secrets, passwords, or API keys",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-10",
+      "description": "OWASP CVSS 7+ dependencies resolved",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-11",
+      "description": "Key endpoints meet SLA (P95 < 200ms under expected load)",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-12",
+      "description": "No N+1 queries in ORM layer",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-13",
+      "description": "Unit test coverage ≥ 70%",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-14",
+      "description": "Integration tests cover all critical flows including security",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-15",
+      "description": "Logs structured (JSON in prod), correlation IDs included",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-16",
+      "description": "Metrics scrape endpoint available _(Java: `/actuator/prometheus`; .NET: `/metrics`; Python: `/metrics`; Go: `/metrics` — see Tier-2 skill for exact route)_",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-17",
+      "description": "Errors fully traceable via trace ID",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-18",
+      "description": "Runs in Docker (non-root user, minimal image)",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-19",
+      "description": "All config externalized via environment variables",
+      "verifier": "manual"
+    },
+    {
+      "id": "BE-20",
+      "description": "Readiness and liveness probes configured",
+      "verifier": "manual"
+    }
+  ]
+}

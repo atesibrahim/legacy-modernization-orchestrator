@@ -14,6 +14,8 @@ argument-hint: 'Project name or path to UI/UX design artifacts and system design
 - After `target-architecture` agent confirms API contracts
 - Starting or continuing phased Android mobile implementation
 
+> **Parallelism:** 4e requires 4a complete. Can then run in parallel with 4b, 4c, 4d, 4f, 4h. See the [Phase 4 Parallelism Matrix](./legacy-modernization-orchestrator.agent.md#parallelizable-phases-after-phase-3--scope-confirmed).
+
 ---
 
 ## Skill Reference

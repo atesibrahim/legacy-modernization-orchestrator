@@ -2,11 +2,17 @@
 name: legacy-architecture
 description: 'Legacy system architecture visualization and design skill. Act as a senior master architect. Use when: visualizing legacy architecture, creating system diagrams for legacy systems, understanding legacy component relationships, mapping legacy data flows, identifying architectural weaknesses, producing mermaid diagrams in HTML format, documenting legacy architectural constraints before redesign.'
 argument-hint: 'Legacy system name or path to analysis report to base diagrams from'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Legacy System Design & Visualization
 
-# Instructions
+## Role
+**Senior Master Architect** — Reconstruct and visually document the legacy architecture with precision. Produce diagrams that make even the most chaotic legacy systems understandable.
+
+## Instructions
 
 1. Read the - `legacy_architecture.html` and `legacy_architecture.md` files after created to ensure they are correctly generated and contain the required diagrams and documentation. If the HTML file is not rendering diagrams correctly, check for common Mermaid syntax issues (unclosed blocks, reserved keywords in node IDs, etc.) and regenerate the file if needed.
 2. **Run validation** on the generated HTML file using the File Creation Validation Checklist from [STANDARDS.md](./STANDARDS.md) before proceeding. This ensures the diagrams will render correctly and are not broken due to syntax errors or file generation issues.
@@ -16,9 +22,6 @@ argument-hint: 'Legacy system name or path to analysis report to base diagrams f
 4. **Fix the issues** automatically (invalid diagrams have no value)
 5. **Re-validate** to confirm the fix worked
 6. Repeat steps 4-5 until there are no validation issues
-
-## Role
-**Senior Master Architect** — Reconstruct and visually document the legacy architecture with precision. Produce diagrams that make even the most chaotic legacy systems understandable.
 
 ## When to Use
 - After completing legacy analysis (`legacy-analysis` skill)
@@ -39,7 +42,7 @@ Create folder `ai-driven-development/docs/legacy_architecture/` and produce:
 - `legacy_architecture.md` — Architecture documentation
 - `legacy_architecture.html` — Interactive visual diagrams (Mermaid.js)
 
-> ⚠️ **Always overwrite these files completely** — never append. Use `create_file` or write the full content from scratch. Appending produces two HTML documents in one file, which breaks rendering.
+> ⚠️ **Always overwrite these files completely** — never append. Use the active runtime's file-writing mechanism to write the full content from scratch. Appending produces two HTML documents in one file, which breaks rendering.
 
 ---
 
@@ -68,6 +71,22 @@ Map how components communicate:
 - **Asynchronous**: JMS, MQ, file-based messaging
 - **Database coupling**: Multiple services writing to same tables
 - **Event-driven**: Any pub/sub or callback patterns
+
+#### External Dependency Criticality Matrix
+
+For every external integration identified (third-party APIs, SaaS, on-prem services, partner feeds), populate the following matrix. This feeds Phase 3 resilience and fallback decisions.
+
+| Dependency | Protocol | Direction | RTO Impact | Replacement Cost | SPoF? | Notes |
+|---|---|---|---|---|---|---|
+| _e.g. Payment Gateway_ | _HTTPS REST_ | _outbound_ | _High — blocks checkout_ | _High (bespoke contract)_ | _Yes_ | _No circuit-breaker today_ |
+| _e.g. SMTP Relay_ | _SMTP_ | _outbound_ | _Low — async email_ | _Low (commodity)_ | _No_ | _Could switch to SES_ |
+
+**Column definitions:**
+- **RTO Impact** — `High` (system unusable without it) / `Medium` (degraded) / `Low` (cosmetic / async)
+- **Replacement Cost** — `High` (bespoke integration, data-lock-in) / `Medium` / `Low` (commodity/substitutable)
+- **SPoF?** — `Yes` if no fallback exists and failure propagates to users
+
+Flag any dependency with both `RTO Impact = High` **and** `SPoF? = Yes` as a **critical integration risk** — these become mandatory inputs to Phase 3 target architecture resilience patterns (circuit breaker, bulkhead, async fallback).
 
 ### Step 4 — Generate Visual Diagrams (HTML + Mermaid.js)
 Produce all diagrams as an HTML file with embedded Mermaid.js.
@@ -145,7 +164,7 @@ Key checks for this skill's output:
 - No `\n` inside quoted node labels — use `<br/>` for multi-line labels
 - Node IDs contain no spaces or reserved keywords (`end`, `subgraph`)
 
-If the file is missing or any check fails, **regenerate the entire file** from scratch using `create_file`. Do not attempt to patch individual lines.
+If the file is missing or any check fails, **regenerate the entire file** from scratch using the active runtime's file-writing mechanism. Do not attempt to patch individual lines.
 
 ### Step 5 — Identify Architectural Weaknesses
 Document at least 3 critical weaknesses:
@@ -191,6 +210,8 @@ Full Mermaid.js HTML file containing all diagrams from Step 4 above, customized 
 ---
 
 ## Definition of Done (DoD)
+
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §3 — Phase 2 quality gates.
 
 ### Diagrams
 - [ ] High-level architecture diagram (system boundary clearly shown)

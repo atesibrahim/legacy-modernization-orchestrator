@@ -2,6 +2,9 @@
 name: ui-ux-design
 description: 'UI/UX design skill for legacy system redesign. Act as a senior master UI/UX developer. Use when: designing user interfaces for modernized application, creating wireframes mockups design systems, defining user journeys for web React and mobile iOS Android, applying WCAG accessibility standards, building responsive mobile-first design, producing HTML design previews, creating component design system tokens typography colors.'
 argument-hint: 'Application name and list of primary user roles or workflows to design for'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # UI/UX Design for Redesign
@@ -243,8 +246,15 @@ For each component in the design system, define the prop API contract that devel
 
 Produce a component prop API definition for every component in the design system inventory. Save to `ai-driven-development/docs/ui_design/component_api.md`.
 
-#### 8.3 — Storybook Story Stubs
-For each component, provide a Storybook story stub that developers can fill in:
+#### 8.3 — Developer Handoff Stubs
+
+Produce handoff stubs for **every confirmed client target** (read from `tech_stack_selections.md`). Only generate the paths applicable to the confirmed scope.
+
+---
+
+**8.3a — Web Frontend (React / Vue / Angular / Svelte): Storybook Story Stubs**
+
+For each component, provide a Storybook story stub that developers can fill in. Save to `ai-driven-development/docs/ui_design/storybook_stubs/`.
 
 ```typescript
 // src/components/Button/Button.stories.tsx
@@ -268,7 +278,76 @@ export const Disabled: Story = { args: { label: 'Disabled', disabled: true } };
 export const Loading: Story = { args: { label: 'Saving...', loading: true } };
 ```
 
-Save stubs to `ai-driven-development/docs/ui_design/storybook_stubs/`.
+Also produce a token export file (`ai-driven-development/docs/ui_design/tokens_web.css`) with CSS custom properties generated from `tokens.json`.
+
+---
+
+**8.3b — iOS (SwiftUI): PreviewProvider Stubs**
+
+For each component, produce a `PreviewProvider` stub. Save to `ai-driven-development/docs/ui_design/ios_previews/`.
+
+```swift
+// Previews/ButtonPreviews.swift
+import SwiftUI
+
+struct AppButton_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            AppButton(label: "Click me", style: .primary, action: {})
+                .previewDisplayName("Primary")
+            AppButton(label: "Disabled", style: .primary, action: {})
+                .disabled(true)
+                .previewDisplayName("Disabled")
+            AppButton(label: "Saving...", style: .primary, isLoading: true, action: {})
+                .previewDisplayName("Loading")
+        }
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
+}
+```
+
+Also produce `ai-driven-development/docs/ui_design/tokens_ios.swift` — a Swift color/typography token file generated from `tokens.json` using the `Color(red:green:blue:)` initialiser, ready to drop into `Assets.xcassets` or a `DesignTokens.swift` helper.
+
+---
+
+**8.3c — Android (Jetpack Compose): @Preview Stubs**
+
+For each component, produce `@Preview` annotated composable stubs. Save to `ai-driven-development/docs/ui_design/android_previews/`.
+
+```kotlin
+// previews/ButtonPreview.kt
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+
+@Preview(showBackground = true, name = "Primary")
+@Composable
+fun AppButtonPrimaryPreview() {
+    AppTheme {
+        AppButton(label = "Click me", style = ButtonStyle.Primary, onClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "Disabled")
+@Composable
+fun AppButtonDisabledPreview() {
+    AppTheme {
+        AppButton(label = "Disabled", style = ButtonStyle.Primary, enabled = false, onClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "Loading")
+@Composable
+fun AppButtonLoadingPreview() {
+    AppTheme {
+        AppButton(label = "Saving...", style = ButtonStyle.Primary, isLoading = true, onClick = {})
+    }
+}
+```
+
+Also produce `ai-driven-development/docs/ui_design/tokens_android/`:
+- `Color.kt` — Material 3 color tokens generated from `tokens.json`
+- `Theme.kt` — `MaterialTheme` wrapper binding the color and typography tokens
 
 #### 8.4 — Design Implementation Checklist
 Produce `ai-driven-development/docs/ui_design/design-implementation-checklist.md`:
@@ -305,6 +384,8 @@ Produce `ai-driven-development/docs/ui_design/design-implementation-checklist.md
 
 ## Definition of Done (DoD)
 
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §3 — Phase 4c/4d/4e quality gates and §4 — Cross-Cutting Concerns checklist (security and accessibility).
+
 ### UX Quality
 - [ ] User journeys cover all primary use cases identified in analysis
 - [ ] Friction points from legacy UI explicitly addressed
@@ -338,4 +419,10 @@ Produce `ai-driven-development/docs/ui_design/design-implementation-checklist.md
 ---
 
 ## Next Skill
-Proceed to [`frontend-development`](../frontend-development/SKILL.md) to implement the design system and screens. Run in parallel with [`backend-development`](../backend-development/SKILL.md).
+Proceed to the client implementation skill(s) matching the confirmed scope in `tech_stack_selections.md`. All client skills can run in parallel with each other and with [`backend-development`](../backend-development/SKILL.md):
+
+| Confirmed target | Next skill |
+|---|---|
+| Web frontend (React / Vue / Angular / Svelte) | [`frontend-development`](../frontend-development/SKILL.md) |
+| iOS | [`ios-development`](../ios-development/SKILL.md) |
+| Android | [`android-development`](../android-development/SKILL.md) |

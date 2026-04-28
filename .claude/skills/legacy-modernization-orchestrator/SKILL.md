@@ -1,6 +1,6 @@
 ---
 name: legacy-modernization-orchestrator
-description: "Master orchestrator for complete end-to-end legacy system modernization from analysis to go-live. Trigger phrases: "modernize legacy system", "full legacy redesign", "end-to-end modernization project", "start legacy modernization workflow", "run all modernization phases", "orchestrate full redesign from legacy to production-ready", "legacy system transformation". Executes phases in strict order with DoD gates: Phase 1 (analysis) → Phase 2 (legacy diagrams) → Phase 2.5 (tech stack selection) → Phase 3 (target architecture) → Phase 4a–4g (optional parallel: UI/UX, backend, frontend, iOS, Android, data migration, security review) → Phase 5 (comparison) → Phase 6 (final validation + go/no-go). Use standalone sub-agents (legacy-analysis, target-architecture, etc.) when you only need a single phase, not the full workflow."
+description: "Master orchestrator agent for end-to-end legacy system modernization. Use when: starting a full legacy modernization project, orchestrating all redesign phases in order, running the complete legacy modernization workflow, validating phase completion before proceeding, coordinating analysis design development comparison phases. Development targets (backend, web frontend, iOS, Android) are optional and selected per project scope. Invokes other redesign agents in sequence with DoD gates."
 argument-hint: Legacy project path or name to begin full end-to-end redesign workflow
 ---
 

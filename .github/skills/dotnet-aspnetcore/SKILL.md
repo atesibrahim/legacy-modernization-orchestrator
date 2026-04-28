@@ -2,6 +2,9 @@
 name: dotnet-aspnetcore
 description: '.NET 9 + ASP.NET Core backend — clean/hexagonal architecture, EF Core, Serilog, xUnit, Testcontainers.NET, MSBuild, Dockerfile. Apply when tech_stack_selections.md confirms .NET + ASP.NET Core as the backend stack.'
 argument-hint: 'Project name or path to system design artifacts to base backend implementation on'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # .NET 9 + ASP.NET Core — Backend Implementation
@@ -9,6 +12,20 @@ argument-hint: 'Project name or path to system design artifacts to base backend 
 > These are the .NET-specific implementation steps that complement [`backend-development/SKILL.md`](../backend-development/SKILL.md). Apply these when `tech_stack_selections.md` confirms `.NET + ASP.NET Core` as the backend stack.
 
 See also: [`STANDARDS.md`](./STANDARDS.md) for .NET-specific architecture rules, project folder structure, and Docker image template.
+
+## Role
+**Senior .NET / ASP.NET Core Backend Engineer** — Implement a production-ready, clean/hexagonal architecture backend using .NET 9 and ASP.NET Core, following all standards in `core.md` and `backend-development/STANDARDS.md`.
+
+## Prerequisites (Preflight)
+Before starting, verify the following artifacts exist:
+
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| Tech stack selections | `ai-driven-development/docs/tech_stack_selections.md` | Always — must confirm `.NET + ASP.NET Core` |
+| Target architecture | `ai-driven-development/docs/target_architecture/target_architecture.md` | Always |
+| Backend todo tracker | `ai-driven-development/development/backend_development/be_development_todo.md` | If continuing an in-progress phase |
+
+**If any required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 2.5: Tech Stack Selection, Phase 3: `target-architecture`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
 ---
 
@@ -36,7 +53,7 @@ See also: [`STANDARDS.md`](./STANDARDS.md) for .NET-specific architecture rules,
 ### Web Layer
 
 - **DTOs with FluentValidation** or `DataAnnotations` — never expose EF Core entities over the API.
-- **Problem Details** (`IProblemDetailsService`) for RFC 7807 error responses.
+- **Problem Details** (`IProblemDetailsService`) for RFC 9457 error responses — shape defined in `core.md §10`.
 - **Minimal API** endpoint grouping with `MapGroup` and typed `TypedResults`.
 
 ### Data Layer
@@ -102,8 +119,8 @@ See also: [`STANDARDS.md`](./STANDARDS.md) for .NET-specific architecture rules,
 |---|---|
 | API | `Microsoft.AspNetCore.OpenApi`, `Swashbuckle.AspNetCore`, `Serilog.AspNetCore`, `FluentValidation.AspNetCore` |
 | Application | `MediatR`, `FluentValidation`, `AutoMapper` |
-| Infrastructure | `Microsoft.EntityFrameworkCore`, `Npgsql.EntityFrameworkCore.PostgreSQL`, `Microsoft.EntityFrameworkCore.Design` |
-| Tests | `xunit`, `Moq`, `FluentAssertions`, `Testcontainers.PostgreSql`, `Microsoft.AspNetCore.Mvc.Testing` |
+| Infrastructure | `Microsoft.EntityFrameworkCore`, `<<EF Core DB provider from tech_stack_selections.md>>` (e.g. `Npgsql.EntityFrameworkCore.PostgreSQL` for PostgreSQL, `Microsoft.EntityFrameworkCore.SqlServer` for MSSQL, `Oracle.EntityFrameworkCore` for Oracle), `Microsoft.EntityFrameworkCore.Design` |
+| Tests | `xunit`, `Moq`, `FluentAssertions`, `<<Testcontainers DB module from tech_stack_selections.md>>` (e.g. `Testcontainers.PostgreSql`, `Testcontainers.MsSql`, `Testcontainers.Oracle`), `Microsoft.AspNetCore.Mvc.Testing` |
 
 **Configuration files**:
 - `appsettings.json` — common config (no secrets)
@@ -206,8 +223,12 @@ builder.Host.UseSerilog((ctx, lc) => lc
 **Health checks**:
 ```csharp
 builder.Services.AddHealthChecks()
-    .AddNpgSql(connectionString, name: "postgres")
-    .AddRedis(redisConnection, name: "redis");
+    // Add the DB health check that matches tech_stack_selections.md:
+    // PostgreSQL:  .AddNpgSql(connectionString, name: "postgres")
+    // MSSQL:       .AddSqlServer(connectionString, name: "sqlserver")
+    // Oracle:      .AddOracle(connectionString, name: "oracle")
+    // MongoDB:     .AddMongoDb(connectionString, name: "mongodb")
+    .AddRedis(redisConnection, name: "redis"); // remove if Redis not in stack
 app.MapHealthChecks("/health");
 app.MapHealthChecks("/health/ready", new() { Predicate = r => r.Tags.Contains("ready") });
 ```
@@ -220,3 +241,35 @@ app.MapHealthChecks("/health/ready", new() { Predicate = r => r.Tags.Contains("r
 - **Dependency security**: `dotnet list package --vulnerable` (MSBuild audit) + Trivy image scan — fail on CVSS ≥ 7.
 - **Static analysis**: `dotnet-format` + `Roslynator` analyzer set.
 - **Mutation testing**: Stryker.NET (`dotnet stryker`) — mutation score ≥ 60%.
+
+---
+
+## Definition of Done (DoD)
+
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §2 — Common Anti-Patterns (§2.4 Anemic Domain Model, §2.7 N+1 Query) and §7 — Code Review Checklist.
+
+### Inherited from `backend-development`
+All DoD items in [`backend-development/SKILL.md`](../backend-development/SKILL.md) must be ✅ before this DoD is evaluated.
+
+### Additional DoD — .NET / ASP.NET Core
+
+#### Build & Quality
+- [ ] `dotnet build` completes with zero errors and zero warnings (`<TreatWarningsAsErrors>true</TreatWarningsAsErrors>`)
+- [ ] `dotnet format --verify-no-changes` exits clean
+- [ ] `dotnet test` passes with line coverage ≥ 70% (Cobertura report via `coverlet`)
+
+#### Static Analysis
+- [ ] Roslynator analyzer set reports zero warnings in CI
+- [ ] Stryker.NET mutation score ≥ 60% (if configured)
+
+#### Security
+- [ ] `dotnet list package --vulnerable` reports zero vulnerable packages
+- [ ] Trivy image scan passes — zero CVSS ≥ 7 vulnerabilities in the published image
+
+#### Runtime Correctness
+- [ ] `/health` returns `{"status":"Healthy"}` in local run
+- [ ] `/metrics` returns Prometheus-format metrics
+- [ ] `dotnet publish` produces a self-contained runnable artifact or Docker image
+
+#### Next Skill
+When all items above are ✅, proceed to [`compare-legacy-to-new`](../compare-legacy-to-new/SKILL.md) (Phase 5).

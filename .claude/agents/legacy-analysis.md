@@ -1,6 +1,6 @@
 ---
 name: legacy-analysis
-description: "Run first in any modernization project. Use when: analysing a legacy codebase, reverse engineering legacy architecture, finding technical debt, mapping business flows, detecting hidden dependencies, assessing legacy security posture, inventorying database schema / stored procedures / triggers / tables, producing table ownership matrix, data quality assessment, UI screen inventory before any redesign or migration. Produces legacy_analyse.md. Required by all subsequent phases."
+description: "Legacy system analysis agent. Act as a senior expert technical analyst. Use when: analysing legacy codebase, reverse engineering legacy architecture, identifying technical debt, mapping business flows, detecting hidden dependencies, assessing security posture, database schema reverse engineering, stored procedures and triggers inventory, table ownership matrix, data quality assessment, creating legacy architecture reports, risk matrix, data and integration maps before any redesign or migration project."
 tools:
   - Read
   - Write

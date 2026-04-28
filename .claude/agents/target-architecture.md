@@ -1,6 +1,6 @@
 ---
 name: target-architecture
-description: "Use when: designing the new modern system architecture, creating target state design, applying Clean/Hexagonal/DDD/microservices patterns, defining service boundaries and bounded contexts, API-first design, producing Mermaid architecture diagrams. NOT for legacy system documentation. Requires legacy-analysis + legacy-architecture + tech stack confirmed in Phase 2.5."
+description: "Target system architecture design agent for legacy modernization. Act as a senior expert architect. Use when: designing new modern system architecture, creating target state architecture, applying clean architecture hexagonal DDD microservices patterns, defining service boundaries bounded contexts API-first design, producing mermaid architecture diagrams in HTML, tech stack user-selected: Java/.NET/Python/Go backend, React/Vue/Angular/Svelte frontend, Kotlin mobile."
 tools:
   - Read
   - Write

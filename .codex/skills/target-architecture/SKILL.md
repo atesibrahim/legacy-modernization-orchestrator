@@ -1,6 +1,6 @@
 ---
 name: target-architecture
-description: 'Modern target system architecture design using Clean / Hexagonal / DDD patterns. Trigger phrases: "design modern replacement system", "create target architecture", "define bounded contexts", "design microservices", "API-first architecture design", "produce architecture diagrams for new system", "define service boundaries". Tech stack: Java Spring Boot / .NET ASP.NET Core / Python FastAPI / Go Gin-Fiber backend; React / Vue / Angular / Svelte frontend; Kotlin mobile. Outputs: target_architecture.md + target_architecture.html with architecture diagrams and ADRs. NOT for legacy system documentation — use legacy-analysis and legacy-architecture for that. Requires legacy-analysis + legacy-architecture + tech_stack_selections.md to exist.'
+description: "Target system architecture design skill for legacy modernization. Act as a senior master architect. Use when: designing new modern system architecture, creating target state architecture, applying clean architecture hexagonal DDD microservices patterns, defining service boundaries bounded contexts API-first design, producing mermaid architecture diagrams in HTML, tech stack user-selected: Java/.NET/Python/Go backend, React/Vue/Angular/Svelte frontend, Kotlin mobile."
 argument-hint: 'Project name or path to legacy analysis and legacy design artifacts'
 ---
 

@@ -2,6 +2,9 @@
 name: python-fastapi
 description: 'Python 3.12 + FastAPI backend — clean/hexagonal architecture, SQLAlchemy 2, Alembic, Pydantic v2, pytest-asyncio, structlog, pyproject.toml. Apply when tech_stack_selections.md confirms Python + FastAPI as the backend stack.'
 argument-hint: 'Project name or path to system design artifacts to base backend implementation on'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Python 3.12 + FastAPI — Backend Implementation
@@ -9,6 +12,20 @@ argument-hint: 'Project name or path to system design artifacts to base backend 
 > These are the Python-specific implementation steps that complement [`backend-development/SKILL.md`](../backend-development/SKILL.md). Apply these when `tech_stack_selections.md` confirms `Python + FastAPI` as the backend stack.
 
 See also: [`STANDARDS.md`](./STANDARDS.md) for Python-specific architecture rules, project folder structure, and Docker image template.
+
+## Role
+**Senior Python / FastAPI Backend Engineer** — Implement a production-ready, clean/hexagonal architecture backend using Python 3.12 and FastAPI, following all standards in `core.md` and `backend-development/STANDARDS.md`.
+
+## Prerequisites (Preflight)
+Before starting, verify the following artifacts exist:
+
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| Tech stack selections | `ai-driven-development/docs/tech_stack_selections.md` | Always — must confirm `Python + FastAPI` |
+| Target architecture | `ai-driven-development/docs/target_architecture/target_architecture.md` | Always |
+| Backend todo tracker | `ai-driven-development/development/backend_development/be_development_todo.md` | If continuing an in-progress phase |
+
+**If any required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 2.5: Tech Stack Selection, Phase 3: `target-architecture`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
 ---
 
@@ -57,7 +74,7 @@ See also: [`STANDARDS.md`](./STANDARDS.md) for Python-specific architecture rule
 
 - **`pytest`** + **`pytest-asyncio`** — all tests `async def`.
 - **`httpx.AsyncClient`** with `ASGITransport` for integration tests — no live server.
-- **Testcontainers** (`testcontainers-python`) for real PostgreSQL/Redis in integration tests.
+- **Testcontainers** (`testcontainers-python`) for real DB/Redis in integration tests (module chosen from `tech_stack_selections.md`).
 - **`factory_boy`** for test data factories.
 - Coverage via `pytest-cov` — target ≥ 70%.
 
@@ -84,7 +101,12 @@ dependencies = [
     "pydantic>=2.9",
     "pydantic-settings>=2.6",
     "sqlalchemy[asyncio]>=2.0",
-    "asyncpg>=0.30",
+    # DB async driver — choose from tech_stack_selections.md:
+    # PostgreSQL: "asyncpg>=0.30"
+    # MySQL/MariaDB: "aiomysql>=0.2"
+    # MSSQL: "aioodbc>=0.5" (or pyodbc for sync)
+    # SQLite (dev only): built-in via aiosqlite
+    "asyncpg>=0.30",  # replace with chosen driver
     "alembic>=1.14",
     "structlog>=24.4",
     "python-jose[cryptography]>=3.3",
@@ -99,7 +121,11 @@ dev = [
     "pytest-cov>=6.0",
     "httpx>=0.27",
     "factory-boy>=3.3",
-    "testcontainers[postgres]>=4.8",
+    # Testcontainers DB module — choose from tech_stack_selections.md:
+    # PostgreSQL: "testcontainers[postgres]>=4.8"
+    # MySQL:      "testcontainers[mysql]>=4.8"
+    # MSSQL:      "testcontainers[mssql]>=4.8"
+    "testcontainers[postgres]>=4.8",  # replace with chosen DB module
     "mypy>=1.13",
     "ruff>=0.7",
 ]
@@ -216,7 +242,7 @@ app.add_middleware(
 
 ## Phase 9 — Integrations (Python)
 
-- **Scheduling**: `APScheduler` with `AsyncIOScheduler` and a persistent job store (PostgreSQL), or `Celery Beat` for task queues.
+- **Scheduling**: `APScheduler` with `AsyncIOScheduler` and a persistent job store (DB driver from `tech_stack_selections.md` — e.g. PostgreSQL, MSSQL), or `Celery Beat` for task queues.
 - **Task queue**: `Celery` with Redis or RabbitMQ broker; `arq` for simpler async background jobs.
 - **Email**: `fastapi-mail` with `aiosmtplib`.
 - **HTTP clients**: `httpx.AsyncClient` (never `requests` in async code) — use as a context manager.
@@ -265,3 +291,34 @@ async def readiness(db: AsyncSession = Depends(get_db)) -> dict:
 - **Linting / formatting**: `ruff check . --fix` + `ruff format .` — zero warnings allowed in CI.
 - **Type checking**: `mypy src/ --strict` or `pyright` — zero errors in CI.
 - **Alembic**: `alembic check` — fail CI if there are unapplied model changes without a migration.
+
+---
+
+## Definition of Done (DoD)
+
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §2 — Common Anti-Patterns (§2.4 Anemic Domain Model, §2.7 N+1 Query) and §7 — Code Review Checklist.
+
+### Inherited from `backend-development`
+All DoD items in [`backend-development/SKILL.md`](../backend-development/SKILL.md) must be ✅ before this DoD is evaluated.
+
+### Additional DoD — Python / FastAPI
+
+#### Build & Quality
+- [ ] `ruff check .` exits with zero warnings (CI fails on any lint error)
+- [ ] `ruff format --check .` exits clean
+- [ ] `mypy src/ --strict` exits with zero type errors
+- [ ] `pytest --cov=src --cov-fail-under=70` passes
+
+#### Migrations
+- [ ] `alembic check` exits clean — no unapplied model changes without a migration script
+
+#### Security
+- [ ] `pip-audit` reports zero packages with CVSS ≥ 7
+
+#### Runtime Correctness
+- [ ] `/health/live` returns `{"status":"ok"}` in local run
+- [ ] `/health/ready` returns `{"status":"ok"}` (DB connectivity confirmed)
+- [ ] `/metrics` returns Prometheus-format metrics
+
+#### Next Skill
+When all items above are ✅, proceed to [`compare-legacy-to-new`](../compare-legacy-to-new/SKILL.md) (Phase 5).

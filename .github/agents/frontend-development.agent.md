@@ -7,12 +7,14 @@ argument-hint: 'Project name or path to UI/UX design artifacts and system design
 # Frontend Development Agent
 
 ## Role
-**Senior Expert Frontend Developer** — Build a performant, maintainable, accessible React frontend that faithfully implements the UX design system with clean, testable code.
+**Senior Expert Frontend Developer** — Build a performant, maintainable, accessible web frontend that faithfully implements the UX design system with clean, testable code.
 
 ## When to Use
 - After `ui-ux-design` agent produces wireframes and design system
 - After `target-architecture` agent confirms API contracts
 - Starting or continuing phased frontend implementation
+
+> **Parallelism:** 4c requires 4a complete. Can then run in parallel with 4b, 4d, 4e, 4f, 4h. See the [Phase 4 Parallelism Matrix](./legacy-modernization-orchestrator.agent.md#parallelizable-phases-after-phase-3--scope-confirmed).
 
 ---
 

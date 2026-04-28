@@ -2,6 +2,9 @@
 name: android-development
 description: 'Android mobile development skill for legacy modernization. Act as a senior expert Android developer. Use when: building Kotlin Jetpack Compose Android mobile app, implementing MVVM Clean Architecture, Kotlin Coroutines Flow, EncryptedSharedPreferences Keystore token storage, Retrofit OkHttp networking, Room local persistence, push notifications FCM, deep linking, unit testing JUnit Mockk Turbine, UI testing Espresso Compose, Play Store deployment, phased Android development plan.'
 argument-hint: 'Project name or path to UI/UX design artifacts and system design to implement'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Android Development
@@ -27,6 +30,7 @@ Before starting, verify the following artifacts exist:
 
 ## Output Location
 Create folder `ai-driven-development/development/mobile_development/android/{project_name}` — all Android code here.
+- `ai-driven-development/development/mobile_development/android/android_development_todo.md` — phase tracker with all Android phases checked off as they complete.
 
 ---
 
@@ -227,7 +231,7 @@ Before writing any code, add the Android phase checklist from [STANDARDS.md](./S
            .build()
    ```
 
-3. **TokenManager** (`core/security/TokenManager.kt`) — EncryptedSharedPreferences:
+4. **TokenManager** (`core/security/TokenManager.kt`) — EncryptedSharedPreferences:
    ```kotlin
    class TokenManager @Inject constructor(@ApplicationContext context: Context) {
        private val prefs = EncryptedSharedPreferences.create(
@@ -242,7 +246,7 @@ Before writing any code, add the Android phase checklist from [STANDARDS.md](./S
    }
    ```
 
-4. **Result sealed class** (`core/network/Result.kt`):
+5. **Result sealed class** (`core/network/Result.kt`):
    ```kotlin
    sealed class Result<out T> {
        data class Success<T>(val data: T) : Result<T>()
@@ -251,9 +255,9 @@ Before writing any code, add the Android phase checklist from [STANDARDS.md](./S
    }
    ```
 
-5. **AuthRepository + LoginUseCase**
+6. **AuthRepository + LoginUseCase**
 
-6. **AuthViewModel** with `StateFlow<AuthUiState>`:
+7. **AuthViewModel** with `StateFlow<AuthUiState>`:
    ```kotlin
    @HiltViewModel
    class AuthViewModel @Inject constructor(
@@ -274,7 +278,7 @@ Before writing any code, add the Android phase checklist from [STANDARDS.md](./S
    }
    ```
 
-7. **Login Screen** — implement per wireframe from `ui_ux_pages.html`
+8. **Login Screen** — implement per wireframe from `ui_ux_pages.html`
 
 8. **Navigation guard** `NavGraph`:
    - Unauthenticated routes: `auth/login`
@@ -578,6 +582,8 @@ Implement Android platform extension features for the project. Skip any item not
 ---
 
 ## Definition of Done (DoD)
+
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §3 — Phase 4e quality gates, §4 — Cross-Cutting Concerns checklist, and §7 — Code Review Checklist.
 
 ### Code Quality
 - [ ] Detekt and Ktlint zero violations

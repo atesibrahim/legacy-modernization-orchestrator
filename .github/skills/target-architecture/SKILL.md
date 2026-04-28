@@ -2,6 +2,9 @@
 name: target-architecture
 description: 'Target system architecture design skill for legacy modernization. Act as a senior master architect. Use when: designing new modern system architecture, creating target state architecture, applying clean architecture hexagonal DDD microservices patterns, defining service boundaries bounded contexts API-first design, producing mermaid architecture diagrams in HTML, tech stack user-selected: Java/.NET/Python/Go backend, React/Vue/Angular/Svelte frontend, Kotlin mobile.'
 argument-hint: 'Project name or path to legacy analysis and legacy design artifacts'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Target System Design
@@ -19,7 +22,7 @@ Before starting, verify the following artifacts exist:
 
 | Artifact | Expected Path | Required? |
 |---|---|---|
-| Legacy analysis report | `ai-driven-development/docs/analysing/legacy_analysis.md` | Always |
+| Legacy analysis report | `ai-driven-development/docs/legacy_analysis/legacy_analysis.md` | Always |
 | Legacy architecture report | `ai-driven-development/docs/legacy_architecture/legacy_architecture.md` | Always |
 | Tech stack selections | `ai-driven-development/docs/tech_stack_selections.md` | Always |
 
@@ -32,23 +35,13 @@ Create in folder `ai-driven-development/docs/target_architecture/` and produce:
 - `target_architecture.md` — Target architecture documentation
 - `target_architecture.html` — Interactive visual diagrams (Mermaid.js)
 
-> ⚠️ **Always overwrite these files completely** — never append. Use `create_file` or write the full content from scratch. Appending produces two HTML documents in one file, which breaks rendering.
+> ⚠️ **Always overwrite these files completely** — never append. Use the active runtime's file-writing mechanism to write the full content from scratch. Appending produces two HTML documents in one file, which breaks rendering.
 
 ---
 
 ## Tech Stack (apply only layers in scope — language/framework from `tech_stack_selections.md`)
 
-> The backend language/framework and frontend framework are **user-selected** in Phase 2.5. Read `tech_stack_selections.md` to determine the active choices. iOS/Android stacks are fixed.
-
-| Layer | User-Selected Options | Required When |
-|---|---|---|
-| Backend Language | Java 21 / .NET 9 / Python 3.12 / Go 1.23 | Backend in scope |
-| Backend Framework | Spring Boot 3.5+ / ASP.NET Core / FastAPI / Gin or Fiber | Backend in scope |
-| Frontend Framework | React 18+ / Vue 3 / Angular 18 / Svelte 5 | Web Frontend in scope |
-| Frontend Language | TypeScript (strict — all frameworks) | Web Frontend in scope |
-| Mobile iOS | Swift / SwiftUI | iOS in scope |
-| Mobile Android | Kotlin / Jetpack Compose | Android in scope |
-| API Style | REST + OpenAPI 3.1 | Backend in scope |
+> Read all stack choices from `ai-driven-development/docs/tech_stack_selections.md` — do not hardcode versions here. iOS/Android stacks are fixed (Swift/SwiftUI, Kotlin/Jetpack Compose). TypeScript strict mode applies to all web frontend frameworks. REST + OpenAPI 3.1 applies whenever a backend is in scope.
 
 > Do NOT include rows or sections for tiers that are out of scope.
 
@@ -81,14 +74,17 @@ Create in folder `ai-driven-development/docs/target_architecture/` and produce:
 
 **Review from prerequisites:**
 - Count bounded contexts hinted at in `legacy_analysis.md` (module count, God-tables, integration clusters)
-- Count in-scope tiers from `tech_stack_selections.md` (Backend / Frontend / iOS / Android)
+- Count in-scope tiers from `tech_stack_selections.md` (Backend / Web Frontend / Native iOS / Native Android / Cross-Platform Mobile).
+  - If `§ Mobile -> Framework` is `Flutter` or `React Native`, count **Cross-Platform Mobile** as one tier.
+  - Count `§ iOS` and `§ Android` only when native mobile delivery is actually in scope.
+  - Do not double-count mobile by counting both `§ Mobile` and native `§ iOS` / `§ Android` unless the project explicitly includes both a shared cross-platform app and separate native apps.
 
 **Choose a strategy:**
 
 | Scale | Signal | Strategy |
 |---|---|---|
 | **Simple** | 1–3 bounded contexts, 1 tier | Proceed through Steps 1–9 sequentially |
-| **Moderate** | 4–6 bounded contexts OR 2 tiers | Design contexts one at a time; backend and frontend architecture as separate sub-tasks |
+| **Moderate** | 4–6 bounded contexts OR 2 tiers | Design contexts one at a time; split backend and each in-scope client/mobile architecture into separate sub-tasks as needed |
 | **Complex** | 7+ bounded contexts OR 3+ tiers | One sub-task per bounded context group for Steps 2+3; one sub-task per tier for diagrams |
 
 **Per-context sub-task breakdown (moderate/complex):**
@@ -105,7 +101,7 @@ This agent then:
 
 **Multi-tier decomposition:**
 - Sub-task A: Backend architecture (Steps 2, 3, 4, 5, 6, ADRs 001–004 + 006)
-- Sub-task B: Frontend/Mobile architecture (Step 2 frontend-specific, ADR-005 if mobile in scope)
+- Sub-task B: Frontend/Mobile architecture (Step 2 frontend-specific, ADR-005 if any mobile target is in scope, including cross-platform)
 - This agent: Diagrams (Step 7) and NFR (Step 8) — synthesized after A and B complete
 
 > Record the decomposition plan (bounded context list + assigned sub-tasks) in `target_architecture.md` before starting any sub-task.
@@ -140,7 +136,7 @@ For each module/service:
 ### Step 4 — API Design (API-First)
 Before any code:
 - Define OpenAPI 3.1 spec for all public APIs
-- Standardize error model: `{ code, message, details[], traceId }`
+- Standardize error model: RFC 9457 Problem Details shape — see `core.md §10` (`type`, `title`, `status`, `detail`, `instance`, `traceId`)
 - Define versioning strategy: URL path `/v1/` (recommended)
 - Define pagination: offset or cursor-based
 - Define authentication: Bearer JWT in Authorization header
@@ -159,8 +155,8 @@ Ground every decision in the DB analysis findings from `legacy_analysis.md` (Sec
 - **Event Sourcing**: Evaluate if audit trail requirements (previously handled by triggers) justify it
 
 ### Step 6 — Security Architecture
-- **Authentication**: OAuth2 / OpenID Connect (Keycloak preferred) or Spring Security + LDAP
-- **Authorization**: RBAC with `@PreAuthorize` annotations, externalized permission model
+- **Authentication**: OAuth2 / OpenID Connect (Keycloak preferred). For LDAP/AD environments, federate via the chosen IdP rather than direct LDAP binding. _(Java/Spring Boot: Spring Security OIDC or Spring Security + LDAP is acceptable as a secondary path.)_
+- **Authorization**: RBAC with an externalized permission model. Enforce method-level authorization at every application boundary using the framework's native mechanism. _(Java/Spring Boot: `@PreAuthorize` annotations; .NET: `[Authorize(Policy="...")]`; Python: dependency-injected permission guards; Go: middleware-based policy enforcement.)_
 - **Token Strategy**: JWT (short-lived access token, refresh token rotation)
 - **API Gateway**: Single entry point, rate limiting, auth validation, request routing
 - **Secret Management**: HashiCorp Vault / AWS Secrets Manager / Kubernetes Secrets
@@ -199,10 +195,29 @@ Key checks for this skill's output:
 - Every `subgraph` block is closed with `end`
 - Node IDs contain no spaces or reserved keywords
 
-If the file is missing or any check fails, **regenerate the entire file** from scratch using `create_file`. Do not attempt to patch individual lines.
+If the file is missing or any check fails, **regenerate the entire file** from scratch using the active runtime's file-writing mechanism. Do not attempt to patch individual lines.
 
 ### Step 8 — Non-Functional Requirements (NFR)
 Define measurable targets using the **NFR Table Template** from [STANDARDS.md](./STANDARDS.md). Populate actual values agreed with stakeholders.
+
+#### Step 8.1 — SLOs & Error Budgets
+
+For every service exposed to users or dependent services, define an explicit SLO. This table is the go/no-go gate for `final-validation` (Phase 6) and drives Prometheus alert thresholds in `devops-infra` (Phase 4h).
+
+| Service | Availability SLO | Latency SLO (P95) | Error Rate SLO | Error Budget (30-day) | Burn-Rate Alert Threshold | Rollback Trigger |
+|---|---|---|---|---|---|---|
+| _e.g. Order API_ | _99.9%_ | _< 300 ms_ | _< 0.1%_ | _43.8 min downtime_ | _> 5× in 1 h_ | _Error budget > 10% consumed in 1 h_ |
+| _e.g. Auth Service_ | _99.95%_ | _< 150 ms_ | _< 0.05%_ | _21.9 min downtime_ | _> 10× in 30 min_ | _Any P0 alert firing for > 5 min_ |
+
+**Column definitions:**
+- **Availability SLO** — agreed uptime target; drives `PodCrashLooping` and health-probe alert thresholds
+- **Latency SLO (P95)** — 95th-percentile response time; drives `HighLatencyP95` Prometheus alert
+- **Error Rate SLO** — fraction of 5xx responses allowed; drives `HighErrorRate` alert
+- **Error Budget (30-day)** — allowable downtime = `(1 − SLO) × 30 × 24 × 60` minutes; surfaced in Phase 6 smoke test plan
+- **Burn-Rate Alert Threshold** — multiple of steady-state error rate that triggers a page (fast-burn alert per Google SRE Workbook §5)
+- **Rollback Trigger** — condition under which an automated or on-call rollback must be initiated within the post-cutover 72-hour watch window
+
+> **Rule**: Any service with `Availability SLO ≥ 99.9%` **must** have circuit-breaker + retry patterns defined in the architecture (Phase 3 Step 6 — Resilience). Record the SLO table in `target_architecture.md §4`.
 
 ### Step 9 — Architecture Decision Records (ADR)
 Produce an ADR for each major decision **applicable to the confirmed scope**:
@@ -213,7 +228,7 @@ Produce an ADR for each major decision **applicable to the confirmed scope**:
 | ADR-002 | Authentication approach | Backend in scope |
 | ADR-003 | Database per service vs shared | Backend in scope |
 | ADR-004 | Message broker selection (or none) | Backend in scope |
-| ADR-005 | Mobile strategy (native vs cross-platform) | iOS or Android in scope |
+| ADR-005 | Mobile strategy (native vs cross-platform) | Any mobile target is in scope (iOS, Android, or cross-platform mobile) |
 | ADR-006 | Legacy DB migration strategy (strangler fig / dual-write / big-bang) and stored procedure disposition | Backend in scope |
 
 > Skip ADRs for components outside the confirmed scope. If the scope is `frontend-only`, produce only an ADR covering the state management and rendering strategy decisions.
@@ -222,7 +237,9 @@ Produce an ADR for each major decision **applicable to the confirmed scope**:
 
 ## Definition of Done (DoD)
 
-> ✅ = required for all scopes · *(backend)* = required only if backend is in scope · *(frontend)* = web frontend only · *(mobile)* = iOS or Android only
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §1 — Architecture Decision Trees and §3 — Phase 3 quality gates.
+
+> ✅ = required for all scopes · *(backend)* = required only if backend is in scope · *(frontend)* = web frontend only · *(mobile)* = native iOS, native Android, or cross-platform mobile as applicable
 
 ### Architecture
 - [ ] Technology Profile read from `legacy_analysis.md` and confirmed scope recorded ✅

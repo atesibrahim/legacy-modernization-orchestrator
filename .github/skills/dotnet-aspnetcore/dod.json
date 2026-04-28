@@ -1,0 +1,57 @@
+{
+  "skill": "dotnet-aspnetcore",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "DN-01",
+      "description": "`dotnet build` completes with zero errors and zero warnings (`<TreatWarningsAsErrors>true</TreatWarningsAsErrors>`)",
+      "verifier": "cmd"
+    },
+    {
+      "id": "DN-02",
+      "description": "`dotnet format --verify-no-changes` exits clean",
+      "verifier": "cmd"
+    },
+    {
+      "id": "DN-03",
+      "description": "`dotnet test` passes with line coverage ≥ 70% (Cobertura report via `coverlet`)",
+      "verifier": "cmd"
+    },
+    {
+      "id": "DN-04",
+      "description": "Roslynator analyzer set reports zero warnings in CI",
+      "verifier": "manual"
+    },
+    {
+      "id": "DN-05",
+      "description": "Stryker.NET mutation score ≥ 60% (if configured)",
+      "verifier": "manual"
+    },
+    {
+      "id": "DN-06",
+      "description": "`dotnet list package --vulnerable` reports zero vulnerable packages",
+      "verifier": "cmd"
+    },
+    {
+      "id": "DN-07",
+      "description": "Trivy image scan passes — zero CVSS ≥ 7 vulnerabilities in the published image",
+      "verifier": "manual"
+    },
+    {
+      "id": "DN-08",
+      "description": "`/health` returns `{\"status\":\"Healthy\"}` in local run",
+      "verifier": "manual"
+    },
+    {
+      "id": "DN-09",
+      "description": "`/metrics` returns Prometheus-format metrics",
+      "verifier": "manual"
+    },
+    {
+      "id": "DN-10",
+      "description": "`dotnet publish` produces a self-contained runnable artifact or Docker image",
+      "verifier": "cmd"
+    }
+  ]
+}

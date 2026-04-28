@@ -2,6 +2,9 @@
 name: security-review
 description: 'Security review skill for legacy modernization target system. Optional Phase 4g. Use when: performing OWASP Top 10 checks per layer, detecting hardcoded secrets and credentials, scanning dependency CVEs with OWASP Dependency-Check or Trivy, auditing API authorization coverage, reviewing JWT validation algorithm and rotation, auditing CORS and CSP configuration, verifying Docker image security (non-root, distroless, no leaked secrets), producing a security findings report before go-live.'
 argument-hint: 'Project name or path to target architecture and development artifacts to review'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Security Review
@@ -25,8 +28,9 @@ Before starting, verify the following artifacts exist:
 | Frontend code | `ai-driven-development/development/frontend_development/` | If web frontend in scope |
 | iOS code | `ai-driven-development/development/mobile_development/ios/` | If iOS in scope |
 | Android code | `ai-driven-development/development/mobile_development/android/` | If Android in scope |
+| Cross-platform mobile code | `ai-driven-development/development/mobile_development/cross-platform/` | If Flutter or React Native is in scope |
 
-**At least one Phase 4 code artifact must exist.** If none are present, stop and report which Phase 4 development agents must run first.
+**At least one Phase 4 implementation artifact must exist (`4b`, `4c`, `4d`, `4e`, or `4i`).** If none are present, stop and report which Phase 4 development agents must run first.
 
 **If any always-required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 3: `target-architecture`, Phase 2.5: Tech Stack Selection Gate), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
@@ -55,7 +59,7 @@ Create `security_review_report.md` with this shell:
 **Project**: [name]
 **Reviewer**: [agent / human]
 **Date**: YYYY-MM-DD
-**Scope**: [Backend / Frontend / iOS / Android / Infrastructure]
+**Scope**: [Backend / Frontend / Native iOS / Native Android / Cross-Platform Mobile / Infrastructure]
 
 ## Summary
 | Severity | Count |
@@ -76,7 +80,82 @@ Create `security_review_report.md` with this shell:
 
 ---
 
-### Phase 1 — OWASP Top 10 Layer-by-Layer Audit
+### Phase 1 — Threat Model (STRIDE)
+
+**Goal**: Identify the highest-risk trust-boundary crossings before applying OWASP controls. Threat modelling ensures controls are applied where they matter most, rather than uniformly.
+
+> **Complete this phase before Phase 2 (OWASP audit).** The threat model output is used to prioritise and scope the OWASP checks.
+
+#### 1.1 — Identify Trust Boundaries
+
+Read `target_architecture.md` and identify every point where data or control crosses a trust boundary:
+
+| Trust Boundary | From | To | Protocol | Auth? |
+|---|---|---|---|---|
+| TB-01 | End user (browser/mobile) | API Gateway | HTTPS | JWT Bearer |
+| TB-02 | API Gateway | Backend Service | HTTPS (internal TLS) | Service-to-service mTLS or internal JWT |
+| TB-03 | Backend Service | Database | PostgreSQL TLS | DB credentials (Vault/secret manager) |
+| TB-04 | Backend Service | External Payment API | HTTPS | API key |
+| TB-05 | CI/CD Pipeline | Container Registry | HTTPS | Registry token |
+| TB-06 | Admin user | Admin API / console | HTTPS | MFA-enforced JWT |
+
+_Populate this table from `target_architecture.md`. Add or remove rows to match the actual system._
+
+#### 1.2 — STRIDE Analysis per Trust Boundary
+
+For each trust boundary, assess all six STRIDE threat categories. Record findings in `security_review_report.md` under a new **Threat Model** section.
+
+| STRIDE Category | Description | Applies to |
+|---|---|---|
+| **S**poofing | Attacker impersonates a user, service, or component | Auth tokens, service identities |
+| **T**ampering | Attacker modifies data in transit or at rest | API payloads, DB records, log files |
+| **R**epudiation | Actor denies performing an action (no audit trail) | Admin actions, financial transactions |
+| **I**nformation Disclosure | Sensitive data exposed to unauthorised parties | Error messages, logs, API responses |
+| **D**enial of Service | Service made unavailable | Auth endpoints, resource-intensive APIs |
+| **E**levation of Privilege | Attacker gains higher permissions than granted | Role boundaries, IDOR, JWT scope |
+
+**STRIDE threat table template** (complete one per trust boundary):
+
+| TB | Threat | STRIDE | Likelihood (H/M/L) | Impact (H/M/L) | Risk | Mitigating Control |
+|---|---|---|---|---|---|---|
+| TB-01 | Stolen JWT used from another device | S | M | H | **High** | Short-lived tokens (≤15 min) + refresh token rotation |
+| TB-01 | Attacker replays expired token | S | L | H | **Medium** | `exp` claim validated on every request; clock skew ≤ 60 s |
+| TB-01 | User modifies `role` claim in JWT payload | T | M | H | **High** | Backend validates claims server-side; never trusts client-supplied role |
+| TB-01 | User denies placing a high-value order | R | M | M | **Medium** | All order mutations logged with authenticated user ID and timestamp |
+| TB-01 | API returns other users' data via IDOR | I | M | H | **High** | Owner check in use-case layer; automated IDOR tests in CI |
+| TB-01 | Credential-stuffing attack on `/auth/login` | D | H | H | **Critical** | Rate limiting (≤ 5 req/min per IP), exponential backoff, CAPTCHA |
+| TB-01 | Regular user accesses admin endpoint | E | M | H | **High** | Role-based `@PreAuthorize` on every admin endpoint; integration test coverage |
+| TB-03 | SQL injection via malformed API input | T | M | H | **High** | ORM parameterized queries only; semgrep injection rule in CI |
+| TB-04 | SSRF to internal metadata service | I | M | H | **High** | URL allowlist for external calls; block 169.254.x and RFC1918 ranges |
+
+_Complete the full table for all trust boundaries before proceeding to Phase 2._
+
+#### 1.3 — Risk Prioritisation
+
+After completing the STRIDE table, extract the **Critical** and **High** risks and add them to the report summary as the prioritised control targets. These findings must have explicit mitigating controls in Phase 2.
+
+Risk scoring guide:
+
+| Likelihood | Impact H | Impact M | Impact L |
+|---|---|---|---|
+| **H** | Critical | High | Medium |
+| **M** | High | Medium | Low |
+| **L** | Medium | Low | Info |
+
+#### 1.4 — Threat Model Sign-Off
+
+Before proceeding to Phase 2, the threat model must be reviewed:
+
+- [ ] Threat model reviewed by lead developer or security champion
+- [ ] All Critical and High risks have at least one proposed mitigating control
+- [ ] Trust boundaries match `target_architecture.md` — no undocumented data flows
+- [ ] Threat model section committed to `security_review_report.md`
+
+> **Tip**: If the architecture has not changed significantly from a previous review cycle, reuse the existing threat model and mark unchanged boundaries as "Reviewed — no change" with the review date.
+
+---
+
+### Phase 2 — OWASP Top 10 Layer-by-Layer Audit
 
 For each OWASP category, check every in-scope layer and record findings.
 
@@ -190,7 +269,7 @@ Run dependency vulnerability scans — **block deployment if CVSS ≥ 7**:
 
 ---
 
-### Phase 2 — Secrets Detection
+### Phase 3 — Secrets Detection
 
 **Goal**: Ensure no credentials, API keys, tokens, or private keys are committed to the repository or baked into container images.
 
@@ -215,7 +294,7 @@ Checklist:
 
 ---
 
-### Phase 3 — CORS & CSP Configuration Review
+### Phase 4 — CORS & CSP Configuration Review
 
 **CORS checklist**:
 - [ ] `Access-Control-Allow-Origin` uses an explicit domain allowlist — never `*` in production
@@ -232,7 +311,7 @@ Checklist:
 
 ---
 
-### Phase 4 — Docker Image Security
+### Phase 5 — Docker Image Security
 
 Run for every image that ships to production:
 
@@ -262,6 +341,9 @@ Checklist:
 
 ## Definition of Done
 
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §2.5 — Hardcoded Configuration, §2.8 — Logging Sensitive Data, and §4 — Cross-Cutting Concerns Security checklist.
+
+- [ ] Threat model (STRIDE) completed for all trust boundaries; all Critical and High risks have mitigating controls; threat model signed off
 - [ ] All OWASP Top 10 categories audited for every in-scope layer
 - [ ] Zero Critical findings remaining unmitigated
 - [ ] Zero High findings without documented accepted-risk justification

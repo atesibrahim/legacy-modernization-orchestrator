@@ -33,6 +33,11 @@
   },
   "scripts": {
     "sync:wrappers": "node scripts/sync-wrappers.js",
-    "check:wrappers": "node scripts/sync-wrappers.js --check"
+    "check:wrappers": "node scripts/sync-wrappers.js --check",
+    "validate:roster": "node scripts/validate-roster.js",
+    "ci:validate": "node scripts/ci-validate.js",
+    "generate:dod": "node scripts/generate-dod.js",
+    "check:dod": "node scripts/generate-dod.js --check",
+    "check:adr": "node scripts/check-adr-prompts.js --all"
   }
 }
