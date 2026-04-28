@@ -1,6 +1,6 @@
 ---
 name: ios-development
-description: 'Native iOS app development for modernized systems. Trigger phrases: "build iOS app", "implement Swift SwiftUI app", "build native iPhone app", "implement iOS MVVM", "iOS Keychain token storage", "iOS URLSession networking", "iOS CoreData persistence", "iOS push notifications APNs", "iOS deep linking", "XCTest unit tests", "submit to App Store", "iOS WidgetKit widget", "iOS BackgroundTasks", "iOS App Intents Siri". Outputs: ios_development_todo.md + full Xcode project under development/mobile_development/ios/. NOT for Android — use android-development. NOT for cross-platform (Flutter/RN not supported). Requires ui-ux-design + target-architecture.'
+description: "iOS mobile development skill for legacy modernization. Act as a senior expert iOS developer. Use when: building Swift SwiftUI iOS mobile app, implementing MVVM architecture, Combine async-await, Keychain token storage, URLSession networking, CoreData local persistence, push notifications, deep linking, unit testing XCTest, UI testing, App Store deployment, phased iOS development plan."
 argument-hint: 'Project name or path to UI/UX design artifacts and system design to implement'
 ---
 

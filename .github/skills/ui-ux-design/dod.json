@@ -1,0 +1,97 @@
+{
+  "skill": "ui-ux-design",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "UX-01",
+      "description": "User journeys cover all primary use cases identified in analysis",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-02",
+      "description": "Friction points from legacy UI explicitly addressed",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-03",
+      "description": "Navigation structure logical and tested with at least 1 real user",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-04",
+      "description": "Design tokens defined (colors, typography, spacing)",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-05",
+      "description": "Component inventory documented",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-06",
+      "description": "Consistent naming conventions (BEM or component-based)",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-07",
+      "description": "All critical screens wireframed in HTML",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-08",
+      "description": "Mobile and desktop views specified",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-09",
+      "description": "States documented (empty, loading, error, success)",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-10",
+      "description": "Color contrast ratios verified (WCAG AA minimum)",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-11",
+      "description": "Keyboard navigation path documented for each screen",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-12",
+      "description": "ARIA roles/labels specified for custom components",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-13",
+      "description": "`tokens.json` exported in W3C format",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-14",
+      "description": "Component prop API defined for every component",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-15",
+      "description": "Storybook story stubs produced",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-16",
+      "description": "`design-implementation-checklist.md` produced",
+      "verifier": "glob"
+    },
+    {
+      "id": "UX-17",
+      "description": "Design reviewed by product owner / stakeholder",
+      "verifier": "manual"
+    },
+    {
+      "id": "UX-18",
+      "description": "At least 1 usability test or design walkthrough conducted",
+      "verifier": "manual"
+    }
+  ]
+}

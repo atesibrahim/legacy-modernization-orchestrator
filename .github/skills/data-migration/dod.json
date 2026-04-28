@@ -1,0 +1,68 @@
+{
+  "skill": "data-migration",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "DM-01",
+      "description": "Schema mapping table covers 100% of legacy tables (including decisions to archive/drop)",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-02",
+      "description": "Data cleansing scripts documented and reviewed",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-03",
+      "description": "Schema migration scripts committed and applied successfully on staging",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-04",
+      "description": "ETL scripts tested on a staging copy of production data",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-05",
+      "description": "Pre- and post-migration validation queries produce matching counts and checksums",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-06",
+      "description": "Reconciliation report signed off by DBA and Product Owner",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-07",
+      "description": "Cutover procedure checklist complete and rehearsed on staging",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-08",
+      "description": "PII column inventory documented; masking scripts written, reviewed, and run automatically in non-prod pipeline",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-09",
+      "description": "Privacy/compliance team sign-off obtained before first non-prod data load",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-10",
+      "description": "Rollback playbook written and tested (rehearsed on staging)",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-11",
+      "description": "Post-migration audit checklist completed after stabilization period",
+      "verifier": "manual"
+    },
+    {
+      "id": "DM-12",
+      "description": "All migration artifacts committed to `ai-driven-development/development/data_migration/`",
+      "verifier": "glob",
+      "glob": "ai-driven-development/development/data_migration/"
+    }
+  ]
+}

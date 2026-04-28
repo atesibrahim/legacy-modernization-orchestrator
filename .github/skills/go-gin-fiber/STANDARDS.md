@@ -134,14 +134,17 @@ Rules:
 
 ## Standard Error Response Format
 
-All HTTP errors must return a consistent JSON envelope:
+All HTTP errors must follow the RFC 9457 canonical shape defined in [core.md §10](../../standards/core.md#10-standard-error-response-format-rfc-9457). Go implementation:
+
 ```go
 type ErrorResponse struct {
-    Type    string `json:"type"`
-    Title   string `json:"title"`
-    Status  int    `json:"status"`
-    Detail  string `json:"detail,omitempty"`
-    TraceID string `json:"trace_id,omitempty"`
+    Type     string            `json:"type"`
+    Title    string            `json:"title"`
+    Status   int               `json:"status"`
+    Detail   string            `json:"detail,omitempty"`
+    Instance string            `json:"instance,omitempty"`
+    TraceID  string            `json:"traceId,omitempty"`
+    Errors   map[string][]string `json:"errors,omitempty"`
 }
 ```
 

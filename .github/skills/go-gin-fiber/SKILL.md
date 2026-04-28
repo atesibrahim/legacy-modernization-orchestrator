@@ -2,6 +2,9 @@
 name: go-gin-fiber
 description: 'Go 1.23 + Gin or Fiber backend — clean/hexagonal architecture, GORM/sqlc, zap/zerolog, testcontainers-go, Air live reload, Docker scratch image. Apply when tech_stack_selections.md confirms Go + Gin or Go + Fiber as the backend stack.'
 argument-hint: 'Project name or path to system design artifacts to base backend implementation on'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Go 1.23 + Gin / Fiber — Backend Implementation
@@ -9,6 +12,20 @@ argument-hint: 'Project name or path to system design artifacts to base backend 
 > These are the Go-specific implementation steps that complement [`backend-development/SKILL.md`](../backend-development/SKILL.md). Apply these when `tech_stack_selections.md` confirms `Go + Gin` or `Go + Fiber` as the backend stack.
 
 See also: [`STANDARDS.md`](./STANDARDS.md) for Go-specific architecture rules, project folder structure, and Docker image template.
+
+## Role
+**Senior Go / Gin-Fiber Backend Engineer** — Implement a production-ready, clean/hexagonal architecture backend using Go 1.23 and Gin or Fiber, following all standards in `core.md` and `backend-development/STANDARDS.md`.
+
+## Prerequisites (Preflight)
+Before starting, verify the following artifacts exist:
+
+| Artifact | Expected Path | Required? |
+|---|---|---|
+| Tech stack selections | `ai-driven-development/docs/tech_stack_selections.md` | Always — must confirm `Go + Gin` or `Go + Fiber` |
+| Target architecture | `ai-driven-development/docs/target_architecture/target_architecture.md` | Always |
+| Backend todo tracker | `ai-driven-development/development/backend_development/be_development_todo.md` | If continuing an in-progress phase |
+
+**If any required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 2.5: Tech Stack Selection, Phase 3: `target-architecture`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
 ---
 
@@ -51,7 +68,7 @@ See also: [`STANDARDS.md`](./STANDARDS.md) for Go-specific architecture rules, p
 **sqlc** (code-generation approach — preferred for performance-critical paths):
 - Write SQL queries in `.sql` files; `sqlc generate` produces type-safe Go code.
 - `sqlc.yaml` pins the schema and query directories.
-- Use `pgx/v5` driver directly with `sqlc` for best PostgreSQL performance.
+- Use the driver that matches `tech_stack_selections.md` directly with `sqlc` (e.g. `pgx/v5` for PostgreSQL, `go-sql-driver/mysql` for MySQL, `microsoft/go-mssqldb` for MSSQL).
 
 ### Logging
 
@@ -63,7 +80,7 @@ See also: [`STANDARDS.md`](./STANDARDS.md) for Go-specific architecture rules, p
 ### Testing
 
 - **`testing` standard library** + **`github.com/stretchr/testify`** for assertions.
-- **`testcontainers-go`** for real PostgreSQL/Redis containers in integration tests.
+- **`testcontainers-go`** for real DB/Redis containers in integration tests — use the module that matches `tech_stack_selections.md` (e.g. `testcontainers-go/modules/postgres`, `testcontainers-go/modules/mysql`, `testcontainers-go/modules/mssql`).
 - **Table-driven tests** for unit tests — `t.Run(tc.name, ...)`.
 - **`net/http/httptest`** for handler tests — no live server.
 - Coverage via `go test -coverprofile=coverage.out ./...` — target ≥ 70%.
@@ -93,8 +110,8 @@ toolchain go1.23.4
 |---|---|
 | HTTP framework (Gin) | `github.com/gin-gonic/gin` |
 | HTTP framework (Fiber) | `github.com/gofiber/fiber/v2` |
-| ORM | `gorm.io/gorm` + `gorm.io/driver/postgres` |
-| SQL codegen | `github.com/sqlc-dev/sqlc` (dev tool) + `github.com/jackc/pgx/v5` |
+| ORM | `gorm.io/gorm` + DB driver from `tech_stack_selections.md` (e.g. `gorm.io/driver/postgres`, `gorm.io/driver/mysql`, `gorm.io/driver/sqlserver`) |
+| SQL codegen | `github.com/sqlc-dev/sqlc` (dev tool) + DB driver from `tech_stack_selections.md` (e.g. `github.com/jackc/pgx/v5` for PostgreSQL, `github.com/go-sql-driver/mysql` for MySQL, `github.com/microsoft/go-mssqldb` for MSSQL) |
 | Migrations | `github.com/pressly/goose/v3` |
 | Config | `github.com/caarlos0/env/v11` |
 | Logging | `go.uber.org/zap` |
@@ -273,3 +290,34 @@ r.GET("/health/ready", func(c *gin.Context) {
 - **Dependency security**: `govulncheck ./...` (official Go vulnerability database) — fail on any known vulnerability.
 - **Build verification**: `go build ./...` + `go vet ./...` must pass with zero output.
 - **Race detector**: `go test -race ./...` — zero races allowed.
+
+---
+
+## Definition of Done (DoD)
+
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §2 — Common Anti-Patterns (§2.4 Anemic Domain Model, §2.7 N+1 Query) and §7 — Code Review Checklist.
+
+### Inherited from `backend-development`
+All DoD items in [`backend-development/SKILL.md`](../backend-development/SKILL.md) must be ✅ before this DoD is evaluated.
+
+### Additional DoD — Go / Gin-Fiber
+
+#### Build & Quality
+- [ ] `go build ./...` exits with zero errors
+- [ ] `go vet ./...` exits with zero warnings
+- [ ] `golangci-lint run` exits with zero warnings (`errcheck`, `staticcheck`, `gosec`, `revive` enabled)
+- [ ] `go test -coverprofile=coverage.out ./...` achieves ≥ 70% coverage
+
+#### Race Safety
+- [ ] `go test -race ./...` exits with zero race conditions detected
+
+#### Security
+- [ ] `govulncheck ./...` reports zero known vulnerabilities
+
+#### Runtime Correctness
+- [ ] `/health/live` returns `{"status":"ok"}` in local run
+- [ ] `/health/ready` returns `{"status":"ok"}` (DB ping confirmed)
+- [ ] `/metrics` returns Prometheus-format metrics
+
+#### Next Skill
+When all items above are ✅, proceed to [`compare-legacy-to-new`](../compare-legacy-to-new/SKILL.md) (Phase 5).

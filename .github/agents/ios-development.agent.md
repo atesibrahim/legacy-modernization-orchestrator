@@ -14,6 +14,8 @@ argument-hint: 'Project name or path to UI/UX design artifacts and system design
 - After `target-architecture` agent confirms API contracts
 - Starting or continuing phased iOS mobile implementation
 
+> **Parallelism:** 4d requires 4a complete. Can then run in parallel with 4b, 4c, 4e, 4f, 4h. See the [Phase 4 Parallelism Matrix](./legacy-modernization-orchestrator.agent.md#parallelizable-phases-after-phase-3--scope-confirmed).
+
 ---
 
 ## Skill Reference

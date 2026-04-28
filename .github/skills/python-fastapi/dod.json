@@ -1,0 +1,52 @@
+{
+  "skill": "python-fastapi",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "PFA-01",
+      "description": "`ruff check .` exits with zero warnings (CI fails on any lint error)",
+      "verifier": "cmd"
+    },
+    {
+      "id": "PFA-02",
+      "description": "`ruff format --check .` exits clean",
+      "verifier": "cmd"
+    },
+    {
+      "id": "PFA-03",
+      "description": "`mypy src/ --strict` exits with zero type errors",
+      "verifier": "manual"
+    },
+    {
+      "id": "PFA-04",
+      "description": "`pytest --cov=src --cov-fail-under=70` passes",
+      "verifier": "cmd"
+    },
+    {
+      "id": "PFA-05",
+      "description": "`alembic check` exits clean — no unapplied model changes without a migration script",
+      "verifier": "manual"
+    },
+    {
+      "id": "PFA-06",
+      "description": "`pip-audit` reports zero packages with CVSS ≥ 7",
+      "verifier": "manual"
+    },
+    {
+      "id": "PFA-07",
+      "description": "`/health/live` returns `{\"status\":\"ok\"}` in local run",
+      "verifier": "manual"
+    },
+    {
+      "id": "PFA-08",
+      "description": "`/health/ready` returns `{\"status\":\"ok\"}` (DB connectivity confirmed)",
+      "verifier": "manual"
+    },
+    {
+      "id": "PFA-09",
+      "description": "`/metrics` returns Prometheus-format metrics",
+      "verifier": "manual"
+    }
+  ]
+}

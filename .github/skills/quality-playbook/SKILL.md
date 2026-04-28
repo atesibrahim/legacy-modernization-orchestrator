@@ -2,6 +2,9 @@
 name: quality-playbook
 description: 'Cross-cutting quality reference for all phases of legacy modernization. Use when: evaluating architecture decisions, applying quality gates, choosing between design patterns, reviewing testing strategy, applying code quality standards, deciding monolith vs microservices, selecting database strategies, evaluating API design options across any agent phase.'
 argument-hint: 'Phase name or quality concern to evaluate'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Quality Playbook — SKILL.md

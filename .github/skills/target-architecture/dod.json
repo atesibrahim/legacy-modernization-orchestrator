@@ -1,0 +1,172 @@
+{
+  "skill": "target-architecture",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "TA-01",
+      "description": "Technology Profile read from `legacy_analysis.md` and confirmed scope recorded ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-02",
+      "description": "Target architecture diagram created — only layers in scope ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-03",
+      "description": "Each service/module has clear, non-overlapping responsibility ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-04",
+      "description": "Bounded contexts defined and context map produced *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-05",
+      "description": "User-selectable tech components confirmed and documented ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-06",
+      "description": "OpenAPI 3.1 spec structure defined for all services *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-07",
+      "description": "Error model standardized across all APIs *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-08",
+      "description": "API versioning strategy documented *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-09",
+      "description": "Auth flow fully defined (OAuth2/LDAP/Keycloak) *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-10",
+      "description": "Role/permission model documented *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-11",
+      "description": "Secret management approach defined *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-12",
+      "description": "Horizontal scaling strategy defined per service *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-13",
+      "description": "Failure scenarios documented (circuit breakers, fallbacks) *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-14",
+      "description": "NFR targets documented and agreed ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-15",
+      "description": "Data ownership defined per bounded context *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-16",
+      "description": "Target data model (key entities and relationships) produced per bounded context *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-17",
+      "description": "Legacy God-table splits and ownership reassignments documented *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-18",
+      "description": "DB migration strategy from legacy documented *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-19",
+      "description": "Stored procedure and trigger disposition documented *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-20",
+      "description": "Data quality remediation plan defined *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-21",
+      "description": "No cross-context database sharing *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-22",
+      "description": "High-level architecture diagram in HTML — only in-scope tiers shown ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-23",
+      "description": "Bounded context map in HTML *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-24",
+      "description": "Auth flow sequence diagram in HTML *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-25",
+      "description": "Deployment architecture in HTML ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-26",
+      "description": "Data Architecture / Schema Boundary Map in HTML *(backend)*",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-27",
+      "description": "All produced diagrams verified in browser ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-28",
+      "description": "At least 1 ADR produced for major decisions (minimum 3 if backend in scope) ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-29",
+      "description": "Out-of-scope ADRs explicitly skipped with reason noted ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-30",
+      "description": "Design reviewed by at least 2 senior engineers ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-31",
+      "description": "Diagram walkthrough completed with system design team ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-32",
+      "description": "Diagrams reviewed for accuracy against design decisions ✅",
+      "verifier": "manual"
+    },
+    {
+      "id": "TA-33",
+      "description": "Mermaid syntax validated and diagrams render without errors in browser ✅",
+      "verifier": "manual"
+    }
+  ]
+}

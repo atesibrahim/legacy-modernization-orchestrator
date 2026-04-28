@@ -1,6 +1,6 @@
 ---
 name: android-development
-description: "Use when: building native Kotlin Jetpack Compose Android app, implementing MVVM Clean Architecture with Coroutines/Flow, EncryptedSharedPreferences/Keystore token storage, Retrofit + OkHttp networking, Room persistence, FCM push notifications, deep linking, JUnit + Mockk + Turbine + Espresso testing, Play Store deployment, Glance AppWidget, WorkManager. NOT for iOS or cross-platform. Requires ui-ux-design + target-architecture."
+description: "Android mobile development agent for legacy modernization. Act as a senior expert Android developer. Use when: building Kotlin Jetpack Compose Android mobile app, implementing MVVM Clean Architecture, Kotlin Coroutines Flow, EncryptedSharedPreferences Keystore token storage, Retrofit OkHttp networking, Room local persistence, push notifications FCM, deep linking, unit testing JUnit Mockk Turbine, UI testing Espresso Compose, Play Store deployment, phased Android development plan."
 tools:
   - Read
   - Write

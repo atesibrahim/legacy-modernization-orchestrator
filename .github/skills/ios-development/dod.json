@@ -1,0 +1,112 @@
+{
+  "skill": "ios-development",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "IOS-01",
+      "description": "SwiftLint zero warnings",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-02",
+      "description": "No force-unwraps, `try!`, or `fatalError` in production code",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-03",
+      "description": "All services behind protocols (mockable)",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-04",
+      "description": "All screens implemented matching wireframes",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-05",
+      "description": "All API integrations complete and tested against real backend",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-06",
+      "description": "Auth flow (login, token refresh, logout) working end-to-end",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-07",
+      "description": "UI matches design system (colors, typography, spacing)",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-08",
+      "description": "Loading, error, and empty states on every async screen",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-09",
+      "description": "Dark mode fully supported",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-10",
+      "description": "Dynamic Type supported (all text scales)",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-11",
+      "description": "VoiceOver navigation complete",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-12",
+      "description": "Smooth 60fps scrolling (verified with Instruments)",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-13",
+      "description": "No memory leaks (verified with Memory Graph)",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-14",
+      "description": "App launch time < 2s on iPhone 11 (oldest supported hardware for iOS 16)",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-15",
+      "description": "ViewModel unit test coverage ≥ 80%",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-16",
+      "description": "Service unit test coverage ≥ 70%",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-17",
+      "description": "UI tests cover login and 2+ critical journeys",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-18",
+      "description": "Accessibility Inspector: zero critical issues",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-19",
+      "description": "Release build archives cleanly",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-20",
+      "description": "Privacy manifest complete",
+      "verifier": "manual"
+    },
+    {
+      "id": "IOS-21",
+      "description": "TestFlight build validated",
+      "verifier": "manual"
+    }
+  ]
+}

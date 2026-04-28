@@ -1,0 +1,152 @@
+{
+  "skill": "legacy-analysis",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "LA-01",
+      "description": "Technology Profile (Section 10) produced before any other analysis step",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-02",
+      "description": "Each detected tier (Backend / Frontend / iOS / Android) listed with file/directory evidence",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-03",
+      "description": "Repository profile classification recorded (e.g., `backend-only`, `fullstack-web`)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-04",
+      "description": "Scope recommendation documented (which Phase 4 targets apply)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-05",
+      "description": "100% of services, modules, and APIs listed and categorized",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-06",
+      "description": "All DB tables, columns, indexes, views, stored procedures, and triggers documented",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-07",
+      "description": "All external systems identified with purpose and protocol",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-08",
+      "description": "All build/deployment artifacts catalogued",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-09",
+      "description": "DB engine name, exact version, and EOL status recorded",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-10",
+      "description": "Full schema inventory produced (tables, columns, constraints, indexes, sequences)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-11",
+      "description": "All stored procedures and functions catalogued with purpose and tables accessed",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-12",
+      "description": "All triggers documented (table, event, timing, business logic)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-13",
+      "description": "All scheduled DB jobs listed with schedule and business purpose",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-14",
+      "description": "Table Ownership Matrix produced (which module reads/writes which table)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-15",
+      "description": "Top 10 query hotspots identified with execution plans",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-16",
+      "description": "At least 3 DB anti-patterns identified with table/column evidence",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-17",
+      "description": "Data quality issues quantified (null counts, orphaned rows, duplicates)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-18",
+      "description": "Backup/recovery posture assessed (type, frequency, PITR capability, RPO/RTO)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-19",
+      "description": "At least 3 critical business flows documented end-to-end (sequence level)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-20",
+      "description": "Performance metrics collected (latency, throughput, error rate)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-21",
+      "description": "Top 5 bottlenecks identified and proven with logs/metrics",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-22",
+      "description": "Dead code percentage estimated",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-23",
+      "description": "Authentication/authorization flow documented",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-24",
+      "description": "Sensitive data handling identified (PII, credentials, keys)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-25",
+      "description": "Risk matrix scored for all identified risks (Impact × Likelihood)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-26",
+      "description": "At least 1 OWASP Top 10 issue assessed",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-27",
+      "description": "Findings reviewed with at least 1 senior developer from legacy team",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-28",
+      "description": "Findings validated against actual system behavior (not just docs)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LA-29",
+      "description": "Business stakeholder confirmed business flow accuracy",
+      "verifier": "manual"
+    }
+  ]
+}

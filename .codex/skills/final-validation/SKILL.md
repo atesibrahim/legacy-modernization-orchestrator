@@ -1,6 +1,6 @@
 ---
 name: final-validation
-description: "Final validation and cutover readiness for modernized systems. Trigger phrases: perform final validation, check release readiness, conduct go/no-go review, validate functional completeness, verify performance metrics, review security clearance, ensure operational readiness, obtain stakeholder approval. Outputs: release_readiness_checklist.md, go_no_go_decision.md, smoke_test_plan.md. Requires Phase 5 comparison report + Phase 4 outputs."
+description: "Final validation and cutover readiness for modernized systems. Trigger phrases: \"perform final validation\", \"check release readiness\", \"conduct go/no-go review\", \"validate functional completeness\", \"verify performance metrics\", \"review security clearance\", \"ensure operational readiness\", \"obtain stakeholder approval\". Outputs: release_readiness_checklist.md, go_no_go_decision.md, smoke_test_plan.md. Requires Phase 5 comparison report + Phase 4 outputs."
 argument-hint: "Project name or path to system design artifacts to base final validation on"
 ---
 

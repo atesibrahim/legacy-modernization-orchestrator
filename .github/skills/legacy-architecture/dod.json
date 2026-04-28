@@ -1,0 +1,92 @@
+{
+  "skill": "legacy-architecture",
+  "version": "1.0.0",
+  "generated_from": "SKILL.md — run 'node scripts/generate-dod.js' to regenerate",
+  "items": [
+    {
+      "id": "LARCH-01",
+      "description": "High-level architecture diagram (system boundary clearly shown)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-02",
+      "description": "Component dependency diagram (all modules included, coupling visible)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-03",
+      "description": "Data flow diagram (input → processing → output for main flows)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-04",
+      "description": "Authentication/authorization flow diagram",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-05",
+      "description": "Database architecture diagram (entity groupings, God tables, cross-module coupling)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-06",
+      "description": "Deployment topology diagram (network zones, servers, LB, CDN, environments)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-07",
+      "description": "All diagrams rendered correctly in HTML (verify in browser)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-08",
+      "description": "All integrations mapped with protocol (HTTP, JMS, DB direct, FTP, etc.)",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-09",
+      "description": "Sync vs async flows clearly distinguished",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-10",
+      "description": "Stateful vs stateless components identified",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-11",
+      "description": "Shared data stores identified with all consumers listed",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-12",
+      "description": "At least 3 architectural weaknesses identified with evidence",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-13",
+      "description": "Tight coupling areas highlighted with migration risk rating",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-14",
+      "description": "Coupling hotspot map produced",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-15",
+      "description": "Diagram walkthrough completed with system design team",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-16",
+      "description": "Diagrams reviewed for accuracy against design decisions",
+      "verifier": "manual"
+    },
+    {
+      "id": "LARCH-17",
+      "description": "Mermaid syntax validated and diagrams render without errors in browser",
+      "verifier": "manual"
+    }
+  ]
+}

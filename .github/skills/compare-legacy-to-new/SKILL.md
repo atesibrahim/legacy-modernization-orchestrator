@@ -2,6 +2,9 @@
 name: compare-legacy-to-new
 description: 'Legacy vs new system comparison and gap analysis skill. Act as a senior master architect analyst developer. Use when: comparing legacy system with redesigned system, gap analysis between legacy and new, mapping legacy components to new equivalents, creating migration strategy, producing before-after diagrams in HTML mermaid, validating that all legacy functionality is covered in new design, identifying improvements and regressions.'
 argument-hint: 'Path to legacy analysis and new system design artifacts to compare'
+version: 1.0.0
+last_reviewed: 2026-04-27
+status: Active
 ---
 
 # Compare Legacy to New System
@@ -10,7 +13,7 @@ argument-hint: 'Path to legacy analysis and new system design artifacts to compa
 **Senior Master Architect / Analyst / Developer** — Produce an objective, evidence-based comparison between the legacy system and the new design. Identify what was preserved, what was improved, what was eliminated, and what risks remain in the transition.
 
 ## When to Use
-- After legacy analysis (`legacy-analysis`, `legacy-architecture`) and target design (`target-architecture`) are complete, and at least one in-scope development target is complete (`backend-development`, `frontend-development`, `ios-development`, and/or `android-development`)
+- After legacy analysis (`legacy-analysis`, `legacy-architecture`) and target design (`target-architecture`) are complete, and at least one in-scope implementation target is complete (`backend-development`, `frontend-development`, `ios-development`, `android-development`, and/or `cross-platform-mobile`)
 - Need to validate that all legacy functionality is covered in the new system
 - Presenting migration strategy to stakeholders
 - Risk assessment before production cutover
@@ -27,8 +30,9 @@ Before starting, verify the following artifacts exist:
 | Frontend development outputs | `ai-driven-development/development/frontend_development/` | If web frontend in scope |
 | iOS development outputs | `ai-driven-development/development/mobile_development/ios/` | If iOS in scope |
 | Android development outputs | `ai-driven-development/development/mobile_development/android/` | If Android in scope |
+| Cross-platform mobile outputs | `ai-driven-development/development/mobile_development/cross-platform/` | If Flutter or React Native is in scope |
 
-**At least one Phase 4 development artifact must exist.** If none are present, stop and report which Phase 4 agents must run first.
+**At least one in-scope Phase 4 implementation artifact must exist (`4b`, `4c`, `4d`, `4e`, or `4i`).** If none are present, stop and report which Phase 4 agents must run first.
 
 **If any always-required artifact is missing**: Stop. Report which artifact is missing, which phase produces it (Phase 1: `legacy-analysis`, Phase 2: `legacy-architecture`, Phase 3: `target-architecture`), and offer: (a) Run the prerequisite phase now, (b) Provide the artifact path manually.
 
@@ -93,14 +97,19 @@ Format:
 | Nightly Batch Job | `cron_nightly.sh` | Scheduler | `NightlyJobConfig.java` | ✅ Full | Spring Batch replaces shell script |
 | [Legacy function] | [Legacy class/file] | [New service] | [New class/file] | ❌ Missing | [Why / plan] |
 
-**Coverage Status Key**:
-- ✅ Full — Fully implemented in new system
-- ⚠️ Partial — Partially implemented or behavior changed
-- ❌ Missing — Not yet implemented (MUST be resolved before cutover)
-- 🗑️ Removed — Intentionally not migrated (document justification)
+**Coverage Status Key** (canonical values from `core.md` §11 — use exact strings):
+- `✅ Full` — Fully implemented with functional parity
+- `⚠️ Partial` — Implemented but missing edge cases or minor behaviour
+- `🔄 Planned` — Absent but roadmapped; ticket/sprint and delivery date must exist
+- `❌ Missing` — Absent with no remediation plan — **blocks cutover** if feature is critical
+- `🗑️ Removed` — Intentionally not migrated; stakeholder sign-off required
 
 ### Step 2 — Architecture Comparison
 Compare architectural decisions side by side:
+
+> **⚠ EXAMPLE VALUES ONLY — REPLACE ALL ROWS WITH YOUR ACTUAL STACK.**
+> The table below uses a Java 8 → Java 21 / Spring / React migration as an illustration.
+> Read `legacy_analysis.md` and `tech_stack_selections.md` to populate the real values before saving this report.
 
 | Dimension | Legacy | New | Change Type | Impact |
 |---|---|---|---|---|
@@ -108,13 +117,13 @@ Compare architectural decisions side by side:
 | Language / Runtime | Java 8 | Java 21 (Virtual Threads) | Upgrade | Performance gain |
 | Frontend | JSP + jQuery | React 18 + TypeScript | Full rewrite | UX improvement |
 | Authentication | Custom session | JWT + OAuth2/LDAP | Replacement | Security improvement |
-| Authorization | Hard-coded role checks | `@PreAuthorize` + RBAC | Replacement | Maintainability |
-| Database Access | Raw JDBC + Stored Procs | Spring Data JPA | Replacement | Testability |
+| Authorization | Hard-coded role checks | RBAC at application boundary | Replacement | Maintainability |
+| Database Access | Raw JDBC + Stored Procs | ORM / query layer per stack | Replacement | Testability |
 | API Style | No REST (form POSTs) | REST + OpenAPI 3.1 | New | Integrability |
 | Messaging | File-based polling | Message Broker (Kafka/RabbitMQ) | Replacement | Reliability |
 | Deployment | Manual WAR deploy | Docker + CI/CD | Replacement | Repeatability |
 | Observability | Log files (manual) | Structured logs + Metrics + Tracing | Addition | Operational visibility |
-| Testing | None / manual | JUnit + Integration + E2E | Addition | Quality gate |
+| Testing | None / manual | Unit + Integration + E2E per stack | Addition | Quality gate |
 
 ### Step 3 — Non-Functional Improvement Analysis
 Quantify improvements where possible:
@@ -200,6 +209,56 @@ Complete after running load tests on the new system:
 
 ---
 
+### Step 3.6 — Automated Surface Diff
+
+Run automated diffs to catch regressions that manual review misses. Record results in `compare_legacy_to_new_system.md §5 — Automated Surface Diff`.
+
+#### 3.6.1 — API Surface Diff (openapi-diff)
+
+If both legacy and new system have OpenAPI specs (or the legacy endpoints were reverse-engineered in Phase 1):
+
+```bash
+# Install once
+npm install -g openapi-diff   # or: npx openapi-diff
+
+# Diff legacy spec against new spec
+openapi-diff legacy-openapi.json new-openapi.json --format markdown > api_surface_diff.md
+```
+
+Classify every change using the table below. Any **Breaking** change that is also present in the legacy feature list is a **cutover blocker** unless a migration path is documented.
+
+| Change Type | Example | Classification | Action Required |
+|---|---|---|---|
+| Endpoint removed | `DELETE /api/v1/reports/{id}` removed | **Breaking** | Document consumer impact; add to feature coverage table as `❌ Missing` |
+| Required field added | New mandatory request field | **Breaking** | Version the endpoint or provide default |
+| Response field removed | Field dropped from response body | **Breaking** | Document downstream consumers |
+| Endpoint added | New endpoint with no legacy equivalent | Non-breaking | Record as improvement |
+| Optional field added | New optional response field | Non-breaking | No action needed |
+| Status code changed | `200 → 204` on DELETE | **Breaking** | Update consumers |
+
+#### 3.6.2 — Feature List Diff (script)
+
+Compare the legacy feature inventory (from `legacy_analysis.md §5 — Business Flows`) against the new system's feature coverage table:
+
+```bash
+# Extract feature IDs from legacy analysis
+grep -oP '(?<=\| )\w+\-\d+' ai-driven-development/docs/legacy_analysis/legacy_analysis.md \
+  | sort -u > /tmp/legacy_features.txt
+
+# Extract covered feature IDs from coverage table
+grep '✅ Full\|⚠️ Partial\|🔄 Planned' \
+  ai-driven-development/docs/legacy_vs_new_system/compare_legacy_to_new_system.md \
+  | grep -oP '\w+\-\d+' | sort -u > /tmp/covered_features.txt
+
+# Report uncovered features
+comm -23 /tmp/legacy_features.txt /tmp/covered_features.txt > /tmp/uncovered_features.txt
+echo "Uncovered legacy features:"; cat /tmp/uncovered_features.txt
+```
+
+Any feature in `/tmp/uncovered_features.txt` that is not `🗑️ Removed` (with sign-off) is a **gap** — add it to the feature coverage table as `❌ Missing` and escalate for resolution before Phase 6.
+
+---
+
 ### Step 4 — Risk & Migration Strategy
 Identify transition risks and mitigation:
 
@@ -273,6 +332,8 @@ Before production migration, all items must be checked:
 ---
 
 ## Definition of Done (DoD)
+
+> 📋 **Quality review**: Before marking this phase complete, consult [quality-playbook/SKILL.md](../quality-playbook/SKILL.md) §3 — Phase 5 quality gates.
 
 ### Performance
 - [ ] Legacy performance baseline documented (P50/P95/P99 latency, throughput, batch duration)

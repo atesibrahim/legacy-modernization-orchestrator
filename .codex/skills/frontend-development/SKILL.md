@@ -1,6 +1,6 @@
 ---
 name: frontend-development
-description: 'Web frontend implementation for modernized applications. Trigger phrases: "implement web frontend", "build React app", "build Vue app", "build Angular app", "build Svelte app", "implement design system in code", "set up TanStack Query", "set up Zustand state", "set up Pinia state", "API integration with Axios", "Vitest unit tests", "Playwright e2e tests", "frontend performance optimization". Outputs: fe_development_todo.md + full frontend project under development/frontend_development/. NOT for mobile apps — use ios-development (Swift/SwiftUI) or android-development (Kotlin/Compose) instead. Requires ui-ux-design + target-architecture.'
+description: "Frontend development skill for legacy modernization. Act as a senior expert frontend developer. Use when: building React / Vue / Angular / Svelte TypeScript frontend, implementing design system components, state management TanStack Query Zustand Pinia NgRx, API integration Axios, code splitting lazy loading performance optimization, Vitest Playwright testing, phased frontend development plan. For mobile clients use ios-development or android-development skills instead."
 argument-hint: 'Project name or path to UI/UX design artifacts and system design to implement'
 ---
 

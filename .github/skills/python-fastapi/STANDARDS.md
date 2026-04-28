@@ -114,7 +114,7 @@ Rules:
 
 ## Standard Error Response Format
 
-All errors must follow the project's Problem Details convention. Use a FastAPI exception handler:
+All errors must follow the RFC 9457 canonical shape defined in [core.md §10](../../standards/core.md#10-standard-error-response-format-rfc-9457). Use a FastAPI exception handler:
 ```python
 from fastapi.responses import JSONResponse
 
@@ -127,7 +127,8 @@ async def app_exception_handler(request: Request, exc: AppException) -> JSONResp
             "title": exc.title,
             "status": exc.status_code,
             "detail": exc.detail,
-            "instance": str(request.url),
+            "instance": str(request.url.path),
+            "traceId": request.state.trace_id,  # mandatory extension
         },
     )
 ```

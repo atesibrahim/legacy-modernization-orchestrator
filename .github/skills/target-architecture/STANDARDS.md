@@ -312,9 +312,9 @@ Valid openers: `graph TB`, `graph LR`, `flowchart TD`, `sequenceDiagram`, `class
 
 ## File Creation Validation Checklist
 
-After generating the HTML file with `create_file`, verify all items before marking the step complete:
+After generating the HTML file with the active runtime's file-writing mechanism, verify all items before marking the step complete:
 
-1. **File exists** — confirm `create_file` succeeded at the exact path (e.g., `ai-driven-development/docs/target_architecture/target_architecture.html`)
+1. **File exists** — confirm the file-write step succeeded at the exact path (e.g., `ai-driven-development/docs/target_architecture/target_architecture.html`)
 2. **Single HTML document** — `<!DOCTYPE html>` appears exactly **once** in the file
 3. **Use `<pre class="mermaid">`** — no `<div class="mermaid">` elements exist in the file
 4. **Tag balance** — every `<pre class="mermaid">` has a matching `</pre>` on its own line
@@ -324,13 +324,13 @@ After generating the HTML file with `create_file`, verify all items before marki
 8. **All blocks closed** — every `subgraph`, `alt`, `loop`, `opt` has a matching `end`
 9. **No empty diagram blocks** — each `<pre class="mermaid">` contains actual diagram content
 
-If any check fails, **overwrite the entire file** with corrected content using `create_file` — never patch individual lines.
+If any check fails, **overwrite the entire file** with corrected content using the active runtime's file-writing mechanism — never patch individual lines.
 
 ---
 
 ## Architecture Decision Record (ADR) Template
 
-Use for each major architectural decision. Required ADRs: architecture style, auth approach, DB strategy, message broker, mobile strategy.
+Use for each major architectural decision. Required ADRs: architecture style, auth approach, DB strategy, message broker, mobile strategy, legacy DB migration strategy.
 
 ```markdown
 ## ADR-00X: [Decision Title]
@@ -403,7 +403,7 @@ Use for each major architectural decision. Required ADRs: architecture style, au
 [NFR table]
 
 ## 8. Architecture Decision Records
-[ADR-001 through ADR-005]
+[ADR-001 through ADR-006]
 
 ## 9. Technology Stack (Confirmed Choices)
 [Final confirmed selections from flexibles]

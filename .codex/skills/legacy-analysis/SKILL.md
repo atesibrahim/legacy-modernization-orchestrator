@@ -1,6 +1,6 @@
 ---
 name: legacy-analysis
-description: 'Legacy system deep-dive analysis for modernization projects. Trigger phrases: "analyse legacy codebase", "reverse engineer legacy architecture", "inventory legacy database schema", "find technical debt", "map business flows in legacy system", "detect hidden dependencies", "assess legacy security posture", "catalogue stored procedures and triggers", "produce table ownership matrix", "data quality assessment before migration". Outputs: legacy_analyse.md with technology profile, DB schema inventory, risk matrix, integration map, security findings, and UI screen inventory. Run this FIRST — all other phases depend on its output.'
+description: "Legacy system analysis skill. Act as a senior expert technical analyst. Use when: analysing legacy codebase, reverse engineering legacy architecture, identifying technical debt, mapping business flows, detecting hidden dependencies, assessing security posture, database schema reverse engineering, stored procedures and triggers inventory, table ownership matrix, data quality assessment, creating legacy architecture reports, risk matrix, data and integration maps before modernization."
 argument-hint: 'Path or description of the legacy project to analyze'
 ---
 

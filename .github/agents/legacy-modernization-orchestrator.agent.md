@@ -22,52 +22,68 @@ argument-hint: 'Legacy project path or name to begin full end-to-end redesign wo
 Phase 1 → Phase 2 → Phase 2.5 → Phase 3 → [Scope Selection] → Phase 4 (optional parallel phases) → Phase 5 → Phase 6
 ```
 
-> **Before Phase 4, the orchestrator MUST ask the user which development targets are needed.**
+> **Before Phase 4, the orchestrator MUST confirm which development targets are needed.**
+> When Phase 1 is available, it should pre-fill the scope from `legacy_analysis.md` Section 10 and present that scope for confirmation. Only ask direct target questions when the Phase 1 evidence is missing, incomplete, or ambiguous.
 > Development phases are optional — a project may need only backend, only web frontend, only mobile, or any combination.
 
 | Phase | Agent | Role | Required? |
 |---|---|---|---|
 | 1 | [`legacy-analysis`](./legacy-analysis.agent.md) | Legacy Analysis | Always |
 | 2 | [`legacy-architecture`](./legacy-architecture.agent.md) | Legacy Architecture Visualization | Always |
-| 2.5 | Tech Stack Selection Gate | User confirms all target tech choices | Always |
+| 2.5 | [`tech-stack-selection`](../skills/tech-stack-selection/SKILL.md) | User confirms all target tech choices | Always |
 | 3 | [`target-architecture`](./target-architecture.agent.md) | Target Architecture Design | Always |
 | 4a | [`ui-ux-design`](./ui-ux-design.agent.md) | UX & Interface Design | If any client UI needed |
 | 4b | [`backend-development`](./backend-development.agent.md) | Backend Implementation | **Optional** |
 | 4c | [`frontend-development`](./frontend-development.agent.md) | Web Frontend Implementation | **Optional** |
 | 4d | [`ios-development`](./ios-development.agent.md) | iOS Mobile App | **Optional** |
 | 4e | [`android-development`](./android-development.agent.md) | Android Mobile App | **Optional** |
-| 4f | `data-migration` | Data Migration & ETL | **Optional** |
-| 4g | `security-review` | Security Audit (OWASP Top 10) | **Optional** |
-| 4h | `devops-infra` | Infrastructure-as-Code & CI/CD | **Optional** |
+| 4f | [`data-migration`](./data-migration.agent.md) | Data Migration & ETL | **Optional** |
+| 4g | [`security-review`](./security-review.agent.md) | Security Audit (OWASP Top 10) | **Optional** |
+| 4h | [`devops-infra`](./devops-infra.agent.md) | Infrastructure-as-Code & CI/CD | **Optional** |
+| 4i | [`cross-platform-mobile`](./cross-platform-mobile.agent.md) | Flutter / React Native Mobile App | **Optional (non-default)** |
 | 5 | [`compare-legacy-to-new`](./compare-legacy-to-new.agent.md) | Gap Analysis & Comparison | After any dev phase complete |
-| 6 | Final Validation | Cutover Readiness | After Phase 5 |
+| 6 | [`final-validation`](./final-validation.agent.md) | Cutover Readiness | After Phase 5 |
 
 ### Parallelizable phases (after Phase 3 + scope confirmed)
-- Phase 4a (UI/UX) **must complete before** 4c, 4d, and 4e — frontend and mobile phases require wireframes and API contracts from 4a
-- Phase 4a **can run in parallel with** Phase 4b (backend), since backend does not depend on UI wireframes
-- Phase 4b, 4c, 4d, 4e can all run in parallel with each other once 4a is complete
-- Phase 4f (data-migration) can run in parallel with all Phase 4 sub-phases; it depends on Phase 3 (target schema known) but not on any other Phase 4 sub-phase
-- Phase 4g (security-review) runs after Phase 4b/4c/4d/4e code exists; it can overlap with Phase 5
-- Phase 4h (devops-infra) can run in parallel with Phase 4b once target architecture is confirmed; it produces IaC, CI/CD pipelines, and monitoring config
 
-### Cross-platform mobile — not supported
-> **Flutter, React Native, and KMM are not supported.** When a project requires cross-platform mobile:
-> - Option 1: Build native — use Phase 4d (`ios-development`) and/or Phase 4e (`android-development`)
-> - Option 2: Document the gap — note in `tech_stack_selections.md` that cross-platform is out of scope; a future skill may add this support
+| Phase | Gate to start | Safe to run in parallel with | Notes |
+|---|---|---|---|
+| 4a `ui-ux-design` | Phase 3 complete | 4b | **Must complete before** 4c, 4d, 4e — they depend on wireframes |
+| 4b `backend-development` | Phase 3 complete | 4a, 4h | Backend does not depend on UI wireframes |
+| 4c `frontend-development` | **4a complete** | 4b, 4d, 4e, 4f, 4h | Cannot start until wireframes exist |
+| 4d `ios-development` | **4a complete** | 4b, 4c, 4e, 4f, 4h | Cannot start until mobile design system exists |
+| 4e `android-development` | **4a complete** | 4b, 4c, 4d, 4f, 4h | Cannot start until mobile design system exists |
+| 4f `data-migration` | Phase 3 complete | 4b, 4c, 4d, 4e, 4i, 4h | Depends on target schema (Phase 3); independent of other Phase 4 sub-phases |
+| 4g `security-review` | **At least one of 4b/4c/4d/4e/4i complete** | Phase 5 | Code must exist to audit; can overlap with compare phase |
+| 4h `devops-infra` | Phase 3 complete + relevant deployable artifacts started | 4b, 4c, 4d, 4e, 4i, 4f | Produces IaC/CI-CD/monitoring for backend, web, and mobile delivery paths as applicable; feeds 4g and Phase 6 |
+| 4i `cross-platform-mobile` | **4a complete** + `tech_stack_selections.md` confirms Flutter or RN | 4b, 4c, 4f, 4h | **Mutually exclusive with 4d/4e for the same platform** — do not run both native and cross-platform |
+
+### Cross-platform mobile — optional (non-default)
+
+> **Native (Swift/Kotlin) is the default and recommended path.** Cross-platform mobile is an optional path (Phase 4i) via the `cross-platform-mobile` skill.
 >
-> Do **NOT** attempt to generate Flutter/React Native/KMM code via `ios-development` or `android-development` — the output will be incorrect.
+> | Decision | When | Phase |
+> |---|---|---|
+> | Native iOS | Platform-native behaviour, deep OS integration | 4d |
+> | Native Android | Platform-native behaviour, deep OS integration | 4e |
+> | Flutter | Unified codebase, team knows Dart, confirmed in `tech_stack_selections.md` | 4i |
+> | React Native | Unified codebase, team knows React/TS, confirmed in `tech_stack_selections.md` | 4i |
+>
+> **4i is mutually exclusive with 4d/4e for the same mobile target.** Do NOT run both native and cross-platform for the same platform.
+> Do NOT attempt to generate Flutter/React Native code via `ios-development` or `android-development` — the output will be incorrect.
+> KMM is not supported — it is a business-logic sharing layer, not a full UI framework.
 
 ---
 
 ## Execution Rules
 
 1. **Never skip Phases 1–3** — analysis, legacy design, and target design are always required
-2. **Scope Selection is mandatory before Phase 4** — ask the user which development targets apply (see Scope Selection below)
+2. **Scope Selection is mandatory before Phase 4** — confirm which development targets apply using Phase 1 auto-detection when available; ask directly only if needed (see Scope Selection below)
 3. **Tech Stack Selection Gate (Phase 2.5) is mandatory** — collect ALL technology choices from the user after Phase 2, save to `tech_stack_selections.md`, then proceed to Phase 3
 4. **Skip optional phases that are out of scope** — do not execute them; mark as N/A in tracker
 5. **Validate DoD before proceeding** — if DoD not met, refine current phase before moving on
 6. **Document phase status** — update the tracker file after each phase
-7. **Parallelize where safe** — Phase 4a must complete before 4c/4d/4e (they depend on wireframes); 4a can run in parallel with 4b; 4b/4c/4d/4e can run in parallel with each other
+7. **Parallelize where safe** — consult the Phase 4 Parallelism Matrix above; 4f/4g/4h have their own gates and must not be started before their prerequisites are met; 4i is mutually exclusive with 4d/4e for the same mobile target
 
 ---
 
@@ -132,15 +148,125 @@ Create `ai-driven-development/redesign_progress.md` to track all phases:
 | 2 | legacy-architecture | ⬜ Not Started | — | — | |
 | 2.5 | tech-stack-selection | ⬜ Not Started | — | — | |
 | 3 | target-architecture | ⬜ Not Started | — | — | |
-| 4a | ui-ux-design | ⬜ Not Started | — | — | |
+| 4a | ui-ux-design | ⬜ N/A | — | — | ← if not in scope |
 | 4b | backend-development | ⬜ N/A | — | — | ← if not in scope |
 | 4c | frontend-development | ⬜ N/A | — | — | ← if not in scope |
 | 4d | ios-development | ⬜ N/A | — | — | ← if not in scope |
 | 4e | android-development | ⬜ N/A | — | — | ← if not in scope |
+| 4f | data-migration | ⬜ N/A | — | — | ← if not in scope |
+| 4g | security-review | ⬜ N/A | — | — | ← if not in scope |
+| 4h | devops-infra | ⬜ N/A | — | — | ← if not in scope |
+| 4i | cross-platform-mobile | ⬜ N/A | — | — | ← only if Flutter/RN confirmed in tech_stack_selections.md |
 | 5 | compare-legacy-to-new | ⬜ Not Started | — | — | |
 | 6 | final-validation | ⬜ Not Started | — | — | |
 
 ## Status Key: ⬜ Not Started | 🔄 In Progress | ✅ Complete | ❌ Blocked | — N/A (out of scope)
+```
+
+---
+
+## Advisory: Token Budget Estimate
+
+> **Use this in two passes:**
+> 1. **Rough estimate before Phase 1** using the user's stated project intent or a conservative default profile when scope is still unknown.
+> 2. **Refined estimate after Phase 1** once `legacy_analysis.md` Section 10 confirms the actual scope.
+>
+> This step is advisory. Its purpose is to help the user understand expected token consumption before a long orchestration run, then refine that estimate once scope is evidence-based.
+
+### Token Estimates by Scope Profile
+
+Estimates below are rough midpoints based on typical legacy systems of moderate complexity. Very large codebases (> 500 files) or highly complex DBs (> 200 tables) trend toward the upper bound; greenfield stubs or minimal codebases trend toward the lower bound.
+
+| Phase | Scope | Estimated tokens (input + output) |
+|---|---|---|
+| 1 — legacy-analysis | Always | 80k – 200k |
+| 2 — legacy-architecture | Always | 30k – 80k |
+| 2.5 — tech-stack-selection | Always | 5k – 15k |
+| 3 — target-architecture | Always | 60k – 150k |
+| 4a — ui-ux-design | If any UI in scope | 60k – 150k |
+| 4b — backend-development | If backend in scope | 150k – 400k |
+| 4c — frontend-development | If web frontend in scope | 100k – 300k |
+| 4d — ios-development | If iOS in scope | 100k – 300k |
+| 4e — android-development | If Android in scope | 100k – 300k |
+| 4f — data-migration | If in scope | 40k – 120k |
+| 4g — security-review | If in scope | 30k – 80k |
+| 4h — devops-infra | If in scope | 40k – 120k |
+| 5 — compare-legacy-to-new | Always | 40k – 100k |
+| 6 — final-validation | Always | 20k – 50k |
+
+### Scope Roll-up Table
+
+Use this table for both the rough and refined estimate:
+
+| Scope Profile | Phases included | Estimated total tokens |
+|---|---|---|
+| Backend-only (no UI) | 1, 2, 2.5, 3, 4b, 4f†, 4g†, 4h†, 5, 6 | **600k – 1.5M** |
+| Fullstack web (backend + web) | 1, 2, 2.5, 3, 4a, 4b, 4c, 4f†, 4g†, 4h†, 5, 6 | **900k – 2.3M** |
+| Fullstack + iOS | above + 4d | **1.0M – 2.6M** |
+| Fullstack + Android | above + 4e | **1.0M – 2.6M** |
+| Fullstack + iOS + Android | above + 4d + 4e | **1.1M – 2.9M** |
+
+† Phases marked † are optional — include in estimate only if confirmed in scope.
+
+### Pass 1 — Rough Estimate Before Phase 1
+
+Before invoking Phase 1, if the user asked for a **full run**, present a rough estimate using whichever of the following is available:
+- the user's stated delivery intent (for example: backend-only, fullstack web, mobile modernization)
+- an existing prior tracker if resuming work
+- otherwise a conservative default such as **fullstack web** until Phase 1 confirms the actual profile
+
+Use the following prompt:
+
+> **Preliminary Token Budget Estimate**
+>
+> Before Phase 1, I can only estimate from the currently declared scope (**[profile name or provisional profile]**). This full run is likely to consume approximately **[lower]k – [upper]k tokens** across [N] phases.
+>
+> - This is a **rough estimate** and may change after Phase 1 analyzes the actual repository.
+> - It covers all phases in sequence, including parallel Phase 4 sub-phases.
+> - Very large or highly coupled legacy systems may exceed the upper bound.
+> - Token usage varies by model; consult your provider's pricing page for cost conversion.
+> - You can run individual phases in isolation (Mode B / Mode C — see `agent-governance/SKILL.md` §1) to spread the run over multiple sessions.
+>
+> **Proceed to Phase 1? [Y / N]**
+> - **Y** — Begin Phase 1 now.
+> - **N** — The orchestrator will stop. You can re-invoke for any individual phase at any time.
+
+> **Non-interactive / CI environments**: If no TTY is available or `--yes` is passed, default to **Y** and log a note that the budget prompt was auto-accepted.
+
+### Pass 2 — Refined Estimate After Phase 1
+
+After Phase 1 completes and the user confirms scope from `legacy_analysis.md` Section 10, recompute the estimate using the **confirmed scope**.
+
+Present the following before proceeding deeper into the remaining phases:
+
+> **Refined Token Budget Estimate**
+>
+> Phase 1 confirmed the project scope as **[profile name]** with the following in-scope phases: **[list]**.
+>
+> The updated full-run estimate is approximately **[lower]k – [upper]k tokens** across [N] phases.
+>
+> - This refined estimate supersedes the preliminary estimate.
+> - Optional phases 4f / 4g / 4h are included only if confirmed in scope.
+> - If this revised estimate is materially higher than expected, you can stop here and resume with individual phases later.
+>
+> **Continue after Phase 1? [Y / N]**
+> - **Y** — Continue with Phase 2.
+> - **N** — Stop after Phase 1; preserve all artifacts and tracker state.
+
+> **Non-interactive / CI environments**: If no TTY is available or `--yes` is passed, default to **Y** and log a note that the refined budget prompt was auto-accepted.
+
+Record both the preliminary and refined ranges, plus the user confirmation decision, in `ai-driven-development/redesign_progress.md` under a `## Token Budget` section:
+
+```markdown
+## Token Budget
+- Preliminary scope assumption: [profile or "provisional"]
+- Preliminary estimate: [lower]k – [upper]k tokens
+- Preliminary confirmation: Yes / Auto-accepted (non-interactive) / No (run stopped)
+- Confirmed scope after Phase 1: [profile]
+- In-scope phases: [list]
+- Refined estimate: [lower]k – [upper]k tokens
+- Refined confirmation: Yes / Auto-accepted (non-interactive) / No (run stopped after Phase 1)
+- Actual spend: [update at Phase 6]
 ```
 
 ---
@@ -191,158 +317,29 @@ Create `ai-driven-development/redesign_progress.md` to track all phases:
 ---
 
 ## Phase 2.5: Tech Stack Selection Gate
-**Role**: Orchestrator — gather all technology choices from the user before any design or code work begins
+**Agent**: [`tech-stack-selection`](../skills/tech-stack-selection/SKILL.md)  
+**Role**: Orchestrator — gather all technology choices from the user before any design or code work begins  
 **Required**: Always — this gate must complete before Phase 3 starts
 
-**Requires**: Phase 2 complete (legacy architecture understood), Scope confirmed (from Phase 1 analysis)
+**Requires**: Phase 2 complete (legacy architecture understood), scope confirmed (from Phase 1 analysis)
 
-> **Purpose**: Collect and persist every flexible technology decision for all in-scope tiers in one place. All downstream agents (target-architecture, ui-ux-design, backend-development, frontend-development, ios-development, android-development) will read `tech_stack_selections.md` instead of asking the user again.
+> **Purpose**: Collect and persist every flexible technology decision for all in-scope tiers in one place. All downstream agents (Phases 3–6) will read `tech_stack_selections.md` instead of asking the user again.
 
 **Execute**:
-Present the following questionnaire to the user, showing **only the sections relevant to the confirmed scope**. Record the user's answers and save them to `ai-driven-development/docs/tech_stack_selections.md`.
-
-> "Before I begin designing the target architecture, I need to confirm your technology preferences.
->
-> **Option A — Skip selection (use defaults)**: Type `skip` or `default` and I will apply the full default stack immediately:
-> - Backend: Java 21 + Spring Boot 3.5, PostgreSQL, Keycloak, no broker, Redis, `@Scheduled`
-> - Frontend: React 18 + TypeScript, MUI v5, Zustand, no charts/table/RTE/i18n, CSS transitions
-> - iOS: CoreData, AsyncImage, APNs only, no crash/analytics, SPM
-> - Android: Moshi, FCM, no crash/analytics, manual pagination, no WorkManager
-> - Common: Docker Compose, GitHub Actions, Prometheus + Grafana
->
-> **Option B — Answer each question**: Pick from the listed options **or type any custom value** — you are not limited to the suggestions shown. For each question you can also type `default` to accept the recommended option for that item.
->
-> Which would you prefer?"
-
-### Skip / Default Behaviour
-If the user types `skip`, `default`, or `use defaults`:
-- Populate `tech_stack_selections.md` with the full default stack listed in Option A above.
-- Skip all remaining questions.
-- Proceed directly to the DoD gate.
-
-If the user chooses to answer individually, for **any question** where the user types `default`, apply the *(default)* or *(recommended)* option shown for that question.
-
-> **Custom values are always accepted**: if the user types a technology not listed in the options (e.g. "Oracle DB", "Bun", "SolidJS", "Drizzle ORM"), record it exactly as entered. Do not reject or ask again.
-
-### Questions — Common (always ask)
-> For each question: pick an option, type `default` for the recommended choice, or type any custom value.
-
-| # | Decision | Options *(custom values accepted)* |
-|---|---|---|
-| C1 | **Container/Deployment Strategy** | **Docker Compose** *(default)* / OpenShift / Docker + Kubernetes / Cloud PaaS / *custom* |
-| C2 | **CI/CD Platform** | **GitHub Actions** *(default)* / GitLab CI / Jenkins / *custom* |
-| C3 | **Observability Stack** | **Prometheus + Grafana** *(default)* / Datadog / ELK Stack / *custom* |
-
-### Questions — Backend *(ask only if Backend is in scope)*
-> For each question: pick an option, type `default` for the recommended choice, or type any custom value.
-
-| # | Decision | Options *(custom values accepted)* |
-|---|---|---|
-| B0 | **Backend Language & Framework** | **Java 21 + Spring Boot 3.5** *(default)* / .NET 9 + ASP.NET Core / Python 3.12 + FastAPI / Go 1.23 + Gin or Fiber / *custom* |
-| B1 | **Architecture Style** | **Modular Monolith** *(default)* / Microservices / Hybrid / *custom* |
-| B2 | **Database** | **PostgreSQL** *(default)* / Oracle / MySQL / MongoDB / *custom* |
-| B3 | **Auth Provider** | **Keycloak (OAuth2/OIDC)** *(default — works with all languages)* / Spring Security + LDAP *(Java only)* / ASP.NET Identity *(.NET only)* / Auth0 / *custom* |
-| B4 | **Message Broker** | **None** *(default)* / Kafka / RabbitMQ / AWS SQS / *custom* |
-| B5 | **Caching** | **Redis** *(default)* / In-process cache / None / *custom* |
-| B6 | **Job Scheduling** | **Framework default scheduler** *(default)* / Quartz / Hangfire *(.NET)* / APScheduler *(Python)* / *custom* |
-
-### Questions — Web Frontend *(ask only if Web Frontend is in scope)*
-> For each question: pick an option, type `default` for the recommended choice, or type any custom value.
-
-| # | Decision | Options *(custom values accepted)* |
-|---|---|---|
-| F0 | **Frontend Framework** | **React 18 + TypeScript** *(default)* / Vue 3 + TypeScript / Angular 18 / Svelte 5 + TypeScript / *custom* |
-| F1 | **UI Component Library** | **MUI v5** *(default)* / shadcn/ui + Tailwind CSS / Chakra UI v3 *(React)* · PrimeVue / Vuetify / Quasar *(Vue)* · Angular Material / PrimeNG *(Angular)* · shadcn-svelte + Tailwind *(Svelte)* / *custom* |
-| F2 | **Global State Management** | **Zustand** *(default, React)* / Redux Toolkit / Jotai / Context API only *(React)* · **Pinia** *(default, Vue)* · **NgRx** *(default, Angular)* / Signals · **Svelte stores** *(default, Svelte)* / *custom* |
-| F3 | **Charts / Data Visualization** | **None** *(default)* / Recharts / Chart.js / Nivo / *custom* |
-| F4 | **Data Table** | **None** *(default)* / TanStack Table v8 / AG Grid Community / *custom* |
-| F5 | **Rich Text Editor** | **None** *(default)* / TipTap / Quill / *custom* |
-| F6 | **Internationalization (i18n)** | **None** *(default)* / react-i18next *(React)* · vue-i18n *(Vue)* · Angular i18n built-in *(Angular)* · svelte-i18n *(Svelte)* / *custom* |
-| F7 | **Animation** | **CSS transitions only** *(default)* / Framer Motion *(React/Svelte)* / GSAP / *custom* |
-
-### Questions — iOS App *(ask only if iOS is in scope)*
-> For each question: pick an option, type `default` for the recommended choice, or type any custom value.
-
-| # | Decision | Options *(custom values accepted)* |
-|---|---|---|
-| I1 | **Local Persistence** | **CoreData** *(default)* / SwiftData (iOS 17+) / SQLite (GRDB) / None / *custom* |
-| I2 | **Image Loading** | **Native AsyncImage** *(default)* / Kingfisher / SDWebImageSwiftUI / *custom* |
-| I3 | **Push Notifications** | **APNs only** *(default)* / APNs + Firebase Cloud Messaging (FCM) / None / *custom* |
-| I4 | **Crash Reporting** | **None** *(default)* / Firebase Crashlytics / Sentry / *custom* |
-| I5 | **Analytics** | **None** *(default)* / Firebase Analytics / Amplitude / *custom* |
-| I6 | **Package Manager** | **Swift Package Manager (SPM)** *(default)* / CocoaPods / *custom* |
-
-### Questions — Android App *(ask only if Android is in scope)*
-> For each question: pick an option, type `default` for the recommended choice, or type any custom value.
-
-| # | Decision | Options *(custom values accepted)* |
-|---|---|---|
-| A1 | **JSON Serialization** | **Moshi** *(default)* / Gson / kotlinx.serialization / *custom* |
-| A2 | **Push Notifications** | **Firebase Cloud Messaging (FCM)** *(default)* / None / *custom* |
-| A3 | **Crash Reporting** | **None** *(default)* / Firebase Crashlytics / Sentry / *custom* |
-| A4 | **Analytics** | **None** *(default)* / Firebase Analytics / Amplitude / *custom* |
-| A5 | **Paging Strategy** | **Manual pagination** *(default)* / Paging 3 (Jetpack) / None / *custom* |
-| A6 | **Background Sync (WorkManager)** | **No** *(default)* / Yes / *custom* |
-
-**Save confirmed choices to**:
-```
-ai-driven-development/docs/tech_stack_selections.md
-```
-
-Using this template:
-```markdown
-# Tech Stack Selections
-## Project: [Project Name]
-## Confirmed: [Date]
-## Scope: [Backend / Web Frontend / iOS / Android — only confirmed tiers]
-
-## Common
-- Container/Deployment: [choice]
-- CI/CD: [choice]
-- Observability: [choice]
-
-## Backend *(if in scope)*
-- Language / Framework: [choice]
-- Architecture Style: [choice]
-- Database: [choice]
-- Auth Provider: [choice]
-- Message Broker: [choice]
-- Caching: [choice]
-- Job Scheduling: [choice]
-
-## Web Frontend *(if in scope)*
-- Framework: [choice]
-- UI Component Library: [choice]
-- Global State Management: [choice]
-- Charts / Data Visualization: [choice]
-- Data Table: [choice]
-- Rich Text Editor: [choice]
-- Internationalization: [choice]
-- Animation: [choice]
-
-## iOS *(if in scope)*
-- Local Persistence: [choice]
-- Image Loading: [choice]
-- Push Notifications: [choice]
-- Crash Reporting: [choice]
-- Analytics: [choice]
-- Package Manager: [choice]
-
-## Android *(if in scope)*
-- JSON Serialization: [choice]
-- Push Notifications: [choice]
-- Crash Reporting: [choice]
-- Analytics: [choice]
-- Paging Strategy: [choice]
-- Background Sync (WorkManager): [choice]
-```
+> Read and follow **`.github/skills/tech-stack-selection/SKILL.md`** in full — it contains the complete questionnaire, skip/default logic, custom-value handling (including the protocol for requesting supporting docs when an unfamiliar or enterprise-specific technology is entered), and the output schema for all tiers.
 
 **DoD Gate** — do NOT proceed to Phase 3 until ALL are checked:
-- [ ] User has answered all questions for all in-scope tiers
+- [ ] User has answered all questions for all in-scope tiers (or selected the default stack)
 - [ ] `ai-driven-development/docs/tech_stack_selections.md` created with all confirmed choices
-- [ ] No section left with placeholder `[choice]` values for in-scope tiers
-- [ ] All mandatory keys populated: Backend Language/Framework, Database, Auth Provider (if backend in scope); Frontend Framework (if web in scope); iOS minimum target (if iOS in scope); Android minimum SDK (if Android in scope)
-- [ ] Template reference: `.github/skills/tech-stack-selection/tech_stack_selections.template.md` — use as schema reference to ensure all keys are present
+- [ ] § Common complete: Container/Deployment, CI/CD, Cloud Provider, Secret Management, Observability all populated
+- [ ] § Backend complete (if in scope): Language/Framework, Database, Auth Provider all populated
+- [ ] § Web Frontend complete (if in scope): Framework populated
+- [ ] § Mobile complete (if any mobile target is in scope): Framework populated
+- [ ] § Mobile complete (if Framework = Flutter or React Native): Minimum iOS Target and Minimum SDK populated
+- [ ] § iOS complete (if native iOS is in scope): Minimum iOS Target populated
+- [ ] § Android complete (if native Android is in scope): Minimum SDK populated
+- [ ] Every custom or unfamiliar technology either has supporting documentation recorded in the `Notes` column, or is marked as a placeholder with a phase-deadline note
+- [ ] No unresolved placeholders for any mandatory key in any in-scope tier
 
 ---
 
@@ -377,7 +374,7 @@ Using this template:
 
 > **All Phase 4 sub-phases are optional except 4a (required whenever any UI is in scope).**
 > Only execute the sub-phases confirmed in the Scope Selection step.
-> Phase 4a must complete before 4c/4d/4e (they depend on wireframes); 4a can run in parallel with 4b; 4b/4c/4d/4e can run in parallel with each other.
+> Phase 4a must complete before 4c/4d/4e/4i (they depend on wireframes); 4a can run in parallel with 4b; 4b/4c/4d/4e/4i can run in parallel with each other as scope allows; 4f/4g/4h can overlap once their prerequisites are met. Phase 4i is mutually exclusive with 4d/4e for the same delivery target.
 
 ---
 
@@ -511,11 +508,122 @@ Using this template:
 
 ---
 
+### Phase 4f: Data Migration *(Optional)*
+**Agent**: [`data-migration`](./data-migration.agent.md)
+**Role**: Senior Data Migration Engineer
+**Required if**: Legacy data must be transformed, reconciled, or moved into a new schema
+**Skip if**: No data migration is needed - mark as N/A in tracker
+
+**Requires**: Phase 3 complete (target schema and bounded contexts known)
+
+**Execute**:
+> Invoke the `data-migration` agent - it will follow all migration planning, ETL, validation, cutover, and rollback steps in its skill
+
+**Produce**:
+- `ai-driven-development/development/data_migration/data_migration_todo.md`
+- `ai-driven-development/development/data_migration/schema_migrations/`
+- `ai-driven-development/development/data_migration/etl_scripts/`
+- `ai-driven-development/development/data_migration/validation/`
+- `ai-driven-development/development/data_migration/cutover/`
+
+**DoD Gate**:
+- [ ] Schema mapping table covers 100% of legacy tables
+- [ ] Schema migration scripts applied successfully on staging
+- [ ] ETL scripts tested on production-like staging data
+- [ ] Pre- and post-migration validation queries produce matching counts and checksums
+- [ ] Reconciliation report signed off by DBA and Product Owner
+- [ ] Cutover procedure rehearsed on staging
+- [ ] Rollback playbook written and tested
+
+---
+
+### Phase 4g: Security Review *(Optional)*
+**Agent**: [`security-review`](./security-review.agent.md)
+**Role**: Senior Application Security Engineer
+**Required if**: Security review is in scope before go-live
+**Skip if**: Security review intentionally deferred - mark as N/A in tracker only with explicit user acceptance
+
+**Requires**: Phase 3 complete plus at least one in-scope Phase 4 code artifact (backend, frontend, native mobile, or cross-platform mobile)
+
+**Execute**:
+> Invoke the `security-review` agent - it will audit all in-scope layers against OWASP Top 10, dependency risk, secret exposure, and deployment hardening controls
+
+**Produce**:
+- `ai-driven-development/docs/security_review/security_review_report.md`
+- `ai-driven-development/docs/security_review/security_review_report.html`
+
+**DoD Gate**:
+- [ ] All OWASP Top 10 categories audited for every in-scope layer
+- [ ] Zero Critical findings remaining unmitigated
+- [ ] Zero High findings without documented accepted-risk justification
+- [ ] Dependency scans pass with CVSS < 7
+- [ ] Secrets scan reports zero verified secrets in codebase or image history
+- [ ] Security report reviewed and signed off by lead developer
+
+---
+
+### Phase 4h: DevOps & Infrastructure *(Optional)*
+**Agent**: [`devops-infra`](./devops-infra.agent.md)
+**Role**: Senior DevOps Platform Engineer
+**Required if**: Infrastructure-as-code, CI/CD, runtime environments, or observability assets are in scope
+**Skip if**: Platform/infrastructure work is not part of this engagement - mark as N/A in tracker
+
+**Requires**: Phase 3 complete; backend implementation started if infra depends on real service artifacts
+
+**Execute**:
+> Invoke the `devops-infra` agent - it will produce IaC, pipeline, secret-management, and observability assets by following its skill in full
+
+**Produce**:
+- `ai-driven-development/development/infra/infra_todo.md`
+- `ai-driven-development/development/infra/kubernetes/`
+- `ai-driven-development/development/infra/terraform/` or `pulumi/`
+- `ai-driven-development/development/infra/ci-cd/`
+- `ai-driven-development/development/infra/monitoring/`
+- `ai-driven-development/development/infra/secrets/`
+
+**DoD Gate**:
+- [ ] Infra tracker created with all in-scope components listed
+- [ ] K8s or Helm definitions validate successfully
+- [ ] Terraform or Pulumi plan produces no errors
+- [ ] CI pipeline runs tests and security scans before build or deploy
+- [ ] Staging deploy automated and production deploy gated
+- [ ] Alerting and dashboard coverage complete for required golden signals
+- [ ] No secrets hard-coded anywhere
+
+---
+
+### Phase 4i: Cross-Platform Mobile Development *(Optional, non-default)*
+**Agent**: [`cross-platform-mobile`](./cross-platform-mobile.agent.md)
+**Role**: Senior Expert Cross-Platform Mobile Developer
+**Required if**: Mobile is in scope and `tech_stack_selections.md` confirms Flutter or React Native
+**Skip if**: Native iOS and/or Android delivery is selected instead - mark as N/A in tracker
+
+**Requires**: Phase 4a complete (mobile wireframes) + Phase 3 complete + `tech_stack_selections.md` `§ Mobile` confirms Flutter or React Native + backend APIs available or OpenAPI mock
+
+**Execute**:
+> Invoke the `cross-platform-mobile` agent - it will follow all setup, architecture, feature, testing, and deployment steps in its skill
+
+**Produce**:
+- `ai-driven-development/development/mobile_development/cross-platform/cross_platform_development_todo.md`
+- `ai-driven-development/development/mobile_development/cross-platform/{project_name}/` (all Flutter or React Native code)
+
+**DoD Gate**:
+- [ ] All screens implemented matching wireframes
+- [ ] Auth flow (login, token refresh, logout) working end-to-end
+- [ ] Lint zero warnings
+- [ ] Clean architecture layers respected
+- [ ] Tokens stored only in secure storage
+- [ ] E2E or integration tests cover the primary user journey on both platforms
+- [ ] Builds succeed for both iOS and Android
+- [ ] TestFlight and Play Console internal distribution validated
+
+---
+
 ## Phase 5: Comparison & Gap Analysis
 **Agent**: [`compare-legacy-to-new`](./compare-legacy-to-new.agent.md)
 **Role**: Senior Master Architect / Analyst / Developer
 
-**Requires**: At least one development phase (4b–4e) complete, or all in-scope dev phases complete
+**Requires**: At least one in-scope Phase 4 implementation phase complete (`4b`, `4c`, `4d`, `4e`, or `4i`), or all in-scope implementation phases complete
 
 **Execute**:
 > Invoke the `compare-legacy-to-new` agent — it will follow all steps in its skill
@@ -535,10 +643,15 @@ Using this template:
 ---
 
 ## Phase 6: Final Validation & Cutover Readiness
-**Agent skill:** [`.github/skills/final-validation/SKILL.md`](../skills/final-validation/SKILL.md)  
-**Role**: Full team review — release readiness, rollback readiness, stakeholder sign-off, go/no-go decision.
+**Agent**: [`final-validation`](./final-validation.agent.md)
+**Role**: Senior Release Manager — release readiness, rollback readiness, stakeholder sign-off, go/no-go decision.
 
-> Read `.github/skills/final-validation/SKILL.md` in full before starting Phase 6. Follow every step. All DoD items must be ✅ before production cutover.
+**Requires**: Phase 5 complete plus all in-scope Phase 4 artifacts ready for release validation
+
+**Execute**:
+> Invoke the `final-validation` agent — it will follow all release-readiness, smoke-test, rollback, and go/no-go steps in its skill
+
+> The `final-validation` agent reads `.github/skills/final-validation/SKILL.md` in full before starting. All DoD items must be ✅ before production cutover.
 
 **Summary checklist** (full detail in skill):
 
@@ -574,49 +687,62 @@ Using this template:
 ---
 
 ## Artifact Map
-Full list of all possible outputs — only artifacts for in-scope targets will be produced:
+Full list of all possible outputs — only artifacts for in-scope targets will be produced.
+Authoritative path reference: `.github/skills/STANDARDS_OUTPUTS.md`
 
 ```
 ai-driven-development/
-├── redesign_progress.md                         ← Phase tracker (always)
+├── redesign_progress.md                              ← Phase tracker (always)
+│
 ├── docs/
+│   ├── tech_stack_selections.md                      ← Phase 2.5 (always)
+│   ├── adr/
+│   │   └── ADR-{NNN}-{title}.md                     ← On-demand, any phase
 │   ├── legacy_analysis/
-│   │   └── legacy_analysis.md                    ← Phase 1 (always)
+│   │   └── legacy_analysis.md                        ← Phase 1 (always)
 │   ├── legacy_architecture/
-│   │   ├── legacy_architecture.md              ← Phase 2 (always)
-│   │   ├── legacy_architecture.html            ← Phase 2 (always)
+│   │   ├── legacy_architecture.md                    ← Phase 2 (always)
+│   │   └── legacy_architecture.html                  ← Phase 2 (always)
 │   ├── target_architecture/
-│   │   ├── target_architecture.md                     ← Phase 3 (always)
-│   │   └── target_architecture.html                   ← Phase 3 (always)
-│   ├── ui_design/
-│   │   ├── ui_ux_pages.md                       ← Phase 4a (if any UI)
-│   │   └── ui_ux_pages.html                     ← Phase 4a (if any UI)
-│   └── legacy_vs_new_system/
-│       ├── compare_legacy_to_new_system.md       ← Phase 5 (always)
-│       └── compare_legacy_to_new_system.html     ← Phase 5 (always)
-├── development/
-│   ├── be_development_todo.md                   ← Phase 4b (if backend in scope)
-│   ├── backend_development/                     ← Phase 4b (if backend in scope)
-│   ├── fe_development_todo.md                   ← Phase 4c (if web frontend in scope)
-│   ├── frontend_development/                    ← Phase 4c (if web frontend in scope)
-│   └── mobile_development/
-│       ├── ios/
-│       │   ├── ios_development_todo.md          ← Phase 4d (if iOS in scope)
-│       │   └── {project_name}/                  ← Phase 4d Xcode project
-│       └── android/
-│           ├── android_development_todo.md      ← Phase 4e (if Android in scope)
-│           └── {project_name}/                  ← Phase 4e Gradle project
-│   └── data_migration/                          ← Phase 4f (if data migration in scope)
-│       ├── data_migration_todo.md
-│       ├── schema_migrations/
-│       ├── validation/
-│       ├── cleansing/
-│       └── rollback/
-│   └── security_review/                         ← Phase 4g (if security review in scope)
-│       ├── security_review_report.md
-│       └── security_review_report.html
+│   │   ├── target_architecture.md                    ← Phase 3 (always)
+│   │   └── target_architecture.html                  ← Phase 3 (always)
+│   ├── ui_design/                                    ← Phase 4a (if any UI)
+│   │   ├── ui_ux_pages.md
+│   │   ├── ui_ux_pages.html
+│   │   ├── tokens.json
+│   │   ├── component_api.md
+│   │   ├── design-implementation-checklist.md
+│   │   └── storybook_stubs/
+│   ├── security_review/                              ← Phase 4g (optional)
+│   │   ├── security_review_report.md
+│   │   └── security_review_report.html
+│   ├── legacy_vs_new_system/
+│   │   ├── compare_legacy_to_new_system.md           ← Phase 5 (always)
+│   │   └── compare_legacy_to_new_system.html         ← Phase 5 (always)
+│   └── final_validation/                             ← Phase 6 (always)
+│       ├── release_readiness_checklist.md
+│       ├── go_no_go_decision.md
+│       └── smoke_test_plan.md
+│
 └── development/
-    └── infra/                                   ← Phase 4h (if devops-infra in scope)
+    ├── be_development_todo.md                        ← Phase 4b (if backend in scope)
+    ├── backend_development/                          ← Phase 4b
+    ├── fe_development_todo.md                        ← Phase 4c (if web frontend in scope)
+    ├── frontend_development/                         ← Phase 4c
+    ├── mobile_development/
+    │   ├── ios/                                      ← Phase 4d (if iOS in scope)
+    │   │   ├── ios_development_todo.md
+    │   │   └── {ProjectName}/
+    │   └── android/                                  ← Phase 4e (if Android in scope)
+    │       ├── android_development_todo.md
+    │       └── {ProjectName}/
+    ├── data_migration/                               ← Phase 4f (optional)
+    │   ├── data_migration_todo.md
+    │   ├── schema_migrations/
+    │   ├── validation/
+    │   ├── cleansing/
+    │   └── rollback/
+    └── infra/                                        ← Phase 4h (optional)
         ├── infra_todo.md
         ├── kubernetes/
         ├── helm/
@@ -624,11 +750,6 @@ ai-driven-development/
         ├── ci-cd/
         ├── monitoring/
         └── secrets/
-└── docs/
-    └── final_validation/                        ← Phase 6 (always)
-        ├── release_readiness_checklist.md
-        ├── go_no_go_decision.md
-        └── smoke_test_plan.md
 ```
 
 ---
@@ -642,7 +763,7 @@ The orchestrator will:
 1. Load this agent
 2. Check `redesign_progress.md` for current phase (if resuming)
 3. Execute Phases 1–3 in sequence
-4. **Pause at Scope Selection** — ask which development targets are needed
+4. **Pause at Scope Selection** — present the auto-detected targets for confirmation, or ask directly if Phase 1 did not resolve scope
 5. Execute only in-scope Phase 4 agents (in parallel where possible)
 6. Run Phase 5 comparison after all in-scope dev phases complete
 7. Validate Phase 6 final readiness checklist

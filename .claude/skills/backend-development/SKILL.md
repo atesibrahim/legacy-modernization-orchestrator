@@ -1,6 +1,6 @@
 ---
 name: backend-development
-description: "Backend API and service implementation for modernized systems. Trigger phrases: "implement backend", "build REST API", "build Spring Boot service", "build ASP.NET Core API", "build FastAPI service", "build Go API", "implement clean architecture backend", "set up DDD modules", "implement JWT authentication", "implement database repositories", "add Testcontainers integration tests", "set up observability tracing metrics". Supports: Java Spring Boot, .NET ASP.NET Core, Python FastAPI, Go Gin/Fiber. Outputs: be_development_todo.md + full backend project under development/backend_development/. NOT for frontend or mobile — use frontend-development, ios-development, android-development for those. Requires target-architecture + tech_stack_selections.md."
+description: "Backend development skill for legacy modernization. Act as a senior master backend developer. Use when: building Java Spring Boot / .NET ASP.NET Core / Python FastAPI / Go Gin-Fiber backend, implementing clean architecture hexagonal architecture, setting up domain-driven design modules, implementing REST APIs OpenAPI security JWT OAuth2, database ORM repositories, testing unit integration Testcontainers, observability metrics tracing logging, phased development plan backend implementation."
 argument-hint: Project name or path to system design artifacts to base backend implementation on
 ---
 
