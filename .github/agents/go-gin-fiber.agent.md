@@ -40,15 +40,5 @@ Produce in `ai-driven-development/development/backend_development/`:
 ---
 
 ## Definition of Done
-> All items must be ✅ before this Tier-2 skill is considered complete.
-
-- [ ] `go build ./...` exits with zero errors
-- [ ] `go test ./...` exits with zero test failures
-- [ ] `go vet ./...` reports zero issues
-- [ ] `staticcheck ./...` reports zero issues
-- [ ] Clean architecture layers enforced: Handler → Service → Repository; no DB code in handlers
-- [ ] All I/O functions accept `context.Context` as the first parameter
-- [ ] All secrets loaded from environment variables at startup; none hardcoded
-- [ ] At least one testcontainers-go integration test per repository
-- [ ] `/health` and `/metrics` (Prometheus) endpoints registered
-- [ ] `Dockerfile` uses scratch or distroless base, runs as non-root, image ≤ 50 MB
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/go-gin-fiber/SKILL.md`](../skills/go-gin-fiber/SKILL.md)

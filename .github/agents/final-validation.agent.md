@@ -41,14 +41,5 @@ Produce in `ai-driven-development/docs/final_validation/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — the go/no-go decision cannot be issued until all items are ✅.
-
-- [ ] All Phase 5 comparison report ❌ Missing items resolved or formally accepted
-- [ ] UAT completed with product owner sign-off
-- [ ] Performance regression table complete — zero blocking regressions (or accepted with written sign-off)
-- [ ] Security gate passed — zero critical/high open findings
-- [ ] Rollback plan tested in staging and duration within RTO
-- [ ] All observability checklist items ✅
-- [ ] Smoke test plan written with owner assigned
-- [ ] Go/No-Go decision document produced with stakeholder signatures
-- [ ] `release_readiness_checklist.md`, `go_no_go_decision.md`, `smoke_test_plan.md` all written to `ai-driven-development/docs/final_validation/`
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/final-validation/SKILL.md`](../skills/final-validation/SKILL.md)

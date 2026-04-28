@@ -47,36 +47,8 @@ Produce in `ai-driven-development/docs/legacy_vs_new_system/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
->
-> **Maintenance rule:** This DoD must be an exact copy of the DoD in `../skills/compare-legacy-to-new/SKILL.md`. Any update to one must be applied to the other in the same PR.
-
-### Performance
-- [ ] Legacy performance baseline documented (P50/P95/P99 latency, throughput, batch duration)
-- [ ] Regression thresholds defined per metric
-- [ ] Load test scenarios defined and executed against new system
-- [ ] Performance comparison table complete with Pass/Fail per metric
-- [ ] Zero blocking performance regressions (or written stakeholder acceptance on record)
-
-### Coverage
-- [ ] Every legacy module/feature mapped to new equivalent (no gaps)
-- [ ] All ❌ Missing items have documented resolution plan
-- [ ] All architectural dimensions compared (auth, data, deployment, observability)
-
-### Diagrams
-- [ ] Architecture evolution diagram showing legacy → new
-- [ ] Technology migration map
-- [ ] Functional coverage table
-- [ ] All diagrams render correctly in HTML
-
-### Clarity
-- [ ] Improvements quantified with metrics where possible
-- [ ] Regressions or partial migrations explicitly flagged
-- [ ] Migration strategy chosen and justified
-
-### Validation
-- [ ] Report reviewed by lead architect AND product owner
-- [ ] Cutover checklist reviewed and items assigned owners
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/compare-legacy-to-new/SKILL.md`](../skills/compare-legacy-to-new/SKILL.md)
 
 ---
 

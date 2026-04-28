@@ -38,37 +38,10 @@ Produce in `ai-driven-development/docs/legacy_architecture/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
->
-> **Maintenance rule:** This DoD must be an exact copy of the DoD in `../skills/legacy-architecture/SKILL.md`. Any update to one must be applied to the other in the same PR.
-
-### Diagrams
-- [ ] High-level architecture diagram (system boundary clearly shown)
-- [ ] Component dependency diagram (all modules included, coupling visible)
-- [ ] Data flow diagram (input → processing → output for main flows)
-- [ ] Authentication/authorization flow diagram
-- [ ] Database architecture diagram (entity groupings, God tables, cross-module coupling)
-- [ ] Deployment topology diagram (network zones, servers, LB, CDN, environments)
-- [ ] All diagrams rendered correctly in HTML (verify in browser)
-
-### Technical Accuracy
-- [ ] All integrations mapped with protocol (HTTP, JMS, DB direct, FTP, etc.)
-- [ ] Sync vs async flows clearly distinguished
-- [ ] Stateful vs stateless components identified
-- [ ] Shared data stores identified with all consumers listed
-
-### Insights
-- [ ] At least 3 architectural weaknesses identified with evidence
-- [ ] Tight coupling areas highlighted with migration risk rating
-- [ ] Coupling hotspot map produced
-
-### Validation
-- [ ] Diagram walkthrough completed with system design team
-- [ ] Diagrams reviewed for accuracy against design decisions
-- [ ] Mermaid syntax validated and diagrams render without errors in browser
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/legacy-architecture/SKILL.md`](../skills/legacy-architecture/SKILL.md)
 
 ---
 
 ## Next Agent
 When legacy architecture is fully visualized, invoke the [`target-architecture`](./target-architecture.agent.md) agent to design the target architecture.
-

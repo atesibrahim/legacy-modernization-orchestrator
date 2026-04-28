@@ -46,15 +46,5 @@ Produce in `ai-driven-development/development/data_migration/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
-
-- [ ] Schema mapping table covers 100% of legacy tables (including decisions to archive/drop)
-- [ ] Data cleansing scripts documented and reviewed
-- [ ] Schema migration scripts committed and applied successfully on staging
-- [ ] ETL scripts tested on a staging copy of production data
-- [ ] Pre- and post-migration validation queries produce matching counts and checksums
-- [ ] Reconciliation report signed off by DBA and Product Owner
-- [ ] Cutover procedure checklist complete and rehearsed on staging
-- [ ] Rollback playbook written and tested (rehearsed on staging)
-- [ ] Post-migration audit checklist completed after stabilization period
-- [ ] All migration artifacts committed to `ai-driven-development/development/data_migration/`
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/data-migration/SKILL.md`](../skills/data-migration/SKILL.md)

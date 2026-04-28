@@ -47,40 +47,10 @@ Produce in `ai-driven-development/development/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
-
-### Code Quality
-- [ ] TypeScript strict mode — zero errors, zero `any` types
-- [ ] Zero critical ESLint errors including a11y rules
-- [ ] Consistent folder structure across all features
-
-### Functional
-- [ ] All screens implemented matching wireframes
-- [ ] All API integrations complete and tested
-- [ ] Auth flow working end-to-end with backend
-
-### UX
-- [ ] UI matches design system (colors, spacing, typography)
-- [ ] Loading states on every async operation
-- [ ] Error states with actionable messages
-- [ ] Empty states for all lists
-
-### Performance
-- [ ] Lighthouse Performance score > 80
-- [ ] Initial bundle < 500KB (JS)
-- [ ] No memory leaks (verified with React DevTools Profiler)
-
-### Testing
-- [ ] Unit test coverage: shared components 100%, hooks 80%+
-- [ ] E2E tests cover critical user journeys
-- [ ] Accessibility tests pass (axe-core)
-
-### Deployment
-- [ ] Production build succeeds
-- [ ] Environment variables documented
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/frontend-development/SKILL.md`](../skills/frontend-development/SKILL.md)
 
 ---
 
 ## Next Agent
 When frontend is production-ready, invoke the [`compare-legacy-to-new`](./compare-legacy-to-new.agent.md) agent to validate functional equivalence.
-

@@ -51,31 +51,5 @@ Produce in `ai-driven-development/development/mobile_development/cross-platform/
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
-
-### Code Quality
-- [ ] Lint zero warnings (flutter_lints / ESLint-airbnb-typescript)
-- [ ] Clean architecture layers respected (domain has zero platform imports)
-- [ ] All repositories behind interfaces
-
-### Functional
-- [ ] All screens implemented matching wireframes
-- [ ] All API integrations complete and tested against real backend
-- [ ] Auth flow (login, token refresh, logout) working end-to-end on both platforms
-
-### Security
-- [ ] Tokens in secure storage only (flutter_secure_storage / react-native-keychain)
-- [ ] No secrets committed to version control
-- [ ] Dependency scan — zero CVSS ≥ 7
-
-### Performance
-- [ ] 60fps scroll on mid-range device in Release/Hermes mode
-- [ ] Cold start < 3 seconds on mid-range device
-
-### Testing
-- [ ] Line coverage ≥ 70%
-- [ ] E2E / integration test covers login → primary user journey on both iOS and Android
-
-### Deployment
-- [ ] Builds succeed for both iOS and Android
-- [ ] TestFlight / Play Console internal track upload confirmed
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/cross-platform-mobile/SKILL.md`](../skills/cross-platform-mobile/SKILL.md)
