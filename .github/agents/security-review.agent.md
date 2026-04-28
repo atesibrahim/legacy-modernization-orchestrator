@@ -42,14 +42,5 @@ Produce in `ai-driven-development/docs/security_review/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to Phase 6.
-
-- [ ] All OWASP Top 10 categories audited for every in-scope layer
-- [ ] Zero Critical findings remaining unmitigated
-- [ ] Zero High findings without documented accepted-risk justification
-- [ ] All dependency vulnerability scans pass with CVSS < 7
-- [ ] Secrets scan reports zero verified secrets in codebase or image history
-- [ ] CORS and CSP configurations reviewed and compliant
-- [ ] All Docker images pass Trivy scan and run as non-root
-- [ ] `security_review_report.md` and `security_review_report.html` committed to `ai-driven-development/docs/security_review/`
-- [ ] Report reviewed and signed off by lead developer before go-live
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/security-review/SKILL.md`](../skills/security-review/SKILL.md)

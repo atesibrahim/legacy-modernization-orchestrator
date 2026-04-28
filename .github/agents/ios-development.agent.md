@@ -47,40 +47,8 @@ Produce in `ai-driven-development/development/mobile_development/ios/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
-
-### Code Quality
-- [ ] SwiftLint zero warnings
-- [ ] No force-unwraps, `try!`, or `fatalError` in production code
-- [ ] All services behind protocols (mockable)
-
-### Functional
-- [ ] All screens implemented matching wireframes
-- [ ] All API integrations complete and tested against real backend
-- [ ] Auth flow (login, token refresh, logout) working end-to-end
-
-### UX
-- [ ] UI matches design system (colors, typography, spacing)
-- [ ] Loading, error, and empty states on every async screen
-- [ ] Dark mode fully supported
-- [ ] Dynamic Type supported (all text scales)
-- [ ] VoiceOver navigation complete
-
-### Performance
-- [ ] Smooth 60fps scrolling (verified with Instruments)
-- [ ] No memory leaks (verified with Memory Graph)
-- [ ] App launch time < 2s on iPhone 11
-
-### Testing
-- [ ] ViewModel unit test coverage ≥ 80%
-- [ ] Service unit test coverage ≥ 70%
-- [ ] UI tests cover login and 2+ critical journeys
-- [ ] Accessibility Inspector: zero critical issues
-
-### Release
-- [ ] Release build archives cleanly
-- [ ] Privacy manifest (`PrivacyInfo.xcprivacy`) complete
-- [ ] TestFlight build validated
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/ios-development/SKILL.md`](../skills/ios-development/SKILL.md)
 
 ---
 

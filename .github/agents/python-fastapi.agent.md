@@ -40,14 +40,5 @@ Produce in `ai-driven-development/development/backend_development/`:
 ---
 
 ## Definition of Done
-> All items must be ✅ before this Tier-2 skill is considered complete.
-
-- [ ] `pytest` exits with zero test failures
-- [ ] `ruff check .` reports zero linting violations
-- [ ] `mypy --strict` (or `pyright`) reports zero type errors
-- [ ] Clean architecture layers enforced: Router → Service → Repository; no SQLAlchemy in routers
-- [ ] All dependencies injected via FastAPI `Depends()` — no module-level singletons
-- [ ] All secrets loaded via `Pydantic BaseSettings` from environment; none hardcoded
-- [ ] At least one Testcontainers integration test per repository class
-- [ ] `/health` and `/metrics` (Prometheus) endpoints registered
-- [ ] Multi-stage `Dockerfile` produces a non-root image ≤ 200 MB
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/python-fastapi/SKILL.md`](../skills/python-fastapi/SKILL.md)

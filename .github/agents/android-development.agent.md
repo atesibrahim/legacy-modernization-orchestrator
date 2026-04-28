@@ -47,40 +47,8 @@ Produce in `ai-driven-development/development/mobile_development/android/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
-
-### Code Quality
-- [ ] Detekt and Ktlint zero violations
-- [ ] Clean Architecture layers respected (domain has zero Android imports)
-- [ ] All repositories and services behind interfaces (mockable)
-
-### Functional
-- [ ] All screens implemented matching wireframes
-- [ ] All API integrations complete and tested against real backend
-- [ ] Auth flow (login, token refresh, logout) working end-to-end
-
-### UX
-- [ ] UI matches design system (colors, typography, spacing) via MaterialTheme
-- [ ] Loading, error, and empty states on every async screen
-- [ ] Dark mode fully supported
-- [ ] Font scaling supported
-- [ ] TalkBack navigation complete and labeled
-
-### Performance
-- [ ] Smooth scrolling (no jank in Profiler)
-- [ ] No memory leaks (verified with Memory Profiler)
-- [ ] App startup < 2s on API 26 mid-range emulator
-
-### Testing
-- [ ] ViewModel unit test coverage ≥ 80%
-- [ ] UseCase unit test coverage 100%
-- [ ] UI tests cover login and 2+ critical journeys
-- [ ] Accessibility checks enabled in UI tests
-
-### Release
-- [ ] Release AAB archives cleanly with R8
-- [ ] ProGuard rules verified (no missing keeps)
-- [ ] Internal test track validated
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/android-development/SKILL.md`](../skills/android-development/SKILL.md)
 
 ---
 

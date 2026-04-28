@@ -47,16 +47,5 @@ Produce in `ai-driven-development/development/infra/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to Phase 5.
-
-- [ ] `infra_todo.md` created with all in-scope components listed
-- [ ] All K8s/Helm manifests pass `kubectl --dry-run=client` or `helm lint`
-- [ ] All pods have `runAsNonRoot`, resource limits, and health probes
-- [ ] Terraform plan produces no errors and is reviewed before apply
-- [ ] Terraform state stored in encrypted remote backend
-- [ ] CI pipeline runs tests + security scan before any build
-- [ ] Image tagged with git SHA (not `latest`)
-- [ ] Staging deploy automated; prod deploy requires manual approval gate
-- [ ] Prometheus alert rules cover: error rate, P95 latency, pod crashes, memory saturation
-- [ ] Grafana dashboard has all 7 required panels
-- [ ] No secrets hard-coded anywhere — all sourced from Vault or cloud secrets manager
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/devops-infra/SKILL.md`](../skills/devops-infra/SKILL.md)

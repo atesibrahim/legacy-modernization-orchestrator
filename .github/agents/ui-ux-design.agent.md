@@ -39,35 +39,11 @@ Produce in `ai-driven-development/docs/ui_design/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
-
-### UX Quality
-- [ ] User journeys cover all primary use cases identified in analysis
-- [ ] Friction points from legacy UI explicitly addressed
-- [ ] Navigation structure logical and tested with at least 1 real user
-
-### Design System
-- [ ] Design tokens defined (colors, typography, spacing)
-- [ ] Component inventory documented
-- [ ] Consistent naming conventions (BEM or component-based)
-
-### Wireframes
-- [ ] All critical screens wireframed in HTML
-- [ ] Mobile and desktop views specified
-- [ ] States documented (empty, loading, error, success)
-
-### Accessibility
-- [ ] Color contrast ratios verified (WCAG AA minimum)
-- [ ] Keyboard navigation path documented for each screen
-- [ ] ARIA roles/labels specified for custom components
-
-### Validation
-- [ ] Design reviewed by product owner / stakeholder
-- [ ] At least 1 usability test or design walkthrough conducted
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/ui-ux-design/SKILL.md`](../skills/ui-ux-design/SKILL.md)
 
 ---
 
 ## Next Agent
 Proceed to [`frontend-development`](./frontend-development.agent.md) to implement the design system and screens.  
 Run in parallel with [`backend-development`](./backend-development.agent.md).
-

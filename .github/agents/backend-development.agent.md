@@ -46,44 +46,10 @@ Produce in `ai-driven-development/development/`:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
-
-### Code Quality
-- [ ] Clean architecture layers enforced (no framework in domain)
-- [ ] No critical SonarQube/SpotBugs issues
-- [ ] All `TODO` comments resolved
-- [ ] Code review completed by 1 senior developer
-
-### Functional
-- [ ] All business use cases implemented and tested
-- [ ] API contracts match OpenAPI spec exactly
-
-### Security
-- [ ] Authentication working (configured auth provider)
-- [ ] Authorization enforced at method level on all endpoints
-- [ ] No hardcoded secrets, passwords, or API keys
-- [ ] OWASP CVSS 7+ dependencies resolved
-
-### Performance
-- [ ] Key endpoints meet SLA (P95 < 200ms under expected load)
-- [ ] No N+1 queries in ORM layer
-
-### Testing
-- [ ] Unit test coverage ≥ 70%
-- [ ] Integration tests cover all critical flows including security
-
-### Observability
-- [ ] Logs structured (JSON in prod), correlation IDs included
-- [ ] Metrics available at `/actuator/prometheus`
-- [ ] Errors fully traceable via trace ID
-
-### Deployment
-- [ ] Runs in Docker (non-root user, minimal image)
-- [ ] All config externalized via environment variables
-- [ ] Readiness and liveness probes configured
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/backend-development/SKILL.md`](../skills/backend-development/SKILL.md)
 
 ---
 
 ## Next Agent
 When backend is production-ready, invoke the [`compare-legacy-to-new`](./compare-legacy-to-new.agent.md) agent to validate equivalence and improvements.
-

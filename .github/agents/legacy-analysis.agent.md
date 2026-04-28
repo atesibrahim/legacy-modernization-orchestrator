@@ -38,51 +38,8 @@ Produce in `ai-driven-development/docs/legacy_analysis/` (create if not exists):
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to the next phase.
->
-> **Maintenance rule:** This DoD must be an exact copy of the DoD in `../skills/legacy-analysis/SKILL.md`. Any update to one must be applied to the other in the same PR.
-
-### Technology Profile
-- [ ] Technology Profile (Section 10) produced before any other analysis step
-- [ ] Each detected tier (Backend / Web Frontend / iOS / Android / Cross-Platform Mobile) listed with file/directory evidence
-- [ ] Mobile Framework recorded when any mobile tier is detected
-- [ ] Repository profile classification recorded (e.g., `backend-only`, `fullstack-web`)
-- [ ] Scope recommendation documented (which Phase 4 targets apply)
-
-### Completeness
-- [ ] 100% of services, modules, and APIs listed and categorized
-- [ ] All DB tables, columns, indexes, views, stored procedures, and triggers documented
-- [ ] All external systems identified with purpose and protocol
-- [ ] All build/deployment artifacts catalogued
-
-### Database Analysis
-- [ ] DB engine name, exact version, and EOL status recorded
-- [ ] Full schema inventory produced (tables, columns, constraints, indexes, sequences)
-- [ ] All stored procedures and functions catalogued with purpose and tables accessed
-- [ ] All triggers documented (table, event, timing, business logic)
-- [ ] All scheduled DB jobs listed with schedule and business purpose
-- [ ] Table Ownership Matrix produced (which module reads/writes which table)
-- [ ] Top 10 query hotspots identified with execution plans
-- [ ] At least 3 DB anti-patterns identified with table/column evidence
-- [ ] Data quality issues quantified (null counts, orphaned rows, duplicates)
-- [ ] Backup/recovery posture assessed (type, frequency, PITR capability, RPO/RTO)
-
-### Depth
-- [ ] At least 3 critical business flows documented end-to-end (sequence level)
-- [ ] Performance metrics collected (latency, throughput, error rate)
-- [ ] Top 5 bottlenecks identified and proven with logs/metrics
-- [ ] Dead code percentage estimated
-
-### Security & Risk
-- [ ] Authentication/authorization flow documented
-- [ ] Sensitive data handling identified (PII, credentials, keys)
-- [ ] Risk matrix scored for all identified risks (Impact × Likelihood)
-- [ ] At least 1 OWASP Top 10 issue assessed
-
-### Validation
-- [ ] Findings reviewed with at least 1 senior developer from legacy team
-- [ ] Findings validated against actual system behavior (not just docs)
-- [ ] Business stakeholder confirmed business flow accuracy
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/legacy-analysis/SKILL.md`](../skills/legacy-analysis/SKILL.md)
 
 ---
 

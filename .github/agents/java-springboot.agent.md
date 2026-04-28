@@ -40,13 +40,5 @@ Produce in `ai-driven-development/development/backend_development/`:
 ---
 
 ## Definition of Done
-> All items must be ✅ before this Tier-2 skill is considered complete.
-
-- [ ] `./mvnw verify` (or `./gradlew check`) exits with zero errors and zero test failures
-- [ ] `ruff` / `spotless:check` / `checkstyle` reports zero violations
-- [ ] All Spring layers enforced: Controller → Service → Repository; no cross-layer imports
-- [ ] No `@Autowired` field injection — constructor injection only
-- [ ] All secrets externalized via environment variables or Vault; none in `application.yml`
-- [ ] At least one Testcontainers integration test per repository class
-- [ ] Actuator `/health` and `/prometheus` endpoints enabled and accessible
-- [ ] Multi-stage `Dockerfile` produces a non-root image ≤ 200 MB
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/java-springboot/SKILL.md`](../skills/java-springboot/SKILL.md)

@@ -40,14 +40,5 @@ Produce in `ai-driven-development/development/backend_development/`:
 ---
 
 ## Definition of Done
-> All items must be ✅ before this Tier-2 skill is considered complete.
-
-- [ ] `dotnet build` exits with zero errors and zero warnings (treat warnings as errors)
-- [ ] `dotnet test` exits with zero test failures
-- [ ] `dotnet format --verify-no-changes` reports no formatting violations
-- [ ] Clean architecture layers enforced: API → Application → Domain ← Infrastructure
-- [ ] No `ServiceLocator` pattern — constructor injection only via `IServiceCollection`
-- [ ] All secrets externalized via `IOptions<T>` + environment variables or Azure Key Vault; none in `appsettings.json`
-- [ ] At least one Testcontainers.NET integration test per repository class
-- [ ] `/health` and `/metrics` endpoints enabled (ASP.NET Core Health Checks + Prometheus exporter)
-- [ ] Multi-stage `Dockerfile` produces a non-root image ≤ 200 MB
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/dotnet-aspnetcore/SKILL.md`](../skills/dotnet-aspnetcore/SKILL.md)

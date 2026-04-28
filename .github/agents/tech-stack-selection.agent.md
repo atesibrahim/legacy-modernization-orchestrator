@@ -38,17 +38,5 @@ Produce:
 ---
 
 ## Definition of Done
-> The skill owns the full technical DoD. This checklist is the **delivery acceptance gate** — all items must be ✅ before the orchestrator advances to Phase 3.
-
-- [ ] User answered all questions for all in-scope tiers (or selected the default stack)
-- [ ] `ai-driven-development/docs/tech_stack_selections.md` created with all confirmed choices
-- [ ] No placeholder values remaining for any in-scope tier (all placeholders either resolved or explicitly deferred with an owner + phase deadline)
-- [ ] § Common complete: Container/Deployment, CI/CD, Cloud Provider, Secret Management, Observability all populated
-- [ ] § Backend complete (if in scope): Language/Framework, Database, Auth Provider all populated
-- [ ] § Web Frontend complete (if in scope): Framework populated
-- [ ] § Mobile complete (if any mobile target is in scope): Framework populated
-- [ ] § Mobile complete (if Framework = Flutter or React Native): Minimum iOS Target and Minimum SDK populated
-- [ ] § iOS complete (if native iOS is in scope): Minimum iOS Target populated
-- [ ] § Android complete (if native Android is in scope): Minimum SDK populated
-- [ ] Every custom/unfamiliar technology either has supporting documentation recorded in the `Notes` column **or** is marked as a placeholder with a phase-deadline note
-- [ ] All downstream agents confirmed: they will read `tech_stack_selections.md` and not ask for tech choices again
+> All items must be ✅ before the orchestrator advances to the next phase.  
+> Authoritative checklist: [`../skills/tech-stack-selection/SKILL.md`](../skills/tech-stack-selection/SKILL.md)
