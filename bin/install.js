@@ -19,8 +19,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PACKAGE_ROOT = path.resolve(__dirname, '..');
 const PKG_VERSION  = JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8')).version;
 
-// Stable directory name used to store the full skill/agent files globally
-const INSTALL_DIRNAME = 'legacy-modernization-orchestrator';
+// Previous global installs used a private Claude cache. Keep this so uninstall
+// can clean old package-owned definitions after the canonical location moves.
+const LEGACY_GLOBAL_INSTALL_DIRNAME = 'legacy-modernization-orchestrator';
 
 const AGENTS = [
   'legacy-analysis',
@@ -116,6 +117,37 @@ function writeInstalled(dir, version, checksum) {
   fs.writeFileSync(path.join(dir, '.installed'), JSON.stringify(data, null, 2) + '\n', 'utf8');
 }
 
+function removePackageDefinitions(skillsInstallDir, agentsInstallDir) {
+  for (const agent of AGENTS) {
+    const p = path.join(agentsInstallDir, `${agent}.agent.md`);
+    if (removeIfExists(p)) console.log(`  ✓ removed agent : ${agent}`);
+  }
+  for (const agent of AGENTS) {
+    const p = path.join(skillsInstallDir, agent);
+    if (removeIfExists(p)) console.log(`  ✓ removed skill : ${agent}`);
+  }
+}
+
+function removeInstalledDefinitions(scope, skillsInstallDir, agentsInstallDir) {
+  const installBase = path.dirname(skillsInstallDir);
+
+  console.log('▶ Removing GitHub Copilot definitions...');
+  removePackageDefinitions(skillsInstallDir, agentsInstallDir);
+
+  if (scope === 'global') {
+    for (const base of [path.join(os.homedir(), '.copilot'), path.join(os.homedir(), '.github')]) {
+      if (base !== installBase) {
+        removePackageDefinitions(path.join(base, 'skills'), path.join(base, 'agents'));
+      }
+    }
+
+    const legacyInstallBase = path.join(os.homedir(), '.claude', LEGACY_GLOBAL_INSTALL_DIRNAME);
+    if (legacyInstallBase !== installBase && removeIfExists(legacyInstallBase)) {
+      console.log(`  ✓ removed legacy definitions: ${legacyInstallBase}`);
+    }
+  }
+}
+
 /**
  * Copy a file, replacing all occurrences of relative `.github/skills/` and
  * `.github/agents/` paths with the absolute paths where those files are installed.
@@ -129,6 +161,15 @@ function copyWithPatchedPaths(src, dest, skillsInstallDir, agentsInstallDir) {
 
 // ── resolve base dirs ─────────────────────────────────────────────────────────
 
+function resolveCopilotBase(scope) {
+  if (scope === 'local') return path.join(process.cwd(), '.github');
+
+  const globalCopilotBase = path.join(os.homedir(), '.copilot');
+  return fs.existsSync(globalCopilotBase)
+    ? globalCopilotBase
+    : path.join(os.homedir(), '.github');
+}
+
 function resolveBases(scope) {
   const claudeBase = process.env.CLAUDE_CONFIG_DIR
     ? process.env.CLAUDE_CONFIG_DIR
@@ -136,12 +177,11 @@ function resolveBases(scope) {
   const codexBase = scope === 'global'
     ? path.join(os.homedir(), '.codex')
     : path.join(process.cwd(), '.codex');
-  // Full skill and agent files are installed here so references always resolve
-  const installBase      = scope === 'global'
-    ? path.join(os.homedir(), '.claude', INSTALL_DIRNAME)
-    : path.join(process.cwd(), '.github');
-  const skillsInstallDir = scope === 'global' ? path.join(installBase, 'skills') : path.join(installBase, 'skills');
-  const agentsInstallDir = scope === 'global' ? path.join(installBase, 'agents') : path.join(installBase, 'agents');
+  // Full skill and agent files are installed in the Copilot-visible source tree
+  // so Claude and Codex wrappers can reference the same canonical files.
+  const installBase      = resolveCopilotBase(scope);
+  const skillsInstallDir = path.join(installBase, 'skills');
+  const agentsInstallDir = path.join(installBase, 'agents');
   return { claudeBase, codexBase, skillsInstallDir, agentsInstallDir };
 }
 
@@ -270,11 +310,8 @@ function uninstall(scope, selectedRuntimes) {
   console.log('══════════════════════════════════════════════════════════');
   console.log('');
 
-  // Remove the full skill + agent definitions dir
-  const installBase = path.dirname(skillsInstallDir);
-  if (removeIfExists(installBase)) {
-    console.log(`  ✓ removed definitions: ${installBase}`);
-  }
+  removeInstalledDefinitions(scope, skillsInstallDir, agentsInstallDir);
+  console.log('');
 
   for (const runtime of selectedRuntimes) {
     if (runtime === 'claude') {
