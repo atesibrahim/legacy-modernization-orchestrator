@@ -81,9 +81,9 @@ bash scripts/install.sh --global --all
 | Claude Code | `~/.claude/agents/*.md` | Named subagents (`@agent-name`) |
 | Claude Code | `~/.claude/skills/<name>/SKILL.md` | Slash commands (`/agent-name`) |
 | Codex CLI | `~/.codex/skills/<name>/SKILL.md` | Skill commands (`$agent-name`) |
-| GitHub Copilot | `.github/agents/*.agent.md` | Agent definitions (in this repo) |
+| GitHub Copilot source | `~/.copilot/{agents,skills}/` if `~/.copilot` exists, otherwise `~/.github/{agents,skills}/` | Canonical agent and skill files used by Copilot, Claude, and Codex |
 
-> For **local** installs, files go into `./.claude/` and `./.codex/` inside your project.
+> For **local** installs, canonical files go into `./.github/{agents,skills}/`, and runtime wrappers go into `./.claude/` and `./.codex/` inside your project.
 
 ---
 
@@ -124,7 +124,7 @@ $backend-development MyProject
 
 ### GitHub Copilot (VS Code)
 
-Agents are defined in `.github/agents/`. Use the agent picker in VS Code Copilot Chat or reference them by name. The framework is also described in `AGENTS.md` at the repo root.
+Agents are defined in `.github/agents/` for local installs. For global installs, the canonical source is installed under `~/.copilot/agents/` when that folder already exists, otherwise `~/.github/agents/`. Use the agent picker in VS Code Copilot Chat or reference them by name. The framework is also described in `AGENTS.md` at the repo root.
 
 ---
 
@@ -157,7 +157,7 @@ All outputs are written to `ai-driven-development/` inside your project.
 
 ## How agents work
 
-Each agent reads its full `SKILL.md` from `.github/skills/<name>/SKILL.md` before acting. The skill files contain the authoritative step-by-step procedures, output formats, and Definition of Done checklists. Agents never skip, reorder, or summarize steps.
+Each agent reads its full `SKILL.md` from the canonical source tree before acting. For local installs this is `.github/skills/<name>/SKILL.md`; for global installs this is `~/.copilot/skills/<name>/SKILL.md` when `~/.copilot` exists, otherwise `~/.github/skills/<name>/SKILL.md`. The skill files contain the authoritative step-by-step procedures, output formats, and Definition of Done checklists. Agents never skip, reorder, or summarize steps.
 
 The `.claude/agents/`, `.claude/skills/`, and `.codex/skills/` files installed on your machine are thin wrappers that point back to these skill files.
 
