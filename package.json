@@ -23,6 +23,7 @@
     ".claude/agents/",
     ".claude/skills/",
     ".codex/skills/",
+    "docs/",
     ".github/skills/",
     ".github/agents/",
     "CLAUDE.md",

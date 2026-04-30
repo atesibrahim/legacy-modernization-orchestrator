@@ -117,7 +117,7 @@ function writeInstalled(dir, version, checksum) {
   fs.writeFileSync(path.join(dir, '.installed'), JSON.stringify(data, null, 2) + '\n', 'utf8');
 }
 
-function removePackageDefinitions(skillsInstallDir, agentsInstallDir) {
+function removePackageDefinitions(skillsInstallDir, agentsInstallDir, docsInstallDir) {
   for (const agent of AGENTS) {
     const p = path.join(agentsInstallDir, `${agent}.agent.md`);
     if (removeIfExists(p)) console.log(`  ✓ removed agent : ${agent}`);
@@ -126,18 +126,20 @@ function removePackageDefinitions(skillsInstallDir, agentsInstallDir) {
     const p = path.join(skillsInstallDir, agent);
     if (removeIfExists(p)) console.log(`  ✓ removed skill : ${agent}`);
   }
+  const recommendations = path.join(docsInstallDir, 'llm-recommendations.md');
+  if (removeIfExists(recommendations)) console.log('  ✓ removed doc   : llm-recommendations.md');
 }
 
-function removeInstalledDefinitions(scope, skillsInstallDir, agentsInstallDir) {
+function removeInstalledDefinitions(scope, skillsInstallDir, agentsInstallDir, docsInstallDir) {
   const installBase = path.dirname(skillsInstallDir);
 
   console.log('▶ Removing GitHub Copilot definitions...');
-  removePackageDefinitions(skillsInstallDir, agentsInstallDir);
+  removePackageDefinitions(skillsInstallDir, agentsInstallDir, docsInstallDir);
 
   if (scope === 'global') {
     for (const base of [path.join(os.homedir(), '.copilot'), path.join(os.homedir(), '.github')]) {
       if (base !== installBase) {
-        removePackageDefinitions(path.join(base, 'skills'), path.join(base, 'agents'));
+        removePackageDefinitions(path.join(base, 'skills'), path.join(base, 'agents'), path.join(base, 'docs'));
       }
     }
 
@@ -149,13 +151,14 @@ function removeInstalledDefinitions(scope, skillsInstallDir, agentsInstallDir) {
 }
 
 /**
- * Copy a file, replacing all occurrences of relative `.github/skills/` and
- * `.github/agents/` paths with the absolute paths where those files are installed.
+ * Copy a file, replacing package-relative references with the absolute paths
+ * where those assets are installed.
  */
-function copyWithPatchedPaths(src, dest, skillsInstallDir, agentsInstallDir) {
+function copyWithPatchedPaths(src, dest, skillsInstallDir, agentsInstallDir, docsInstallDir) {
   let content = fs.readFileSync(src, 'utf8');
   content = content.replaceAll('.github/skills/', skillsInstallDir + '/');
   content = content.replaceAll('.github/agents/', agentsInstallDir + '/');
+  content = content.replaceAll('docs/llm-recommendations.md', path.join(docsInstallDir, 'llm-recommendations.md'));
   fs.writeFileSync(dest, content, 'utf8');
 }
 
@@ -182,13 +185,14 @@ function resolveBases(scope) {
   const installBase      = resolveCopilotBase(scope);
   const skillsInstallDir = path.join(installBase, 'skills');
   const agentsInstallDir = path.join(installBase, 'agents');
-  return { claudeBase, codexBase, skillsInstallDir, agentsInstallDir };
+  const docsInstallDir   = path.join(installBase, 'docs');
+  return { claudeBase, codexBase, skillsInstallDir, agentsInstallDir, docsInstallDir };
 }
 
 // ── install ───────────────────────────────────────────────────────────────────
 
 function install(scope, selectedRuntimes) {
-  const { claudeBase, codexBase, skillsInstallDir, agentsInstallDir } = resolveBases(scope);
+  const { claudeBase, codexBase, skillsInstallDir, agentsInstallDir, docsInstallDir } = resolveBases(scope);
 
   console.log('');
   console.log('══════════════════════════════════════════════════════════');
@@ -229,11 +233,21 @@ function install(scope, selectedRuntimes) {
     const dest = path.join(agentsInstallDir, `${agent}.agent.md`);
     if (fs.existsSync(src)) {
       fs.mkdirSync(agentsInstallDir, { recursive: true });
-      fs.copyFileSync(src, dest);
+      copyWithPatchedPaths(src, dest, skillsInstallDir, agentsInstallDir, docsInstallDir);
       console.log(`  ✓ agents/${agent}.agent.md`);
     }
   }
   console.log(`  → ${agentsInstallDir}`);
+  console.log('');
+
+  console.log('▶ Installing supporting docs...');
+  const docsSrc = path.join(PACKAGE_ROOT, 'docs', 'llm-recommendations.md');
+  if (fs.existsSync(docsSrc)) {
+    fs.mkdirSync(docsInstallDir, { recursive: true });
+    fs.copyFileSync(docsSrc, path.join(docsInstallDir, 'llm-recommendations.md'));
+    console.log('  ✓ docs/llm-recommendations.md');
+  }
+  console.log(`  → ${docsInstallDir}`);
   console.log('');
 
   // ── Step 2: Install per-runtime wrappers with patched absolute paths
@@ -247,7 +261,7 @@ function install(scope, selectedRuntimes) {
         const src  = path.join(agentSrc, `${agent}.md`);
         const dest = path.join(agentDest, `${agent}.md`);
         if (fs.existsSync(src)) {
-          copyWithPatchedPaths(src, dest, skillsInstallDir, agentsInstallDir);
+          copyWithPatchedPaths(src, dest, skillsInstallDir, agentsInstallDir, docsInstallDir);
           console.log(`  ✓ agent : ${agent}`);
         }
       }
@@ -261,7 +275,7 @@ function install(scope, selectedRuntimes) {
         const dest = path.join(skillDest, agent, 'SKILL.md');
         if (fs.existsSync(src)) {
           fs.mkdirSync(path.dirname(dest), { recursive: true });
-          copyWithPatchedPaths(src, dest, skillsInstallDir, agentsInstallDir);
+          copyWithPatchedPaths(src, dest, skillsInstallDir, agentsInstallDir, docsInstallDir);
           console.log(`  ✓ skill : ${agent}`);
         }
       }
@@ -280,7 +294,7 @@ function install(scope, selectedRuntimes) {
         const dest = path.join(skillDest, agent, 'SKILL.md');
         if (fs.existsSync(src)) {
           fs.mkdirSync(path.dirname(dest), { recursive: true });
-          copyWithPatchedPaths(src, dest, skillsInstallDir, agentsInstallDir);
+          copyWithPatchedPaths(src, dest, skillsInstallDir, agentsInstallDir, docsInstallDir);
           console.log(`  ✓ skill : ${agent}`);
         }
       }
@@ -302,7 +316,7 @@ function install(scope, selectedRuntimes) {
 // ── uninstall ─────────────────────────────────────────────────────────────────
 
 function uninstall(scope, selectedRuntimes) {
-  const { claudeBase, codexBase, skillsInstallDir, agentsInstallDir } = resolveBases(scope);
+  const { claudeBase, codexBase, skillsInstallDir, agentsInstallDir, docsInstallDir } = resolveBases(scope);
 
   console.log('');
   console.log('══════════════════════════════════════════════════════════');
@@ -310,7 +324,7 @@ function uninstall(scope, selectedRuntimes) {
   console.log('══════════════════════════════════════════════════════════');
   console.log('');
 
-  removeInstalledDefinitions(scope, skillsInstallDir, agentsInstallDir);
+  removeInstalledDefinitions(scope, skillsInstallDir, agentsInstallDir, docsInstallDir);
   console.log('');
 
   for (const runtime of selectedRuntimes) {
