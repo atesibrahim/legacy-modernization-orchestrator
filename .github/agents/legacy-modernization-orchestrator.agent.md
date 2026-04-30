@@ -84,6 +84,8 @@ Phase 1 → Phase 2 → Phase 2.5 → Phase 3 → [Scope Selection] → Phase 4 
 5. **Validate DoD before proceeding** — if DoD not met, refine current phase before moving on
 6. **Document phase status** — update the tracker file after each phase
 7. **Parallelize where safe** — consult the Phase 4 Parallelism Matrix above; 4f/4g/4h have their own gates and must not be started before their prerequisites are met; 4i is mutually exclusive with 4d/4e for the same mobile target
+8. **Select the LLM before starting each phase** — read `docs/llm-recommendations.md` for the relevant agent section, run the Freshness Policy web-search queries, then follow the Model Selection Protocol to present A/B/C options to the user and confirm a choice before proceeding. Never silently pick a model.
+9. **Use a second-model review for critical decisions when available** — for high-impact decisions (for example: target architecture trade-offs, security findings, data migration strategy, cutover/go-no-go decisions, or any argued topic without a clear evidence-based winner), request a review from a different but similarly capable LLM if the environment provides one. If the primary and reviewer outputs materially disagree, or neither is clearly stronger based on evidence, present the alternatives, trade-offs, and your recommendation to the user and proceed only after explicit user approval.
 
 ---
 
