@@ -84,6 +84,10 @@ Phase 1 → Phase 2 → Phase 2.5 → Phase 3 → [Scope Selection] → Phase 4 
 5. **Validate DoD before proceeding** — if DoD not met, refine current phase before moving on
 6. **Document phase status** — update the tracker file after each phase
 7. **Parallelize where safe** — consult the Phase 4 Parallelism Matrix above; 4f/4g/4h have their own gates and must not be started before their prerequisites are met; 4i is mutually exclusive with 4d/4e for the same mobile target
+8. **Select the LLM before starting each phase** — read `docs/llm-recommendations.md` for the relevant agent section, run the Freshness Policy web-search queries, then follow the Model Selection Protocol to present A/B/C options to the user and confirm a choice before proceeding. Never silently pick a model.
+9. **Use a second-model review for critical decisions when available** — for high-impact decisions (for example: target architecture trade-offs, security findings, data migration strategy, cutover/go-no-go decisions, or any argued topic without a clear evidence-based winner), request a review from a different but similarly capable LLM if the environment provides one. If the primary and reviewer outputs materially disagree, or neither is clearly stronger based on evidence, present the alternatives, trade-offs, and your recommendation to the user and proceed only after explicit user approval.
+10. **Validate all Mermaid diagrams after generation** — after any agent produces HTML output containing Mermaid diagrams, run `node scripts/validate-mermaid.js` from the repository root. If errors are reported, run `node scripts/validate-mermaid.js --fix` to auto-fix common issues, then manually correct any remaining errors before marking the phase complete. A phase with broken diagram renders does not satisfy its DoD.
+11. **Choose dependencies from stable, supported release lines** — prefer LTS or current stable releases, avoid prerelease channels (`beta`, `rc`, `canary`, `preview`, `next`) unless explicitly requested, and never invent exact package versions without verifying them from project files or authoritative release sources available in the runtime.
 
 ---
 

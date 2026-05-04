@@ -36,10 +36,10 @@ Present the following questionnaire to the user. Show **only the sections releva
 
 > "Before I begin designing the target architecture, I need to confirm your technology preferences.
 >
-> **Option A — Skip selection (use defaults)**: Type `skip` or `default` and I will apply the full default stack immediately:
+> **Option A — Skip selection (use defaults)**: Type `skip` or `default` and I will apply the full default stack immediately, using stable / LTS-supported releases only:
 > - Common: Docker Compose, GitHub Actions, AWS, AWS Secrets Manager, Prometheus + Grafana
-> - Backend: Java 21 + Spring Boot 3.5, PostgreSQL, Keycloak, no broker, Redis, framework default scheduler
-> - Frontend: React 18 + TypeScript, MUI v5, Zustand, no charts/table/RTE/i18n, CSS transitions
+> - Backend: Java 21 + Spring Boot 3 (stable supported line), PostgreSQL, Keycloak, no broker, Redis, framework default scheduler
+> - Frontend: React 18 + TypeScript, MUI 5, Zustand, no charts/table/RTE/i18n, CSS transitions
 > - Mobile: Native (separate iOS + Android) by default; choose Flutter or React Native only when you explicitly want a shared cross-platform codebase
 > - iOS: iOS 16 minimum, CoreData, AsyncImage, APNs only, no crash/analytics, SPM
 > - Android: API 26 minimum, Moshi, FCM, no crash/analytics, manual pagination, no WorkManager
@@ -55,6 +55,14 @@ If the user types `skip`, `default`, or `use defaults`:
 - Proceed directly to the Definition of Done gate.
 
 If the user chooses to answer individually, for **any question** where the user types `default`, apply the *(default)* or *(recommended)* option shown for that question.
+
+### Release Channel Rule
+
+For every recorded choice:
+- Default to the **stable / LTS** release line.
+- Treat prerelease channels (`alpha`, `beta`, `rc`, `preview`, `canary`, `next`, `nightly`) as **opt-in only** — record them only when the user explicitly requests them or there is no stable alternative.
+- If the exact version is not verified yet, record the **product / major line** (for example `Spring Boot 3`, `React 18`, `Auth.js stable`) and resolve the exact package version later from an authoritative source during implementation.
+- Do not record speculative exact patch versions in `tech_stack_selections.md`.
 
 ### Custom Value Handling
 
@@ -131,7 +139,7 @@ Record the outcome (placeholder or default) and continue.
 
 | # | Decision | Options *(custom values accepted)* |
 |---|---|---|
-| B0 | **Backend Language & Framework** | **Java 21 + Spring Boot 3.5** *(default)* / .NET 9 + ASP.NET Core / Python 3.12 + FastAPI / Go 1.23 + Gin or Fiber / *custom* |
+| B0 | **Backend Language & Framework** | **Java 21 + Spring Boot 3** *(default stable line)* / .NET 9 + ASP.NET Core / Python 3.12 + FastAPI / Go 1.23 + Gin or Fiber / *custom* |
 | B1 | **Architecture Style** | **Modular Monolith** *(default)* / Microservices / Hybrid / *custom* |
 | B2 | **Database** | **PostgreSQL** *(default)* / Oracle / MySQL / MSSQL / MongoDB / *custom* |
 | B3 | **Auth Provider** | **Keycloak (OAuth2/OIDC)** *(default)* / Spring Security + LDAP *(Java only)* / ASP.NET Identity *(.NET only)* / Auth0 / Okta / AWS Cognito / *custom* |

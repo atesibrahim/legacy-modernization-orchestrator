@@ -7,6 +7,8 @@
 **Date confirmed:** <!-- YYYY-MM-DD -->  
 **Confirmed by:** <!-- user / team lead -->
 
+> **Version policy:** Record only stable / LTS choices here. If an ecosystem has no LTS label, record the latest non-prerelease vendor-supported major line. Any beta / rc / canary / preview choice must be explicitly requested and justified in the `Notes` column.
+
 ---
 
 ## § Common

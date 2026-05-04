@@ -236,7 +236,7 @@ Full Mermaid.js HTML file containing all diagrams from Step 4 above, customized 
 ### Validation
 - [ ] Diagram walkthrough completed with system design team
 - [ ] Diagrams reviewed for accuracy against design decisions
-- [ ] Mermaid syntax validated and diagrams render without errors in browser
+- [ ] Mermaid syntax validated: run `node scripts/validate-mermaid.js` from repo root — exits 0 before phase is marked complete
 
 ---
 

@@ -236,6 +236,17 @@ Findings without evidence must be marked `(estimated)` and the estimation method
 
 ---
 
+## 9. Dependency & Version Selection Rules
+
+- Prefer **LTS** or **currently supported stable** releases for frameworks, SDKs, base images, and packages.
+- Never recommend or install **alpha**, **beta**, **rc**, **canary**, **preview**, **nightly**, `next`, or similar prerelease channels unless the user explicitly asks for them or the ecosystem has no stable alternative.
+- Never invent exact dependency versions. Before writing an exact version to `package.json`, `pom.xml`, `pyproject.toml`, `go.mod`, Dockerfiles, install commands, or documentation, verify that version against an authoritative source available in the runtime (existing project files, lockfiles, official docs, package registry, or framework release notes).
+- If an exact version cannot be verified, keep the recommendation at the **stable major line** (for example: `React 18`, `Spring Boot 3`, `.NET 9`) or omit the explicit version and state that the package manager should resolve the current stable release.
+- For JavaScript/TypeScript ecosystems, do not use floating prerelease tags such as `@next`, `@beta`, or `@rc`. Avoid `@latest` in modernization deliverables unless you have verified that it resolves to the vendor's stable channel and there is no safer pinned alternative.
+- If an ecosystem does not publish an LTS label, choose the latest **non-prerelease vendor-supported** release line and state that rationale in the relevant notes or ADR.
+
+---
+
 ## 10. Standard Error Response Format (RFC 9457)
 
 All backend APIs across **all language stacks** MUST return errors in [RFC 9457 Problem Details](https://datatracker.ietf.org/doc/html/rfc9457) format (July 2023, obsoletes RFC 7807). This is the Tier-1 contract — Tier-2 language STANDARDS.md files must not define a different shape; justify any deviation in an ADR.
