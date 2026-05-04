@@ -352,6 +352,7 @@ Before production migration, all items must be checked:
 - [ ] Technology migration map
 - [ ] Functional coverage table
 - [ ] All diagrams render correctly in HTML
+- [ ] Mermaid syntax validated: run `node scripts/validate-mermaid.js` from repo root — exits 0 before phase is marked complete
 
 ### Clarity
 - [ ] Improvements quantified with metrics where possible

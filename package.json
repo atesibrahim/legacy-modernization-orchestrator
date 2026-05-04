@@ -39,6 +39,8 @@
     "ci:validate": "node scripts/ci-validate.js",
     "generate:dod": "node scripts/generate-dod.js",
     "check:dod": "node scripts/generate-dod.js --check",
-    "check:adr": "node scripts/check-adr-prompts.js --all"
+    "check:adr": "node scripts/check-adr-prompts.js --all",
+    "validate:mermaid": "node scripts/validate-mermaid.js",
+    "fix:mermaid": "node scripts/validate-mermaid.js --fix"
   }
 }

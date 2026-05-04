@@ -415,6 +415,7 @@ Produce `ai-driven-development/docs/ui_design/design-implementation-checklist.md
 ### Validation
 - [ ] Design reviewed by product owner / stakeholder
 - [ ] At least 1 usability test or design walkthrough conducted
+- [ ] Mermaid syntax validated: run `node scripts/validate-mermaid.js` from repo root — exits 0 before phase is marked complete
 
 ---
 

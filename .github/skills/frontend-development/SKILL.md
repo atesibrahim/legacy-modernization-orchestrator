@@ -37,6 +37,8 @@ Before starting, verify the following artifacts exist:
 ## Tech Stack
 
 > **Read `tech_stack_selections.md` § Web Frontend → Framework** before Phase 1 to determine the active framework. Apply the corresponding toolchain column from the table below throughout the entire implementation.
+>
+> **Dependency release rule:** Use only stable / LTS package releases unless `tech_stack_selections.md` or the user explicitly approves a prerelease. Before writing an exact package version to `package.json`, lockfiles, or install commands, verify it from the existing project files or an authoritative source available in the runtime. If you cannot verify an exact version, keep the recommendation at the stable major line or omit the version and let the package manager resolve the current stable release.
 
 ### Per-Framework Toolchain
 
@@ -90,7 +92,7 @@ Before writing any code, add the frontend phase checklist from [STANDARDS.md](./
    - _React_: `pnpm create vite frontend -- --template react-ts`
    - _Vue_: `pnpm create vite frontend -- --template vue-ts`
    - _Angular_: `ng new frontend --strict --style=scss`
-   - _Svelte_: `pnpm create svelte@latest frontend` (choose SvelteKit + TypeScript)
+   - _Svelte_: Use the official **stable** SvelteKit starter for the currently supported major release (choose SvelteKit + TypeScript). Do **not** use beta / canary / RC scaffolds.
 
 2. **`tsconfig.json`** with strict mode:
 ```json
